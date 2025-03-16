@@ -1,0 +1,213 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id             Int         @id @default(autoincrement())
+  name           String
+  designation    String?
+  email          String      @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String?
+  role           Role        @default(USER)
+  is_instructor  Boolean     @default(false)
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+  accounts       Account[]
+  profile        Profile?
+  courses        Course[]
+  favourites     Favourite[]
+  enrolments     Enrolment[]
+  reviews        Review[]
+}
+
+model Profile {
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique
+  bio      String? @db.Text
+  gender   String?
+  address  String?
+  phone    String?
+  website  String?
+  twitter  String?
+  facebook String?
+  linkedin String?
+  youtube  String?
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Course {
+  id                     Int      @id @default(autoincrement())
+  userId                 Int
+  category               String
+  title                  String
+  slug                   String
+  description            String   @db.Text
+  regular_price          Float
+  before_price           Float
+  lessons                String
+  duration               String
+  image                  String
+  access_time            String
+  requirements           String   @db.Text
+  what_you_will_learn    String   @db.Text
+  who_is_this_course_for String   @db.Text
+  status                 Status   @default(Pending)
+  in_home_page           Boolean  @default(false)
+  in_home_page_set_at    DateTime @default(now())
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favourites    Favourite[]
+  enrolments    Enrolment[]
+  assets        Asset[]
+  reviews       Review[]
+  courseModules CourseModule[]
+
+  @@index([userId])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  rating     Int
+  comment    String?  @db.Text
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId   Int
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([userId, courseId])
+  @@index([courseId])
+}
+
+model Asset {
+  id           Int      @id @default(autoincrement())
+  courseId     Int
+  type         Type     @default(video)
+  title        String?
+  file_url     String?
+  video_url    String?
+  video_length String?
+  is_preview   Boolean  @default(false)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+model Module {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  status      Int     @default(1)
+
+  courseModules CourseModule[]
+  enrolments    Enrolment[]
+}
+
+model CourseModule {
+  courseId Int
+  moduleId Int
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, moduleId])  
+  @@index([courseId])
+  @@index([moduleId])
+}
+
+model Enrolment {
+  id             Int           @id @default(autoincrement())
+  userId         Int
+  courseId       Int? // Cambiado a nullable
+  moduleId       Int? // Nuevo campo nullable
+  order_number   String        @unique
+  price          Int?
+  paymentId      String?
+  payment_status PaymentStatus @default(PENDING)
+  status         PaymentStatus @default(PENDING)
+  payment_via    String?
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course?       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  module         Module?       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([userId, courseId])
+  @@index([userId, moduleId])
+  @@index([courseId])
+  @@index([moduleId])
+}
+
+model Favourite {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  courseId   Int
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+}
+
+enum Role {
+  USER
+  INSTRUCTOR
+  ADMIN
+}
+
+enum Type {
+  file
+  video
+}
+
+enum Status {
+  Pending
+  Approved
+  Deleted
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  CANCELLED
+  HOLD
+}
