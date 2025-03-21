@@ -1,19 +1,18 @@
 import React from "react";
 import Link from "next/link";
-import InstructorHeader from "@/components/Instructor/InstructorHeader";
 import Image from "next/image";
 import { myCourses } from "@/actions/myCourses";
+import InstructorHeaderMini from "@/components/Instructor/InstructorHeaderMini";
+import ProgressBarCourse from "@/components/Instructor/ProgressBarCourse";
 
 const Page = async () => {
 	const { courses } = await myCourses();
 	return (
 		<>
-			<InstructorHeader />
-
-			<div className="pb-100">
+			<InstructorHeaderMini />
+			<div className="pb-1 pt-5">
 				<div className="container">
-					<h3 className="mb-5 text-center">My Courses</h3>
-
+					<h3 className="mb-5 text-center">Mis Cursos</h3>
 					<div className="row justify-content-center">
 						{courses.map((course) => (
 							<div key={course.id} className="col-lg-4 col-md-6">
@@ -103,6 +102,7 @@ const Page = async () => {
 									</div>
 
 									<div className="courses-content">
+										
 										<div className="course-author d-flex align-items-center">
 											<Image
 												src="https://res.cloudinary.com/dev-empty/image/upload/v1661245253/wqsnxv0pfdwl2abdakf5.jpg"
@@ -122,7 +122,7 @@ const Page = async () => {
 											</Link>
 										</h3>
 
-										<ul className="courses-box-footer d-flex justify-content-between align-items-center">
+										<ul className="courses-box-footer d-flex pb-1 justify-content-between align-items-center">
 											<li>
 												<i className="flaticon-agenda"></i>{" "}
 												{course.lessons} Lessons
@@ -132,9 +132,12 @@ const Page = async () => {
 												8 Students
 											</li>
 										</ul>
+										{/*Progreso de un curso*/}
+										<ProgressBarCourse completedLessons={18} totalLessons={course.lessons} />
 									</div>
 								</div>
 							</div>
+							
 						))}
 					</div>
 				</div>

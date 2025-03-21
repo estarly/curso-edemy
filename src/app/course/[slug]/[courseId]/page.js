@@ -17,6 +17,7 @@ export async function generateMetadata({ params }) {
 
 const page = async ({ params }) => {
 	const { course } = await getSingleCourse(params);
+	console.log(course,'course');
 	const currentUser = await getCurrentUser();
 	return (
 		<>

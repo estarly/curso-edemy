@@ -40,4 +40,5 @@ data_edemy_dev.sql
 
 # Prisma
 prisma/dev.db
+prisma/migrations/*
 note.txt

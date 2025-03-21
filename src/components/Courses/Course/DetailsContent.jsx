@@ -22,10 +22,10 @@ const DetailsContent = ({ currentUser, course }) => {
 						<div className="courses-details-desc">
 							<Tabs>
 								<TabList>
-									<Tab>Overview</Tab>
-									<Tab>Curriculum</Tab>
+									<Tab>Descripción</Tab>
+									<Tab>Currículum</Tab>
 									<Tab>Instructor</Tab>
-									<Tab>Reviews</Tab>
+									<Tab>Reseñas</Tab>
 								</TabList>
 								<TabPanel>
 									<Description {...course} />

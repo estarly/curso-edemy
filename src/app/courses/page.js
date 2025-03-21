@@ -14,7 +14,7 @@ const page = async ({ searchParams }) => {
 	return (
 		<>
 			<PageBanner
-				pageTitle="Courses"
+				pageTitle="Cursos"
 				homePageUrl="/"
 				homePageText="Home"
 				activePageText="Courses"

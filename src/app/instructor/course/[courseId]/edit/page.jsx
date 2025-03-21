@@ -7,7 +7,7 @@ import Header from "../../Header";
 const Page = async ({ params }) => {
 	const { course } = await getCourseById(params);
 
-	// console.log(course);
+	 console.log(course,'edit course');
 	return (
 		<>
 			<div className="ptb-100">

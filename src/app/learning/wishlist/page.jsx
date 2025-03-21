@@ -27,7 +27,7 @@ const Page = async () => {
 						) : (
 							<div className="col-lg-12 col-md-12">
 								<div className="text-center border py-3 fs-5">
-									Empty
+									No tienes cursos favoritos
 								</div>
 							</div>
 						)}

@@ -4,10 +4,15 @@ import React from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-
+import { usePathname } from "next/navigation";
 const UserMenu = ({ currentUser }) => {
+	const pathname = usePathname();	
 	const isAdmin = currentUser?.role === "ADMIN";
+	const isInstructor = currentUser?.is_instructor;
+	const isStudent = currentUser?.role === "USER";
 
+	//console.log(currentUser,'UserMenu');
+	//console.log(currentUser.role, currentUser.is_instructor,'UserMenu');
 	const dummyImage =
 		"https://res.cloudinary.com/dev-empty/image/upload/v1661245253/wqsnxv0pfdwl2abdakf5.jpg";
 
@@ -69,24 +74,63 @@ const UserMenu = ({ currentUser }) => {
 										</div>
 									</Link>
 								</li>
-
 								<li>
 									<hr className="dropdown-divider" />
 								</li>
 
-								{isAdmin ? (
+								{isAdmin && (
 									<li>
 										<Link
 											className="dropdown-item"
 											href="/admin/"
 										>
 											<i className="bx bxs-dashboard"></i>{" "}
-											Dashboard
+											Dashboard Admin
 										</Link>
 									</li>
-								) : null}
+									//asignar cursos a un modulo
+									//asignar modulos a un usuario
+									//
 
-								<li>
+
+								)}
+								{!isAdmin && isInstructor && (
+									<li>
+										<Link
+											className="dropdown-item"
+											href="/instructor/courses"
+										>
+											<i className="bx bxs-dashboard"></i> My
+											Courses
+										</Link>
+									</li>
+								)}
+								{!isAdmin && !isInstructor && isStudent && (
+
+									<>
+										<li>
+											<Link
+												className={`dropdown-item ${pathname === "/learning/my-courses" ? "active" : ""}`}
+												href="/learning/my-courses"
+											>
+												<i className="bx bx-book"></i>Mi Aprendizaje
+											</Link>
+										</li>
+										<li>
+											<Link
+												className={`dropdown-item ${pathname === "/learning/by-module" ? "active" : ""}`}
+												href="/learning/by-module"
+											>
+												<i className="bx bx-book"></i>Por Módulo
+											</Link>
+										</li>
+										{/*Tareas de un curso*/}
+										
+									</>
+								)}
+
+
+								{/* <li>
 									<Link
 										className="dropdown-item"
 										href="/instructor/courses"
@@ -123,12 +167,12 @@ const UserMenu = ({ currentUser }) => {
 									>
 										<i className="bx bxs-heart"></i>Wishlist
 									</Link>
-								</li>
+								</li> */}
 
 								<li>
 									<Link
-										className="dropdown-item"
-										href="/profile/basic-information/"
+										className={`dropdown-item ${pathname === "/profile/basic-information" ? "active" : ""}`}
+										href="/profile/basic-information"
 									>
 										<i className="bx bx-user-circle"></i>{" "}
 										Account settings

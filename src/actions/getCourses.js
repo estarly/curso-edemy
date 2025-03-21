@@ -41,6 +41,7 @@ export async function getCourses(params) {
 		}
 
 		where.status = "Approved";
+		where.is_module = false;
 		const courses = await prisma.course.findMany({
 			where,
 			orderBy: getOrderByClause(),

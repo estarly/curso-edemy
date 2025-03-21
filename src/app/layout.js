@@ -71,8 +71,9 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
 	const currentUser = await getCurrentUser();
+	//console.log(currentUser,'RootLayout');
 	return (
-		<html lang="en">
+		<html lang="es">
 			<body className={nunito.className} suppressHydrationWarning={true}>
 				<TosterProvider />
 				<Navbar currentUser={currentUser} />

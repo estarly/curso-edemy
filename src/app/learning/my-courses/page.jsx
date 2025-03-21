@@ -8,12 +8,13 @@ const Page = async () => {
 	const result = await myLearning();
 	const enrolments = result?.enrolments || [];
 	const currentUser = await getCurrentUser();
+	console.log(enrolments, "enrolments");
+	
 	return (
 		<>
 			<div className="ptb-100">
 				<div className="container">
 					<Links currentUser={currentUser} />
-
 					<div className="row">
 						{enrolments.length > 0 ? (
 							enrolments.map((enrl) => (
@@ -67,7 +68,7 @@ const Page = async () => {
 						) : (
 							<div className="col-lg-12 col-md-12">
 								<div className="text-center fs-5 border p-3">
-									Empty
+									No tienes cursos inscritos
 								</div>
 							</div>
 						)}

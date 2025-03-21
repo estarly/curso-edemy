@@ -25,7 +25,7 @@ const CoursesDetailsSidebar = ({
 					<li className="price">
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
-								<i className="flaticon-tag"></i> Price
+								<i className="flaticon-tag"></i> Precio
 							</span>
 							${regular_price}
 						</div>
@@ -41,7 +41,7 @@ const CoursesDetailsSidebar = ({
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
-								<i className="flaticon-time"></i> Duration
+								<i className="flaticon-time"></i> Duración
 							</span>
 							{duration}
 						</div>
@@ -50,7 +50,7 @@ const CoursesDetailsSidebar = ({
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
 								<i className="flaticon-distance-learning"></i>{" "}
-								Lessons
+								Lecciones
 							</span>
 							{lessons}
 						</div>
@@ -58,15 +58,15 @@ const CoursesDetailsSidebar = ({
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
-								<i className="flaticon-web"></i> Enrolled
+								<i className="flaticon-web"></i> Inscritos
 							</span>
-							255 students
+							255 estudiantes
 						</div>
 					</li>
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
-								<i className="flaticon-lock"></i> Access
+								<i className="flaticon-lock"></i> Acceso
 							</span>
 							{access_time}
 						</div>
@@ -84,7 +84,7 @@ const CoursesDetailsSidebar = ({
 				<div className="courses-share">
 					<div className="share-info">
 						<span>
-							Share This Course <i className="flaticon-share"></i>
+							Compartir este curso <i className="flaticon-share"></i>
 						</span>
 
 						<ul className="social-link">

@@ -83,6 +83,7 @@ model Course {
   what_you_will_learn    String   @db.Text
   who_is_this_course_for String   @db.Text
   status                 Status   @default(Pending)
+  is_module              Boolean  @default(false)
   in_home_page           Boolean  @default(false)
   in_home_page_set_at    DateTime @default(now())
   created_at             DateTime @default(now())

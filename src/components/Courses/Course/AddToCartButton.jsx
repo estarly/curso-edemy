@@ -10,7 +10,7 @@ const AddToCartButton = ({ id, title, slug, regular_price, image }) => {
 		<div className="btn-box">
 			{cart.map((item) => item.id).includes(id) ? (
 				<button className="default-btn w-100" disabled={true}>
-					<i className="flaticon-shopping-cart"></i> Add to Cart{" "}
+					<i className="flaticon-shopping-cart"></i> Ya esta agregado al carrito{" "}
 					<span></span>
 				</button>
 			) : (
@@ -18,7 +18,7 @@ const AddToCartButton = ({ id, title, slug, regular_price, image }) => {
 					className="default-btn w-100"
 					onClick={() => handleAddToCart(item)}
 				>
-					<i className="flaticon-shopping-cart"></i> Add to Cart{" "}
+					<i className="flaticon-shopping-cart"></i> Inscribirme{" "}
 					<span></span>
 				</button>
 			)}

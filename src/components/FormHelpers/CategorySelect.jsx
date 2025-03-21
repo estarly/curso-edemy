@@ -4,20 +4,21 @@ import { useState } from "react";
 import Select from "react-select";
 
 const categories = [
-	{ value: "Web Development", label: "Web Development" },
-	{ value: "App Development", label: "App Development" },
-	{ value: "Business", label: "Business" },
-	{ value: "Finance & Accounting", label: "Finance & Accounting" },
-	{ value: "IT & Software", label: "IT & Software" },
-	{ value: "Office Productivity", label: "Office Productivity" },
-	{ value: "Personal Development", label: "Personal Development" },
-	{ value: "Design", label: "Design" },
-	{ value: "Marketing", label: "Marketing" },
-	{ value: "Lifestyle", label: "Lifestyle" },
-	{ value: "Photography & Video", label: "Photography & Video" },
-	{ value: "Health & Fitness", label: "Health & Fitness" },
-	{ value: "Music", label: "Music" },
-	{ value: "Teacing & Academics", label: "Teacing & Academics" },
+	{ value: 1, label: "Nueva Categoría" },
+	{ value: 2, label: "Web Development" },
+	{ value: 3, label: "App Development" },
+	{ value: 4, label: "Business" },
+	{ value: 5, label: "Finance & Accounting" },
+	{ value: 6, label: "IT & Software" },
+	{ value: 7, label: "Office Productivity" },
+	{ value: 8, label: "Personal Development" },
+	{ value: 9, label: "Design" },
+	{ value: 10, label: "Marketing" },
+	{ value: 11, label: "Lifestyle" },
+	{ value: 12, label: "Photography & Video" },
+	{ value: 13, label: "Health & Fitness" },
+	{ value: 14, label: "Music" },
+	{ value: 15, label: "Teacing & Academics" },
 ];
 
 const CategorySelect = ({ label, value, onChange }) => {
