@@ -36,7 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 edemy_dev.sql
-data_edemy_dev.sql
+#data_edemy_dev.sql
 
 # Prisma
 prisma/dev.db

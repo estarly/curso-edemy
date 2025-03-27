@@ -9,13 +9,15 @@ import TopCategories from "@/components/OnlineTrainingSchool/TopCategories";
 import FunFactsTwo from "@/components/Shared/FunFactsTwo";
 import Partner from "@/components/Shared/Partner";
 import SubscribeForm from "@/components/Shared/SubscribeForm";
-import FunFacts from "@/components/CollegeWebsite/FunFacts";
+//import FunFacts from "@/components/CollegeWebsite/FunFcts";
 
 const page = () => {
 	return (
 		<>
 			<Banner />
-			<FunFacts/>
+			{
+				/*<FunFacts/>*/
+			}
 			<AboutUs />
 			<TopCategories />
 			<Courses />

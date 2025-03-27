@@ -39,7 +39,7 @@ export async function myLearningPlay(params) {
 			include: {
 				assets: {
 					where: {
-						type: "video",
+						assetTypeId: 2,
 					},
 				},
 			},
