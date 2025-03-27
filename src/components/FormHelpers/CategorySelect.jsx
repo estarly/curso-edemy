@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 
 const categories = [
@@ -22,9 +22,13 @@ const categories = [
 ];
 
 const CategorySelect = ({ label, value, onChange }) => {
-	const selectedOption = categories.find(
-		(category) => category.value === value
-	);
+	const [selectedOption, setSelectedOption] = useState(null);
+	useEffect(() => {
+		let selected = categories.find(
+			(category) => category.value === value
+		);
+		setSelectedOption(selected);
+	}, [value]);
 
 	return (
 		<div className="form-gorup">
@@ -35,7 +39,7 @@ const CategorySelect = ({ label, value, onChange }) => {
 				isClearable
 				isSearchable={true}
 				options={categories}
-				value={selectedOption || value}
+				value={selectedOption}
 				onChange={(value) => onChange(value)}
 				formatOptionLabel={(option) => (
 					<div className="flex flex-row items-center gap-3">

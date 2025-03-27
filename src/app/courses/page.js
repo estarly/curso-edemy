@@ -13,12 +13,12 @@ const page = async ({ searchParams }) => {
 	const currentUser = await getCurrentUser();
 	return (
 		<>
-			<PageBanner
-				pageTitle="Cursos"
+			{/*<PageBanner
+				pageTitle="Cursos sdf "
 				homePageUrl="/"
 				homePageText="Home"
 				activePageText="Courses"
-			/>
+			/>*/}
 			<CoursesContent courses={courses} currentUser={currentUser} />
 		</>
 	);

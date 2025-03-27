@@ -24,15 +24,17 @@ export async function getAdminStats() {
 					where: { status: "PAID" },
 				}),
 				prisma.asset.count({
-					where: { type: "video" },
+					where: { assetTypeId: 1 },
 				}),
 				prisma.asset.count({
-					where: { type: "file" },
+					where: { assetTypeId: 2 },
 				}),
 			]);
 
 		return { students, courses, instructors, enrolments, videos, assets };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
+		return { students: 0, instructors: 0, courses: 0, enrolments: 0, videos: 0, assets: 0 }; 
+
 	}
 }

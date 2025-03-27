@@ -3,10 +3,9 @@ import { getAdminStats } from "@/actions/getAdminStats";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
 const Page = async () => {
-	const { students, instructors, courses, enrolments, videos, assets } =
-		await getAdminStats();
-
+	const { students, instructors, courses, enrolments, videos, assets } = await getAdminStats();
 	const currentUser = await getCurrentUser();
+	console.log(currentUser, 'currentUser');
 	const isAdmin = currentUser?.role === "ADMIN";
 
 	return (
@@ -25,7 +24,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bx-group"></i>
 											<h1>{students}</h1>
-											<p>Total Students</p>
+											<p>Total Estudiantes</p>
 										</div>
 									</div>
 
@@ -33,7 +32,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bxs-file"></i>
 											<h1>{courses}</h1>
-											<p>Total Courses</p>
+											<p>Total Cursos</p>
 										</div>
 									</div>
 
@@ -41,7 +40,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bx-group"></i>
 											<h1>{instructors}</h1>
-											<p>Total Instructors</p>
+											<p>Total Instructores</p>
 										</div>
 									</div>
 
@@ -49,7 +48,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bx-cart"></i>
 											<h1>{enrolments}</h1>
-											<p>Course Enrolled</p>
+											<p>Cursos Inscritos</p>
 										</div>
 									</div>
 
@@ -57,7 +56,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bx-cart"></i>
 											<h1>$2941.56</h1>
-											<p>Total Sale</p>
+											<p>Total Ventas</p>
 										</div>
 									</div>
 
@@ -65,7 +64,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bx-cart"></i>
 											<h1>{videos}</h1>
-											<p>Course Videos</p>
+											<p>Videos</p>
 										</div>
 									</div>
 
@@ -73,7 +72,7 @@ const Page = async () => {
 										<div className="info-box-card">
 											<i className="bx bx-cart"></i>
 											<h1>{assets}</h1>
-											<p>Course Assets</p>
+											<p>Recursos</p>
 										</div>
 									</div>
 								</div>

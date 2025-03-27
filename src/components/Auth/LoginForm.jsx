@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Input from "../FormHelpers/Input";
 
-const LoginForm = () => {
+const LoginForm =  () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 
@@ -31,21 +31,23 @@ const LoginForm = () => {
 			redirect: false,
 		}).then((callback) => {
 			setIsLoading(false);
-			console.log(callback);
+			console.log(callback, 'callback');
+
+			if (callback?.error) {
+				toast.error(callback.error);
+			}
+			
 			if (!callback?.error) {
 				toast.success("Logged in");
 				router.refresh();
 			}
 
-			if (callback?.error) {
-				toast.error(callback.error);
-			}
 		});
 	};
 
 	return (
 		<div className="login-form">
-			<h2>Login</h2>
+			<h2>Iniciar Sesión</h2>
 
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Input

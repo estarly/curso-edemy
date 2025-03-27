@@ -1,5 +1,5 @@
 import CourseAdvisor from "@/components/DistanceLearning/CourseAdvisor";
-import Features from "@/components/Index/Features";
+
 import AboutArea from "@/components/OnlineTrainingSchool/AboutArea";
 import FeedbackSlider from "@/components/OnlineTrainingSchool/FeedbackSlider";
 import FunFactsTwo from "@/components/Shared/FunFactsTwo";
@@ -15,7 +15,7 @@ const page = () => {
 				homePageText="Home"
 				activePageText="About Us"
 			/>
-			<Features />
+			{/*<Features />*/}
 			<AboutArea />
 			<FeedbackSlider />
 			<CourseAdvisor />

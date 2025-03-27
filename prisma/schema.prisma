@@ -8,27 +8,28 @@ generator client {
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  //relationMode = "prisma"
 }
 
 model User {
-  id             Int         @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   name           String
   designation    String?
-  email          String      @unique
+  email          String        @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  role           Role        @default(USER)
-  is_instructor  Boolean     @default(false)
-  created_at     DateTime    @default(now())
-  updated_at     DateTime    @updatedAt
+  role           Role          @default(USER)
+  is_instructor  Boolean       @default(false)
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
   accounts       Account[]
   profile        Profile?
   courses        Course[]
   favourites     Favourite[]
   enrolments     Enrolment[]
   reviews        Review[]
+  StateCourse    StateCourse[]
 }
 
 model Profile {
@@ -70,6 +71,7 @@ model Category {
   id         Int      @id @default(autoincrement())
   name       String
   status     Int      @default(1)
+  logo       String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -106,6 +108,7 @@ model Course {
   assets        Asset[]
   reviews       Review[]
   courseModules CourseModule[]
+  StateCourse   StateCourse[]
 
   @@index([userId])
   @@index([category_id])
@@ -126,10 +129,20 @@ model Review {
   @@index([courseId])
 }
 
+model AssetType {
+  id         Int      @id @default(autoincrement())
+  name       String
+  status     Int      @default(1)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  assets Asset[]
+}
+
 model Asset {
   id           Int      @id @default(autoincrement())
   courseId     Int
-  type         Type     @default(video)
+  assetTypeId  Int      @default(1)
   title        String?
   file_url     String?
   video_url    String?
@@ -138,15 +151,21 @@ model Asset {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course      Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  assetType   AssetType     @relation(fields: [assetTypeId], references: [id])
+  assignments Assignment[]
+  statecourse StateCourse[]
 
   @@index([courseId])
+  @@index([assetTypeId])
+  @@index([courseId, assetTypeId])
 }
 
 model Module {
   id          Int     @id @default(autoincrement())
   title       String
   description String?
+  logo        String?
   status      Int     @default(1)
 
   courseModules CourseModule[]
@@ -168,8 +187,8 @@ model CourseModule {
 model Enrolment {
   id             Int           @id @default(autoincrement())
   userId         Int
-  courseId       Int? // Cambiado a nullable
-  moduleId       Int? // Nuevo campo nullable
+  courseId       Int? 
+  moduleId       Int? 
   order_number   String        @unique
   price          Int?
   paymentId      String?
@@ -199,6 +218,85 @@ model Favourite {
   @@index([userId, courseId])
   @@index([userId])
   @@index([courseId])
+}
+
+model Banner {
+  id         Int      @id @default(autoincrement())
+  name       String
+  description String?
+  url         String?
+  status     Int      @default(1)
+  image      String?
+  order      Int      @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Assignment {
+  id               Int      @id @default(autoincrement())
+  assetId          Int
+  assignmentTypeId Int
+  title            String
+  description      String?
+  config           Json?
+  status           Int      @default(1)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  asset          Asset          @relation(fields: [assetId], references: [id])
+  assignmenttype AssignmentType @relation(fields: [assignmentTypeId], references: [id])
+  statecourse    StateCourse[]
+
+  @@index([assetId])
+  @@index([assignmentTypeId])
+}
+
+model AssignmentType {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  status      Int      @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  assignments Assignment[]
+}
+
+model Clasification {
+  id         Int      @id @default(autoincrement())
+  stateCourseId    Int
+  response   Json
+  complete   Int      @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  statecourse StateCourse @relation(fields: [stateCourseId], references: [id])
+
+  @@index([stateCourseId])
+}
+
+model StateCourse {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  courseId         Int
+  stateAsset      Boolean  @default(false)
+  assetId          Int
+  stateEvaluation Boolean  @default(false)
+  assignmentId     Int
+  state            Int      @default(0)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  clasifications Clasification[]
+  user           User            @relation(fields: [userId], references: [id])
+  course         Course          @relation(fields: [courseId], references: [id])
+  asset          Asset           @relation(fields: [assetId], references: [id])
+  evaluation     Assignment      @relation(fields: [assignmentId], references: [id])
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([assetId])
+  @@index([assignmentId])
 }
 
 enum Role {

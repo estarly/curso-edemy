@@ -25,19 +25,24 @@ const Filter = () => {
 		);
 	};
 	return (
-		<div className="col-lg-4 col-md-6 ordering">
-			<div className="select-box">
+		<div className="col-lg-4 col-md-6  d-flex gap-3">
+			<div className="select-box w-50">
+				<label htmlFor="category">Categorías</label>
 				<select className="form-control" onChange={handleSortChange}>
-					<option value="">Sort by (Default DESC)</option>
-					<option value="asc">Oldest first</option>
-					<option value="price_low">
-						Sort by price: low to high
-					</option>
-					<option value="price_high">
-						Sort by price: high to low
-					</option>
+					<option value="asc">1 categoria</option>
+					<option value="price_low">2 categoria</option>
+					<option value="price_high">3 categoria</option>
+					<option value="desc">4 categoria</option>
 				</select>
 			</div>
+			<div className="select-box w-50">
+				<label htmlFor="category">Orden</label>
+				<select className="form-control" onChange={handleSortChange}>
+					<option value="asc">Más antiguos</option>
+					<option value="desc">Más recientes</option>
+				</select>
+			</div>
+			
 		</div>
 	);
 };

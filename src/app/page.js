@@ -1,39 +1,34 @@
-import { getHomepageCourses } from "@/actions/getCourses";
-import { getCurrentUser } from "@/actions/getCurrentUser";
+import AboutUs from "@/components/Index/AboutUs";
 import Banner from "@/components/Index/Banner";
+import Courses from "@/components/Index/Courses";
 import DistanceLearning from "@/components/Index/DistanceLearning";
-import Features from "@/components/Index/Features";
-import IntroVideo from "@/components/Index/IntroVideo";
-import Partner from "@/components/Index/Partner";
-import SelfDevelopmentCourse from "@/components/Index/SelfDevelopmentCourse";
-import Testimonials from "@/components/Index/Testimonials";
-import TopSellingCourses from "@/components/Index/TopSellingCourses";
-import Cta from "@/components/Shared/Cta";
-import DistanceLearningTwo from "@/components/Shared/DistanceLearningTwo";
-import FunFactsFour from "@/components/Shared/FunFactsFour";
-import LatestNews from "@/components/Shared/LatestNews";
+import Totals from "@/components/Index/Totals";
+import FeedbackSlider from "@/components/Index/FeedbackSlider";
+import UpcomingEvents from "@/components/Index/UpcomingEvents";
+import TopCategories from "@/components/OnlineTrainingSchool/TopCategories";
+import FunFactsTwo from "@/components/Shared/FunFactsTwo";
+import Partner from "@/components/Shared/Partner";
+import SubscribeForm from "@/components/Shared/SubscribeForm";
+import FunFacts from "@/components/CollegeWebsite/FunFacts";
 
-export const metadata = {
-	title: "Home | eDemy - React Next.js Education LMS Template",
-};
-
-export default async function Home() {
-	const currentUser = await getCurrentUser();
-	const { courses } = await getHomepageCourses();
+const page = () => {
 	return (
 		<>
-			<Banner currentUser={currentUser} />
-			<Features />
-			<TopSellingCourses courses={courses} currentUser={currentUser} />
+			<Banner />
+			<FunFacts/>
+			<AboutUs />
+			<TopCategories />
+			<Courses />
+		
+			{/*<FeedbackSlider />			
+			<FunFactsTwo />
 			<DistanceLearning />
-			<Testimonials />
-			<SelfDevelopmentCourse currentUser={currentUser} />
-			<Partner />
-			<IntroVideo />
-			<FunFactsFour />
-			<LatestNews />
-			<DistanceLearningTwo />
-			<Cta />
+			<UpcomingEvents />
+			<SubscribeForm mainClsAtts="subscribe-area ptb-100" />
+			<Partner mainClsAtts="partner-area bg-fe4a55 ptb-70" />
+			*/}
 		</>
 	);
-}
+};
+
+export default page;

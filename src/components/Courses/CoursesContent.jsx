@@ -6,14 +6,15 @@ import Filter from "./Filter";
 
 const CoursesContent = ({ courses, currentUser }) => {
 	return (
-		<div className="courses-area courses-section pt-100 pb-70">
+		<div className="courses-area courses-section pbt-70 pt-100">
 			<div className="container">
 				<div className="edemy-grid-sorting row align-items-center">
 					<div className="col-lg-8 col-md-6 result-count">
+						<h1>Cursos</h1>
 						<p>
-							We found{" "}
+							Encontramos{" "}
 							<span className="count">{courses.length}</span>{" "}
-							courses available for you
+							cursos disponibles para ti
 						</p>
 					</div>
 

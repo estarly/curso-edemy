@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/actions/getCurrentUser";
 const Page = async ({}) => {
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
+
 	return (
 		<>
 			<div className="main-content">
@@ -19,13 +20,8 @@ const Page = async ({}) => {
 							<div className="main-content-box">
 								<ul className="nav-style1">
 									<li>
-										<Link href="/admin/students/">
-											Students
-										</Link>
-									</li>
-									<li>
-										<Link href="/admin/students/site-admins/">
-											Admins
+										<Link href="/admin/students">
+											Estudiantes
 										</Link>
 									</li>
 								</ul>

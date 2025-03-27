@@ -6,85 +6,126 @@ import Image from "next/image";
 
 const DistanceLearning = () => {
 	return (
-		<>
-			<div className="about-area ptb-100 bg-f9fbff">
-				<div className="container">
-					<div className="row align-items-center">
-						<div className="col-lg-6 col-md-12">
-							<div className="about-image">
-								<Image
-									src="/images/about-img12.png"
-									width={646}
-									height={554}
-									alt="image"
-								/>
-							</div>
-						</div>
+		<div className="overview-area ptb-100">
+			<div className="container">
+				<div className="overview-box">
+					<div className="overview-content">
+						<span className="sub-title">Distance Learning</span>
+						<h2>
+							Feel Like You Are Attending Your classNamees
+							Physically!
+						</h2>
+						<p>
+							eCademy training programs can bring you a super
+							exciting experience of learning through online! You
+							never face any negative experience while enjoying
+							your classNamees virtually by sitting in your
+							comfort zone. Our flexible learning initiatives will
+							help you to learn better and quicker than the
+							traditional ways of learning skills.
+						</p>
 
-						<div className="col-lg-6 col-md-12">
-							<div className="about-content">
-								<span className="sub-title">
-									DISTANCE LEARNING
-								</span>
+						<Link href="#" className="default-btn">
+							<i className="flaticon-user"></i> Get Started Now{" "}
+							<span></span>
+						</Link>
+					</div>
 
-								<h2>
-									Develop Your Skills, Learn Something New,
-									and Grow Your Skills From Anywhere in the
-									World!
-								</h2>
-
-								<p>
-									Lorem ipsum dolor sit amet, consectetur
-									adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua.
-								</p>
-
-								<ul className="features-list">
-									<li>
-										<span>
-											<i className="flaticon-experience"></i>{" "}
-											Expert Instruction
-										</span>
-									</li>
-									<li>
-										<span>
-											<i className="flaticon-time-left"></i>{" "}
-											Lifetime Access
-										</span>
-									</li>
-									<li>
-										<span>
-											<i className="flaticon-tutorials"></i>{" "}
-											Remote Learning
-										</span>
-									</li>
-									<li>
-										<span>
-											<i className="flaticon-self-growth"></i>{" "}
-											Self Development
-										</span>
-									</li>
-								</ul>
-
-								<Link href="/courses" className="default-btn">
-									<i className="flaticon-user"></i>View All
-									Courses<span></span>
-								</Link>
-							</div>
-						</div>
+					<div className="overview-image">
+						<Image
+							src="/images/overview-img1.png"
+							width={658}
+							height={508}
+							alt="image"
+						/>
 					</div>
 				</div>
 
-				<div className="bulb">
-					<Image
-						src="/images/bulb.png"
-						width={350}
-						height={231}
-						alt="image"
-					/>
+				<div className="overview-box">
+					<div className="overview-image">
+						<Image
+							src="/images/overview-img2.png"
+							width={554}
+							height={512}
+							alt="image"
+						/>
+					</div>
+
+					<div className="overview-content">
+						<span className="sub-title">eCademy Mobile App</span>
+						<h2>
+							Access From Your Mobile, Learn Any Time Any Where
+						</h2>
+						<p>
+							eCademy training programs can bring you a super
+							exciting experience of learning through online! You
+							never face any negative experience while enjoying
+							your classNamees virtually by sitting in your
+							comfort zone. Our flexible learning initiatives will
+							help you to learn better and quicker than the
+							traditional ways of learning skills.
+						</p>
+
+						<div className="btn-box">
+							<Link href="#" className="playstore-btn">
+								<Image
+									src="/images/playstore.png"
+									width={27}
+									height={30}
+									alt="image"
+								/>
+								GET IT ON
+								<span>Google Play</span>
+							</Link>
+
+							<Link href="#" className="applestore-btn">
+								<Image
+									src="/images/applestore.png"
+									width={34}
+									height={35}
+									alt="image"
+								/>
+								GET IT ON
+								<span>Apple Store</span>
+							</Link>
+						</div>
+					</div>
 				</div>
 			</div>
-		</>
+
+			<div className="shape2">
+				<Image
+					src="/images/shape2.png"
+					width={206}
+					height={258}
+					alt="image"
+				/>
+			</div>
+			<div className="shape3">
+				<Image
+					src="/images/shape3.png"
+					width={150}
+					height={150}
+					alt="image"
+				/>
+			</div>
+			<div className="shape4">
+				<Image
+					src="/images/shape4.png"
+					width={26}
+					height={26}
+					alt="image"
+				/>
+			</div>
+			<div className="shape9">
+				<Image
+					src="/images/shape8.svg"
+					width={22}
+					height={22}
+					alt="image"
+				/>
+			</div>
+		</div>
 	);
 };
 

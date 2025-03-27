@@ -20,8 +20,8 @@ const UserMenu = ({ currentUser }) => {
 		<>
 			{!currentUser && (
 				<div className="option-item">
-					<Link href="/auth" className="default-btn">
-						<i className="flaticon-user"></i> Login/Register{" "}
+					<Link href="/auth/login" className="default-btn">
+						<i className="flaticon-user"></i> Iniciar Sesion{" "}
 						<span></span>
 					</Link>
 				</div>

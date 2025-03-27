@@ -53,7 +53,7 @@ const CourseCreateForm = ({ currentUser }) => {
 	const onSubmit = (data) => {
 		setIsLoading(true);
 		if (!data.image) {
-			toast.error("Please drop image 750x500 before submitting.");
+			toast.error("Por favor, suba una imagen de 750x500 antes de enviar.");
 			setIsLoading(false);
 			return;
 		}
@@ -66,7 +66,7 @@ const CourseCreateForm = ({ currentUser }) => {
 				);
 			})
 			.catch((error) => {
-				toast.error("Something went wrong!");
+				toast.error("Algo salió mal!");
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -86,7 +86,7 @@ const CourseCreateForm = ({ currentUser }) => {
 			<div className="row">
 				<div className="col-md-6">
 					<Input
-						label="Course Title"
+						label="Título del curso"
 						id="title"
 						disabled={isLoading}
 						register={register}
@@ -97,13 +97,13 @@ const CourseCreateForm = ({ currentUser }) => {
 					<CategorySelect
 						value={category}
 						onChange={(value) => setCustomValue("category", value)}
-						label="Category"
+						label="Categoría"
 					/>
 				</div>
 
 				<div className="col-md-6">
 					<Input
-						label="Lessons"
+						label="Lecciones"
 						id="lessons"
 						disabled={isLoading}
 						register={register}
@@ -113,7 +113,7 @@ const CourseCreateForm = ({ currentUser }) => {
 
 				<div className="col-md-6">
 					<SetPrice
-						label="Regular Price"
+						label="Precio Regular"
 						id="regular_price"
 						required
 						disabled={isLoading}
@@ -128,7 +128,7 @@ const CourseCreateForm = ({ currentUser }) => {
 
 				<div className="col-md-6">
 					<SetPrice
-						label="Before Price"
+						label="Precio Anterior"
 						id="before_price"
 						required
 						disabled={isLoading}
@@ -143,7 +143,7 @@ const CourseCreateForm = ({ currentUser }) => {
 
 				<div className="col-md-6">
 					<Input
-						label="Duration"
+						label="Duración"
 						id="duration"
 						disabled={isLoading}
 						register={register}
@@ -153,7 +153,7 @@ const CourseCreateForm = ({ currentUser }) => {
 
 				<div className="col-md-6">
 					<Input
-						label="Access Time"
+						label="Tiempo de acceso"
 						id="access_time"
 						disabled={isLoading}
 						register={register}
@@ -171,7 +171,7 @@ const CourseCreateForm = ({ currentUser }) => {
 				<div className="col-md-6">
 					<div className="form-group">
 						<label className="form-label fw-semibold">
-							Overview
+							Descripción
 						</label>
 						<Controller
 							name="description"
@@ -198,7 +198,7 @@ const CourseCreateForm = ({ currentUser }) => {
 				<div className="col-md-6">
 					<div className="form-group">
 						<label className="form-label fw-semibold">
-							Requirements
+							Requisitos
 						</label>
 						<Controller
 							name="requirements"
@@ -225,7 +225,7 @@ const CourseCreateForm = ({ currentUser }) => {
 				<div className="col-md-6">
 					<div className="form-group">
 						<label className="form-label fw-semibold">
-							What You Will Learn
+							Lo que aprenderás
 						</label>
 						<Controller
 							name="what_you_will_learn"
@@ -252,7 +252,7 @@ const CourseCreateForm = ({ currentUser }) => {
 				<div className="col-md-6">
 					<div className="form-group">
 						<label className="form-label fw-semibold">
-							Who is this course for?
+							Para quién es este curso?
 						</label>
 						<Controller
 							name="who_is_this_course_for"
@@ -278,7 +278,7 @@ const CourseCreateForm = ({ currentUser }) => {
 
 				<div className="col-12">
 					<button type="submit" className="default-btn">
-						<i className="flaticon-right-arrow"></i>Create Course{" "}
+						<i className="flaticon-right-arrow"></i>Crear curso{" "}
 						<span></span>
 					</button>
 				</div>

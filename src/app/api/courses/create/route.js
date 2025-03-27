@@ -60,7 +60,7 @@ export async function POST(request) {
 			data: {
 				title,
 				slug,
-				category: category.value,
+				category_id: parseInt(category.value),
 				description,
 				regular_price: parseFloat(regular_price),
 				before_price: parseFloat(before_price),

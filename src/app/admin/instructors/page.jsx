@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/actions/getCurrentUser";
 const Page = async ({}) => {
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
+
 	return (
 		<>
 			<div className="main-content">
@@ -19,13 +20,8 @@ const Page = async ({}) => {
 							<div className="main-content-box">
 								<ul className="nav-style1">
 									<li>
-										<Link href="/admin/instructors/">
+										<Link href="/admin/instructors">
 											Instructores
-										</Link>
-									</li>
-									<li>
-										<Link href="/admin/students/site-admins/">
-											Administradores
 										</Link>
 									</li>
 								</ul>
@@ -41,32 +37,18 @@ const Page = async ({}) => {
 													Email Confirmed
 												</th>
 												<th scope="col">Text</th>
-												<th scope="col">Admin</th>
+												<th scope="col">Make Admin</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
-												<td>Admin User</td>
-												<td>admin@elearniv.com</td>
-												<td>03190290005</td>
+												<td>Oliver Jake</td>
+												<td>oliverjake@gmail.com</td>
+												<td>N/A</td>
 												<td>Yes</td>
 												<td>
 													<div className="max-300px max-height-60">
-														Admin started his career
-														as a Unix and Linux
-														System Engineer in 1999.
-														Since that time he has
-														utilized his Linux
-														skills at companies such
-														as Xerox, UPS,
-														Hewlett-Packard, and
-														Amazon.com.
-														Additionally, he has
-														acted as a technical
-														consultant and
-														independent contractor
-														for small businesses and
-														Fortune 500 companies.
+														N/A
 													</div>
 												</td>
 												<td>
@@ -81,7 +63,63 @@ const Page = async ({}) => {
 															className="btn btn-success btn-sm fs-12 ms-2"
 															disabled=""
 														>
-															Remove from admin
+															Make An Admin
+														</button>
+													</div>
+												</td>
+											</tr>
+
+											<tr>
+												<td>Student Profile</td>
+												<td>student@elearniv.com</td>
+												<td>0923445853</td>
+												<td>Yes</td>
+												<td>
+													<div className="max-300px max-height-60">
+														N/A
+													</div>
+												</td>
+												<td>
+													<div
+														className="css-bbq5bh"
+														style={{
+															fontSize: "12px",
+														}}
+													>
+														<button
+															type="button"
+															className="btn btn-success btn-sm fs-12 ms-2"
+															disabled=""
+														>
+															Make An Admin
+														</button>
+													</div>
+												</td>
+											</tr>
+
+											<tr>
+												<td>Harry Mason</td>
+												<td>harrymason@gmail.com</td>
+												<td>N/A</td>
+												<td>No</td>
+												<td>
+													<div className="max-300px max-height-60">
+														N/A
+													</div>
+												</td>
+												<td>
+													<div
+														className="css-bbq5bh"
+														style={{
+															fontSize: "12px",
+														}}
+													>
+														<button
+															type="button"
+															className="btn btn-success btn-sm fs-12 ms-2"
+															disabled=""
+														>
+															Make An Admin
 														</button>
 													</div>
 												</td>

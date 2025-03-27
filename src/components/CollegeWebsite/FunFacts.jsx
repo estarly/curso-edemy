@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const FunFacts = () => {
 	return (
@@ -9,31 +10,39 @@ const FunFacts = () => {
 			<div className="funfacts-area position-relative bg-f5f7fa">
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-3 col-md-3 col-sm-6">
-							<div className="cw-funfacts single-funfacts-item">
-								<h3>10594</h3>
-								<p>College students</p>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-3 col-sm-6">
-							<div className="cw-funfacts single-funfacts-item">
-								<h3>95 %</h3>
-								<p>Student progress</p>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-3 col-sm-6">
-							<div className="cw-funfacts single-funfacts-item">
-								<h3>99 %</h3>
-								<p>Achievement rate</p>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-3 col-sm-6">
+						
+						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>712</h3>
-								<p>Passionate staff</p>
+								<p>Cursos</p>
 							</div>
 						</div>
+						<div className="col-lg-3 col-md-6 col-sm-6">
+							<div className="cw-funfacts single-funfacts-item">
+								<h3>712</h3>
+								<p>Instructores staff</p>
+							</div>
+						</div>
+						<div className="col-lg-3 col-md-6 col-sm-6">
+							<div className="cw-funfacts single-funfacts-item">
+								<h3>10594</h3>
+								<p>students</p>
+							</div>
+						</div>
+						<div className="col-lg-3 col-md-6 col-sm-6">
+							<div className="cw-funfacts single-funfacts-item">
+								<h3>67 %</h3>
+								<p>Progreso</p>
+							</div>
+						</div>
+						
 					</div>
+				</div>
+				<div className="boxes-info">
+					<p>
+						If you want more?{" "}
+						<Link href="/courses">View More Courses</Link>
+					</p>
 				</div>
 
 				<Image

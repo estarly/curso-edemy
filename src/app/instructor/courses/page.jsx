@@ -4,6 +4,7 @@ import Image from "next/image";
 import { myCourses } from "@/actions/myCourses";
 import InstructorHeaderMini from "@/components/Instructor/InstructorHeaderMini";
 import ProgressBarCourse from "@/components/Instructor/ProgressBarCourse";
+import CategorySelect from "@/components/FormHelpers/CategorySelect";
 
 const Page = async () => {
 	const { courses } = await myCourses();
@@ -12,7 +13,13 @@ const Page = async () => {
 			<InstructorHeaderMini />
 			<div className="pb-1 pt-5">
 				<div className="container">
-					<h3 className="mb-5 text-center">Mis Cursos</h3>
+					<div className="d-flex justify-content-between align-items-center mb-5">
+						<h3 className="text-left">Mis Cursos</h3>
+						<div className="align-items-center">
+							<label className="me-2">Filtrar por categoría:</label>
+							<CategorySelect/>
+						</div>
+					</div>
 					<div className="row justify-content-center">
 						{courses.map((course) => (
 							<div key={course.id} className="col-lg-4 col-md-6">

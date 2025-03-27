@@ -47,7 +47,7 @@ export async function POST(request, { params }) {
 			where: { id: parseInt(courseId) },
 			data: {
 				title,
-				category: category.value,
+				category_id: parseInt(category.value),
 				description,
 				regular_price: parseFloat(regular_price),
 				before_price: parseFloat(before_price),

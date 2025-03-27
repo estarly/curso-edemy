@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 const MenuItem = ({ label, link, submenu }) => {
 	const pathname = usePathname();
+	const isActiveInit = pathname == link;
 	if (submenu) {
 		return (
 			<li className="nav-item" key={label}>
@@ -35,7 +36,7 @@ const MenuItem = ({ label, link, submenu }) => {
 
 	return (
 		<li className="nav-item" key={label}>
-			<Link href={link} className="nav-link">
+			<Link href={link} className={`nav-link ${isActiveInit && 'active'}`} >
 				{label}
 			</Link>
 		</li>

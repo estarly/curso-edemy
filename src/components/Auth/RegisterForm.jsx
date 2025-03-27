@@ -40,8 +40,8 @@ const RegisterForm = () => {
 	};
 
 	return (
-		<div className="register-form">
-			<h2>Register</h2>
+		<div className="login-form">
+			<h2>Registrarme</h2>
 
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Input

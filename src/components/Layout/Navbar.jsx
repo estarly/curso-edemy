@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { menus } from "../../../libs/menus";
+import { menuNew,menus } from "../../../libs/menus";
 import MenuItem from "./MenuItem";
 import MegaMenu from "./MegaMenu";
 import { usePathname } from "next/navigation";
@@ -78,29 +78,29 @@ const Navbar = ({ currentUser }) => {
 								className={classOne}
 								id="navbarSupportedContent"
 							>
-								<SearchForm />
+								{/*<SearchForm />*/}
 
 								<ul className="navbar-nav">
-									{menus.map((menuItem) => (
+									{menuNew.map((menuItem) => (
 										<MenuItem
 											key={menuItem.label}
 											{...menuItem}
 										/>
 									))}
 
-									<MegaMenu />
+									{/*<MegaMenu />*/}
 								</ul>
 							</div>
 
 							<div className="others-option d-flex align-items-center">
-								<div className="option-item">
+								{/*<div className="option-item">
 									<div className="cart-btn">
 										<Link href="/cart">
 											<i className="flaticon-shopping-cart"></i>{" "}
 											<span>{count()}</span>
 										</Link>
 									</div>
-								</div>
+								</div>*/}
 
 								<UserMenu currentUser={currentUser} />
 							</div>
@@ -139,16 +139,16 @@ const Navbar = ({ currentUser }) => {
 						</div>
 
 						<div className="modal-body">
-							<SearchForm />
+							{/*<SearchForm />*/}
 							<ul>
-								{menus.map((menuItem) => (
+								{menuNew.map((menuItem) => (
 									<MenuItem
 										key={menuItem.label}
 										{...menuItem}
 									/>
 								))}
 
-								<MegaMenu />
+								{/*<MegaMenu />*/}
 							</ul>
 						</div>
 					</div>

@@ -44,7 +44,7 @@ const EditCourseForm = ({ course, params }) => {
 
 	useEffect(() => {
 		setValue("title", course[0].title);
-		setValue("category", course[0].category);
+		setValue("category", course[0].category_id);
 		setValue("description", course[0].description);
 		setValue("regular_price", course[0].regular_price);
 		setValue("before_price", course[0].before_price);
@@ -285,10 +285,9 @@ const EditCourseForm = ({ course, params }) => {
 						/>
 					</div>
 				</div>
-
 				<div className="col-12">
 					<button type="submit" className="default-btn">
-						<i className="flaticon-right-arrow"></i>Update Course{" "}
+						<i className="flaticon-right-arrow"></i>Modificar curso{" "}
 						<span></span>
 					</button>
 				</div>
