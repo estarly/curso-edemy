@@ -1,4 +1,5 @@
-
+"use client";
+/*
 import React, { useState } from "react";
 import Link from "next/link";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
@@ -9,9 +10,9 @@ import Swal from "sweetalert2";
 const Page = async ({}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [newBanner, setNewBanner] = useState({ name: "", description: "", image: "" });
-	
+
 	const  banners  = await getBanners();
-	const  saveBanners = await saveBanners();
+	
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
 
@@ -24,7 +25,7 @@ const Page = async ({}) => {
 		});
 
 		if (result.isConfirmed) {
-			//await saveBanners(newBanner);
+			await saveBanners(newBanner);
 			setShowModal(false);
 			Swal.fire('Guardado!', 'El banner ha sido guardado.', 'success');
 		}
@@ -133,8 +134,10 @@ const Page = async ({}) => {
 					</div>
 				</div>
 			)}
+
 		</>
 	);
 };
 
 export default Page;
+*/

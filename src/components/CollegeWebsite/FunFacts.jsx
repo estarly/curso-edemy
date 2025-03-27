@@ -3,8 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getTotal } from "@/actions/principal/getTotal";
 
-const FunFacts = () => {
+const FunFacts = async () => {
+	const funFacts = await getTotal();
+	
 	return (
 		<>
 			<div className="funfacts-area position-relative bg-f5f7fa">
@@ -13,25 +16,25 @@ const FunFacts = () => {
 						
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
-								<h3>712</h3>
+								<h3>{funFacts.courses}</h3>
 								<p>Cursos</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
-								<h3>712</h3>
+								<h3>{funFacts.instructors}</h3>
 								<p>Instructores staff</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
-								<h3>10594</h3>
+								<h3>{funFacts.students}</h3>
 								<p>students</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
-								<h3>67 %</h3>
+								<h3>{funFacts.progress}</h3>
 								<p>Progreso</p>
 							</div>
 						</div>
@@ -40,8 +43,7 @@ const FunFacts = () => {
 				</div>
 				<div className="boxes-info">
 					<p>
-						If you want more?{" "}
-						<Link href="/courses">View More Courses</Link>
+						Si quieres más?{" "}<Link href="/courses">Ver más cursos</Link>
 					</p>
 				</div>
 

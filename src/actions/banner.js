@@ -22,17 +22,17 @@ export async function getBanners() {
 	}
 }
 
-export async function saveBanners() {
+export async function saveBanners(newBanner) {
 	
 	try {
 		
 		const banner = await prisma.banner.create({
 			data: {
-				name: "Banner 1",
-				description: "Descripción del banner 1",
-				url: "https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg",
+				name: newBanner.name,
+				description: newBanner.description,
+				url: newBanner.url,
 				status: 1,
-				image: "https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg",
+				image: newBanner.image,
 				order: 0,
 			},
 		});
