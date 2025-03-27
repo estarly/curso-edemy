@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import { getCurrentUser } from "@/actions/getCurrentUser";
-import { getBanners } from "@/actions/banner";
+import { getBanners,saveBanners } from "@/actions/banner";
 import Swal from "sweetalert2";
 
 const Page = async ({}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [newBanner, setNewBanner] = useState({ name: "", description: "", image: "" });
-	const { banners, saveBanners } = await getBanners();
+	
+	const  banners  = await getBanners();
+	const  saveBanners = await saveBanners();
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
 
