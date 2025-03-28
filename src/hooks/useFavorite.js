@@ -17,7 +17,9 @@ const useFavourite = ({ courseId, currentUser }) => {
 		async (e) => {
 			e.stopPropagation();
 			if (!currentUser) {
-				router.push("/auth");
+				toast.error("Debes iniciar sesión para agregar a tus favoritos");
+				console.log('no currentUser');
+				//router.push("/auth");
 			}
 
 			try {
@@ -32,7 +34,8 @@ const useFavourite = ({ courseId, currentUser }) => {
 				router.refresh();
 				toast.success("Success");
 			} catch (error) {
-				toast.error("Something went wrong");
+				//toast.error("Something went wrong");
+				console.log(error,'error');
 			}
 		},
 		[currentUser, hasFauvorited, courseId, router]

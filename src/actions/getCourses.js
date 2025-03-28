@@ -1,6 +1,6 @@
 import prisma from "../../libs/prismadb";
 
-export async function getCourses(params) {
+export async function getCourses(params,stack=10) {
 	const { q, sort } = params;
 
 	const getOrderByClause = () => {
@@ -45,6 +45,7 @@ export async function getCourses(params) {
 		const courses = await prisma.course.findMany({
 			where,
 			orderBy: getOrderByClause(),
+			take: stack,
 			include: {
 				user: true,
 				enrolments: {

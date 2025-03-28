@@ -12,10 +12,15 @@ import SubscribeForm from "@/components/Shared/SubscribeForm";
 import FunFacts from "@/components/CollegeWebsite/FunFacts";
 import { getBanner } from "@/actions/principal/getBanner";
 import { getTopCategories } from "@/actions/principal/getTopCategories";
+import { getCourses } from "@/actions/getCourses";
+import { getCurrentUser } from "@/actions/getCurrentUser";
 
-const page = async () => {
+const page = async ({searchParams}) => {
 	const banners = await getBanner();
 	const topCategories = await getTopCategories();
+	const { courses } = await getCourses(searchParams,4);
+	console.log(courses,'courses');
+	const currentUser = await getCurrentUser();
 
 	return (
 		<>
@@ -23,7 +28,7 @@ const page = async () => {
 			<FunFacts/>
 			<AboutUs />
 			<TopCategories categories={topCategories} />
-			<Courses />
+			<Courses courses={courses} currentUser={currentUser} />
 		
 			{/*<FeedbackSlider />			
 			<FunFactsTwo />

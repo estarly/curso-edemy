@@ -5,13 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 const TopCategories = ({ categories }) => {
-	console.log(categories, 'categories');
+	
 	return (
-		<div className="categories-area ptb-100">
+		<div className="categories-area pt-100">
 			<div className="container">
 				<div className="section-title">
-					<span className="sub-title">Categories</span>
-					<h2>Top Categories</h2>
+					<span className="sub-title">Categorías</span>
+					<h2>Categorías principales</h2>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit,
 						sed do eiusmod tempor incididunt ut labore et dolore
@@ -19,7 +19,7 @@ const TopCategories = ({ categories }) => {
 					</p>
 				</div>
 
-				<div className="row">
+				<div className="row" key={categories.length}>
 
 					{categories.map((category) => (
 						<div className="col-lg-3 col-sm-6 col-md-6">

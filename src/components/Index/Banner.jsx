@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import Image from 'next/image';
-import { getBanner } from "@/actions/principal/getBanner";
 
 const Banner = ({banners}) => {
 
