@@ -42,3 +42,5 @@ edemy_dev.sql
 prisma/dev.db
 prisma/migrations/*
 note.txt
+
+.idea
