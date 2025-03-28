@@ -2,14 +2,14 @@ import { redirect } from "next/navigation";
 import prisma from "../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
-export async function getCategories() {
+export async function getModules() {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
     redirect("/");
   }
 
   try {
-    const items = await prisma.category.findMany();
+    const items = await prisma.module.findMany();
     return { items };
   } catch (error) {
     return { items: [] };

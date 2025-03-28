@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-// import { DeleteConfirmationDialog } from "@/app/admin/_components";
-
 import Header from "../../courses/Header";
 import { CategoryModal } from "./CategoryModal";
 import { CategoriesTable } from "./CategoriesTable";
