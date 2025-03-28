@@ -11,5 +11,5 @@ module.exports = {
         fallback: {
           fs: false, // Ignora el módulo fs
         },
-      },
+    },
 };

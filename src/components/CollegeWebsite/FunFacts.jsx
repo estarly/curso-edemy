@@ -1,21 +1,12 @@
-"use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getTotal } from "@/app/api/principal/getTotal";
-const FunFacts = () => {
-	const [funFacts, setFunFacts] = useState(null);
+import { getTotal } from "@/actions/principal/getTotal";
 
-		const fetchData = async () => {
-			const data = await getTotal();
-			console.log(data);
-			setFunFacts(data);
-		};
-		
-	useEffect(() => {
-		fetchData();
-	}, []);
+const FunFacts = async () => {
+
+	const funFacts = await getTotal();
 
 	return (
 		<>
@@ -25,25 +16,25 @@ const FunFacts = () => {
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.courses : 0}</h3>
-								<p>Cursos</p>
+								<p>Total de cursos</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.instructors : 0}</h3>
-								<p>Instructores staff</p>
+								<p>Total de instructores</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.students : 0}</h3>
-								<p>Estudiantes</p>
+								<p>Total de estudiantes</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
-								<h3>{funFacts ? funFacts.progress : 0}</h3>
-								<p>Progreso</p>
+								<h3>{funFacts ? funFacts.progress : 0} %</h3>
+								<p>Progreso de cursos</p>
 							</div>
 						</div>
 					</div>

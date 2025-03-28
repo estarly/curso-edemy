@@ -1,152 +1,69 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
-import Image from "next/image";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from 'swiper/modules';
+import Image from 'next/image';
+import { getBanner } from "@/actions/principal/getBanner";
 
-const Banner = () => {
+const Banner = ({banners}) => {
+
 	return (
 		<>
 			<div className="gym-home-area">
-				<Swiper
-					pagination={{
-						type: "fraction",
-					}}
-					navigation={true}
-					modules={[Pagination, Navigation]}
-					className="gym-banner-slides"
-				>
-					<SwiperSlide>
-					<div className="hero-banner-area">
-						<div className="gym-banner-item">
-							<div className="container-fluid maxWidth-1920">
-								<div className="row align-items-center">
-									<div className="col-lg-6 col-md-12">
-										<div className="gym-banner-content">
-											<h1>
-												START YOUR FITNESS JOURNEY WITH
-												EXPERT
-											</h1>
-											<p>
-												Lorem ipsum dolor sit amet,
-												consectetur adipiscing elit, sed
-												do eiusmod tempor incididunt ut
-												labore et dolore magna aliqua.
-												Quis ipsum suspendisse.
-											</p>
-											<Link
-												href="/authentication"
-												className="default-btn"
-											>
-												<i className="flaticon-user"></i>
-												Join For Free
-												<span></span>
-											</Link>
-										</div>
-									</div>
-									<div className="col-lg-6 col-md-12">
-										<div className="gym-banner-image">
-											<Image
-												src="/images/main-banner3.png"
-												width={1920}
-												height={1080}
-												alt="image"
-											/>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						</div>
-					</SwiperSlide>
+				
+					<Swiper
+						pagination={{
+							type: "fraction",
+						}}
+						navigation={true}
+						modules={[Pagination, Navigation]}
+						className="gym-banner-slides"
+					>
+						{banners.map((banner, index) => (
+							<SwiperSlide key={index}>
+								<div className="hero-banner-area" style={{paddingBottom: '50px'}}>
+									<div className="gym-banner-item maxWidth-1920">
+										<div className="container-fluid">
+											<div className="row align-items-center">
+												<div className="col-lg-6 col-md-12">
+													<div className="gym-banner-content">
+														<h1>{banner.name}</h1>
+														<p>{banner.description}</p>
 
-					<SwiperSlide>
-					<div className="hero-banner-area">
-						<div className="gym-banner-item maxWidth-1920">
-							<div className="container-fluid">
-								<div className="row align-items-center">
-									<div className="col-lg-6 col-md-12">
-										<div className="gym-banner-content">
-											<h1>EDEMY IS MORE THAN A PLACE </h1>
-											<p>
-												Lorem ipsum dolor sit amet,
-												consectetur adipiscing elit, sed
-												do eiusmod tempor incididunt ut
-												labore et dolore magna aliqua.
-												Quis ipsum suspendisse.
-											</p>
-											<Link
-												href="/authentication"
-												className="default-btn"
-											>
-												<i className="flaticon-user"></i>
-												Join For Free
-												<span></span>
-											</Link>
-										</div>
-									</div>
-									<div className="col-lg-6 col-md-12">
-										<div className="gym-banner-image">
-											<Image
-												src="/images/banner-img3.png"
-												width={1920}
-												height={1080}
-												alt="image"
-												
-											/>
+														{banner.url && (
+															<Link
+																href={banner.url}
+																target='_blank'
+																className="default-btn sm-btn"
+															>
+																<i className="flaticon-user"></i>
+																Ver 
+																<span></span>
+															</Link>
+														)}
+													</div>
+												</div>
+												<div className="col-lg-6 col-md-12">
+													<div className="gym-banner-image">
+														<Image
+														src="/images/main-banner3.png"
+														
+															width={1920}
+															height={1080}
+															alt="image"
+														/>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-						</div>
-					</SwiperSlide>
-
-					<SwiperSlide>
-					<div className="hero-banner-area">
-						<div className="gym-banner-item maxWidth-1920">
-							<div className="container-fluid">
-								<div className="row align-items-center">
-									<div className="col-lg-6 col-md-12">
-										<div className="gym-banner-content">
-											<h1>
-												WE STANDARD
-											</h1>
-											<p>
-												Lorem ipsum dolor sit amet,
-												consectetur adipiscing elit, sed
-												do eiusmod tempor incididunt ut
-												labore et dolore magna aliqua.
-												Quis ipsum suspendisse.
-											</p>
-											<Link
-												href="/authentication"
-												className="default-btn"
-											>
-												<i className="flaticon-user"></i>
-												Join For Free
-												<span></span>
-											</Link>
-										</div>
-									</div>
-									<div className="col-lg-6 col-md-12">
-										<div className="gym-banner-image">
-											<Image
-												src="/images/banner-img3.png"
-												width={1920}
-												height={1080}
-												alt="image"
-											/>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					</SwiperSlide>
-				</Swiper>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				
 			</div>
 		</>
 	);

@@ -9,17 +9,20 @@ import TopCategories from "@/components/OnlineTrainingSchool/TopCategories";
 import FunFactsTwo from "@/components/Shared/FunFactsTwo";
 import Partner from "@/components/Shared/Partner";
 import SubscribeForm from "@/components/Shared/SubscribeForm";
-//import FunFacts from "@/components/CollegeWebsite/FunFcts";
+import FunFacts from "@/components/CollegeWebsite/FunFacts";
+import { getBanner } from "@/actions/principal/getBanner";
+import { getTopCategories } from "@/actions/principal/getTopCategories";
 
-const page = () => {
+const page = async () => {
+	const banners = await getBanner();
+	const topCategories = await getTopCategories();
+
 	return (
 		<>
-			<Banner />
-			{
-				/*<FunFacts/>*/
-			}
+			<Banner banners={banners} />
+			<FunFacts/>
 			<AboutUs />
-			<TopCategories />
+			<TopCategories categories={topCategories} />
 			<Courses />
 		
 			{/*<FeedbackSlider />			
