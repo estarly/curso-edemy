@@ -10,7 +10,10 @@ export async function myLearning() {
 
 	try {
 		const enrolments = await prisma.enrolment.findMany({
-			where: { userId: currentUser.id },
+			where: { 
+				userId: currentUser.id,
+				courseId: { not: null }
+			},
 			include: {
 				course: {
 					include: {
