@@ -165,12 +165,20 @@ export async function DELETE(request, { params }) {
         { status: 404 }
       );
     }
-
-    await prisma.banner.delete({
+     await prisma.banner.update({
       where: {
         id: parseInt(bannerId),
       },
+      data: {
+        status: 2,
+      },
     });
+
+   /* await prisma.banner.delete({
+      where: {
+        id: parseInt(bannerId),
+      },
+    });*/
 
     return NextResponse.json(
       {

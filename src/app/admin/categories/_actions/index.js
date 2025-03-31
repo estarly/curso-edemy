@@ -9,7 +9,13 @@ export async function getCategories() {
   }
 
   try {
-    const items = await prisma.category.findMany();
+    const items = await prisma.category.findMany({
+      where: {
+        status: {
+          in: [0, 1],
+        },
+      },
+    });
     return { items };
   } catch (error) {
     return { items: [] };

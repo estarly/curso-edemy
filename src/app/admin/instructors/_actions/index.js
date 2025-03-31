@@ -2,18 +2,16 @@ import { redirect } from "next/navigation";
 import prisma from "../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
-export async function getModules() {
+export async function getInstructors() {
   const currentUser = await getCurrentUser();
   if (!currentUser) {
     redirect("/");
   }
 
   try {
-    const items = await prisma.module.findMany({
+    const items = await prisma.user.findMany({
       where: {
-        status: {
-          in: [0, 1],
-        },
+        role: "INSTRUCTOR",
       },
     });
     return { items };

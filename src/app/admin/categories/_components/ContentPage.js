@@ -67,9 +67,16 @@ export const ContentPage = ({ categories, isAdmin }) => {
   
   const handleConfirmDelete = async () => {
     console.log("Eliminando categoría:", selectedCategory);
-    const response = await axios.delete(
-      `/api/categories/${selectedCategory.id}`
+    const response = await axios.put(
+      `/api/categories/${selectedCategory.id}`,
+      {
+        status: 2,
+      }
     );
+
+   /* const response = await axios.delete(
+      `/api/categories/${selectedCategory.id}`
+    );*/
     console.log('Categoría eliminada:', response.data);
 
     // Aquí implementarías la lógica para eliminar la categoría

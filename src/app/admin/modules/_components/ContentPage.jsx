@@ -74,9 +74,15 @@ export const ContentPage = ({ modules, isAdmin }) => {
   const handleConfirmDelete = async () => {
     try {
       console.log("Eliminando módulo:", selectedModule);
-      const response = await axios.delete(
-        `/api/modules/${selectedModule.id}`
+      const response = await axios.put(
+        `/api/modules/${selectedModule.id}`,
+        {
+          status: 2,
+        }
       );
+      /*const response = await axios.delete(
+        `/api/modules/${selectedModule.id}`
+      );*/
       console.log('Módulo eliminado:', response.data);
     } catch (error) {
       console.error("Error al eliminar el módulo:", error);
@@ -99,7 +105,7 @@ export const ContentPage = ({ modules, isAdmin }) => {
               <div className="main-content-box">
                 <Header />
                 <div className="d-flex justify-content-between mb-3">
-                  <h4>Módulos</h4>
+                  <h4></h4>
                   <button
                     className="btn btn-success btn-sm"
                     onClick={handleAddClick}

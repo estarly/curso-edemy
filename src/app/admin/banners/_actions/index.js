@@ -9,7 +9,13 @@ export async function getBanners() {
   }
 
   try {
-    const items = await prisma.banner.findMany();
+    const items = await prisma.banner.findMany({
+      where: {
+        status: {
+          in: [0, 1],
+        },
+      },
+    });
     return { items };
   } catch (error) {
     return { items: [] };
