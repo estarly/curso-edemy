@@ -16,7 +16,7 @@ const Header = () => {
 						pathname === "/instructor/courses" ? "active" : null
 					}
 				>
-					Courses
+					Cursos
 				</Link>
 			</li>
 			<li>
@@ -28,7 +28,7 @@ const Header = () => {
 							: null
 					}
 				>
-					Create a Course
+					Crear un curso
 				</Link>
 			</li>
 			{params && params.courseId && (
@@ -43,7 +43,20 @@ const Header = () => {
 									: null
 							}
 						>
-							Edit course
+							Editando
+						</Link>
+					</li>
+					<li>
+						<Link
+							href={`/instructor/course/${params.courseId}/lessons`}
+							className={
+								pathname ==
+								`/instructor/course/${params.courseId}/lessons`
+									? "active"
+									: null
+							}
+						>
+							Lecciones
 						</Link>
 					</li>
 					<li>
@@ -56,7 +69,7 @@ const Header = () => {
 									: null
 							}
 						>
-							Upload video
+							Subir video
 						</Link>
 					</li>
 					<li>
@@ -69,9 +82,10 @@ const Header = () => {
 									: null
 							}
 						>
-							Upload assets
+							Subir archivos
 						</Link>
 					</li>
+					
 				</>
 			)}
 		</ul>

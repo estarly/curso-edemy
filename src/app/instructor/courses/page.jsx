@@ -49,7 +49,7 @@ const Page = async () => {
 													>
 														{" "}
 														<i className="bx bx-edit"></i>{" "}
-														Edit Course
+														Editar Curso
 													</Link>
 												</li>
 												<li>
@@ -58,7 +58,7 @@ const Page = async () => {
 														href={`/instructor/course/${course.id}/videos`}
 													>
 														<i className="bx bx-cloud-upload"></i>{" "}
-														Upload Video
+														Subir Video
 													</Link>
 												</li>
 
@@ -68,7 +68,7 @@ const Page = async () => {
 														href={`/instructor/course/${course.id}/assets`}
 													>
 														<i className="bx bxs-file-plus"></i>{" "}
-														Upload Assets
+														Subir Assets
 													</Link>
 												</li>
 												{/* <li>
@@ -84,7 +84,7 @@ const Page = async () => {
 															disabled=""
 														>
 															<i className="bx bxs-trash"></i>{" "}
-															Delete{" "}
+															Eliminar{" "}
 															<i
 																className="bx bx-info-circle"
 																style={{
@@ -132,7 +132,7 @@ const Page = async () => {
 										<ul className="courses-box-footer d-flex pb-1 justify-content-between align-items-center">
 											<li>
 												<i className="flaticon-agenda"></i>{" "}
-												{course.lessons} Lessons
+												{course.lessons} Lecciones
 											</li>
 											<li>
 												<i className="flaticon-people"></i>{" "}
@@ -140,7 +140,7 @@ const Page = async () => {
 											</li>
 										</ul>
 										{/*Progreso de un curso*/}
-										<ProgressBarCourse completedLessons={18} totalLessons={course.lessons} />
+										<ProgressBarCourse completedLessons={10} totalLessons={course.lessons} />
 									</div>
 								</div>
 							</div>

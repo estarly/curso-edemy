@@ -17,14 +17,15 @@ export async function getCourseById(params) {
 			},
 		});
 		const videos = await prisma.asset.findMany({
-			where: { courseId: parseInt(courseId), type: "video" },
+			where: { courseId: parseInt(courseId), assetTypeId: 1 },
 		});
 		const assets = await prisma.asset.findMany({
-			where: { courseId: parseInt(courseId), type: "file" },
+			where: { courseId: parseInt(courseId), assetTypeId: 2 },
 		});
 
 		return { course, videos, assets };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
+		return { course: [], videos: [], assets: [] };
 	}
 }

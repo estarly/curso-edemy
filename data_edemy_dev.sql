@@ -1,35 +1,41 @@
 INSERT INTO `User` (`id`, `name`, `email`, `emailVerified`, `image`, `hashedPassword`, `role`, `is_instructor`, `created_at`, `updated_at`, `designation`) VALUES
-(1, 'Pedro', 'admin@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'ADMIN', 0, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', 'CEO At ImportDesk'),
-(2, 'Jose', 'instructor@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'INSTRUCTOR', 1, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', 'CEO At ImportDesk');
+(1, 'Administrador', 'admin@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'ADMIN', 0, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', 'CEO At ImportDesk'),
+(2, 'Instructor', 'instructor@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'INSTRUCTOR', 1, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', 'CEO At ImportDesk'),
+(3, 'Estudiante', 'student@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'STUDENT', 1, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', '---');
 
 INSERT INTO `Profile` (`id`, `userId`, `bio`, `gender`, `address`, `phone`, `website`, `twitter`, `facebook`, `linkedin`, `youtube`) VALUES
 (1, 1, 'This page describes how to perform CRUD operations with your generated Prisma Client API. CRUD is an acronym that stands for.', 'Male', 'Nurani 05, Subid Bazar, Sylhet', '+8801646295918', 'https://themes.gallery/', 'https://twitter.com', 'https://facebook.com', 'https://linkedin.com', 'https://youtube.com');
 
 INSERT INTO `Module` (`id`, `title`, `description`, `logo`,`status`) VALUES
 (1, '1 Módulo', 'Descripción 1', 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', 1),
-(2, 'Módulo 2', 'Descripción 2', 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', 1),
+(2, 'Módulo 2', 'Descripción 2', 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', 0),
 (3, '3 Módulo', 'Descripción 3', 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', 1);
 
 INSERT INTO `Category` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Nueva Categoría', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(2, 'Web Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(3, 'App Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(4, 'Business', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(5, 'Finance & Accounting', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(6, 'IT & Software', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(7, 'Office Productivity', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(8, 'Personal Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(9, 'Design', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(10, 'Marketing', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(11, 'Lifestyle', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(12, 'Photography & Video', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(13, 'Health & Fitness', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(14, 'Music', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(15, 'Teaching & Academics', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
+(1, 'Web Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(2, 'App Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(3, 'Business', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(4, 'Finance & Accounting', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(5, 'IT & Software', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(6, 'Office Productivity', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(7, 'Personal Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(8, 'Design', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(9, 'Marketing', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(10, 'Lifestyle', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(11, 'Photography & Video', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(12, 'Health & Fitness', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(13, 'Music', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(14, 'Teaching & Academics', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
 
-INSERT INTO `AssetType` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'video', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(2, 'file', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
+INSERT INTO `AssetType` (`id`, `name`, `config`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'video', '{"url": "", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(2, 'file', '{"url": "", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(3, 'online', '{"url": "", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
+
+INSERT INTO `AssignmentType` (`id`, `name`, `description`, `config_type`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Verdadero o Falso', 'Contiene una pregunta y dos opciones: Verdadero y Falso. El usuario debe seleccionar la opción correcta.', '{"options": ["Verdadero", "Falso"], "correct_option": "Verdadero"}', 1, NOW(), NOW()),
+(2, 'Selección múltiple', 'Contiene una pregunta y varias opciones de respuesta. El usuario debe seleccionar la opción correcta.', '{"options": ["A", "B", "C"], "correct_option": "C"}', 1, NOW(), NOW()),
+(3, 'Completar', 'Contiene una pregunta y una respuesta. El usuario debe completar la respuesta.', '{"correct_answer": "Respuesta correcta"}', 1, NOW(), NOW());
 
 INSERT INTO `Course` (`id`, `userId`, `category_id`, `title`, `slug`, `description`, `regular_price`, `before_price`, `lessons`, `duration`, `image`, `access_time`, `requirements`, `what_you_will_learn`, `who_is_this_course_for`, `status`, `is_module`, `in_home_page`, `in_home_page_set_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'Complete JavaScript Course 2024', 'complete-javascript-course-2024', '<p><em>Well-made course. Super in-depth, with great challenges and projects that will solidify your Javascript understanding.</em></p>', 99, 149, '21', '68h 34m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707203985/mwg8hiewqc1cfl7k3dvt.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780'),
