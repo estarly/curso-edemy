@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 const UserMenu = ({ currentUser }) => {
 	const pathname = usePathname();	
 	const isAdmin = currentUser?.role === "ADMIN";
-	const isInstructor = currentUser?.is_instructor;
+	const isInstructor = currentUser?.role === "INSTRUCTOR";//currentUser?.is_instructor;
 	const isStudent = currentUser?.role === "USER";
 
 	//console.log(currentUser,'UserMenu');
@@ -82,7 +82,7 @@ const UserMenu = ({ currentUser }) => {
 									<li>
 										<Link
 											className="dropdown-item"
-											href="/admin/"
+											href="/admin"
 										>
 											<i className="bx bxs-dashboard"></i>{" "}
 											Dashboard Admin
@@ -94,18 +94,18 @@ const UserMenu = ({ currentUser }) => {
 
 
 								)}
-								{!isAdmin && isInstructor && (
+								{isInstructor && (
 									<li>
 										<Link
 											className="dropdown-item"
 											href="/instructor/courses"
 										>
-											<i className="bx bxs-dashboard"></i> My
-											Courses
+											<i className="bx bxs-dashboard"></i> Mis
+											Cursos
 										</Link>
 									</li>
 								)}
-								{!isAdmin && !isInstructor && isStudent && (
+								{isStudent && (
 
 									<>
 										<li>
@@ -175,7 +175,7 @@ const UserMenu = ({ currentUser }) => {
 										href="/profile/basic-information"
 									>
 										<i className="bx bx-user-circle"></i>{" "}
-										Account settings
+										Configuración de cuenta
 									</Link>
 								</li>
 
@@ -189,8 +189,7 @@ const UserMenu = ({ currentUser }) => {
 										className="dropdown-item"
 										onClick={() => signOut()}
 									>
-										<i className="bx bx-log-out"></i> Log
-										out
+										<i className="bx bx-log-out"></i> Cerrar Sesión
 									</button>
 								</li>
 							</ul>
