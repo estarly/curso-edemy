@@ -47,7 +47,7 @@ const Banner = ({banners}) => {
 												<div className="col-lg-6 col-md-12">
 													<div className="gym-banner-image">
 														<Image
-														src="/images/main-banner3.png"
+														src={`/images/banner/${(index+1)}.png`}
 														
 															width={1920}
 															height={1080}

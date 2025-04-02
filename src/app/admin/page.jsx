@@ -1,7 +1,7 @@
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import { getAdminStats } from "@/actions/getAdminStats";
 import { getCurrentUser } from "@/actions/getCurrentUser";
-
+import UserMenu from "@/components/Layout/UserMenu";
 const Page = async () => {
 	const { students, instructors, courses, enrolments, videos, assets } = await getAdminStats();
 	const currentUser = await getCurrentUser();
