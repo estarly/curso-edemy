@@ -42,7 +42,10 @@ export async function myLearningPlay(params) {
 			include: {
 				assets: {
 					where: {
-						assetTypeId: 2,
+						assetTypeId: { in: [0, 1, 2, 3] },
+					},
+					include: {
+						assetType: true,
 					},
 				},
 			},
@@ -53,6 +56,7 @@ export async function myLearningPlay(params) {
 		console.error("Error fetching counts:", error);
 	}
 }
+
 export async function courseReviewsAndAssets(params) {
 	const { courseId } = params;
 	const currentUser = await getCurrentUser();
@@ -66,7 +70,7 @@ export async function courseReviewsAndAssets(params) {
 			include: {
 				assets: {
 					where: {
-						type: "file",
+						assetTypeId: { in: [0, 1, 2, 3] },
 					},
 				},
 				reviews: {

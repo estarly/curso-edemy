@@ -7,8 +7,6 @@ const Page = async ({ params }) => {
 	const { course } = await myLearningPlay(params);
 	const { reviewsAndAssets } = await courseReviewsAndAssets(params);
 
-	// console.log(reviewsAndAssets);
-
 	return (
 		<>
 			<div className="mt-5 pb-5 video-area">

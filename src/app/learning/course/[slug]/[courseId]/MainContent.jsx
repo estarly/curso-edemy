@@ -23,22 +23,22 @@ const MainContent = ({ course, reviewsAndAssets }) => {
 					/>
 				</div>
 			</div>
-
+			{/*sidebar left*/}
 			<div className="col-lg-3 col-md-4">
 				<div className="video-sidebar">
 					<div className="course-video-list">
 						<h4 className="title mb-3">{course.title}</h4>
 						<ul>
-							{course.assets.map((video) => (
+							{course.assets.map((asset) => (
 								<li
-									key={video.id}
-									onClick={() => setVideoId(video.id)}
+									key={asset.id}
+									onClick={() => setVideoId(asset.id)}
 									style={{ cursor: "pointer" }}
 								>
-									{video.title}
+									{asset.title}
 									<span className="d-block text-muted fs-13 mt-1">
-										<i className="bx bx-play-circle"></i>{" "}
-										{video.type}
+										<i className={`bx ${asset.assetTypeId === 1 ? 'bx-play-circle' : asset.assetTypeId === 2 ? 'bx-file' : 'bx-link'}`}></i>{" "}
+										{asset.assetType.name}
 									</span>
 								</li>
 							))}
