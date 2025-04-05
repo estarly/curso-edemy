@@ -1,51 +1,59 @@
 "use client";
 
-import DownloadButton from "@/app/instructor/course/[courseId]/assets/DownloadButton";
 import React from "react";
 
 const CourseAsset = ({ assets }) => {
+	console.log(assets, "assets");
+
+	const handleOptionChange = (selectedOption, questionId) => {
+		console.log(`Opción seleccionada para la pregunta ${questionId}: ${selectedOption}`);
+	};
+
 	return (
 		<>
 			<div className="courses-details-desc-style-two">
-				<div className="row justify-content-center">
-					{assets.length ? (
-						assets.map((asst) => (
+				<h3>{assets.title}</h3>
+				<div dangerouslySetInnerHTML={{ __html: assets.description }} />
+			</div>
+			<div className="courses-details-desc-style-two">
+				<div className="row justify-content-left">
+					{assets.assignments.length && (
+						assets.assignments.map((asst) => (
 							<>
-								<div className="col-md-3">
+								<div className="col-md-4">
 									<div className="card">
-										<i
-											className="bx bxs-file"
-											style={{
-												fontSize: "100px",
-												textAlign: "center",
-											}}
-										></i>
-
-										<div className="card-body">
-											<h6 className="card-title d-flex justify-content-center align-items-center">
-												{asst.title}
-											</h6>
-											<div className="d-flex justify-content-center align-items-center">
-												<DownloadButton
-													file_url={asst.file_url}
-												/>
-												<span
-													style={{
-														margin: "0 8px",
-													}}
-												></span>
+										<div className="card-body align-items-center">
+											<h5 className="card-title d-flex justify-content-left ">
+												<strong>{asst.title}</strong>
+											</h5>
+											<span className="text-muted">
+												{asst.description}
+											</span>
+											<div>
+												{asst.config_assignment.options.map((option, index) => {
+													const inputId = `question-${asst.id}-option-${index}`;
+													return (
+														<div key={index}>
+															<input
+																type="radio"
+																id={inputId}
+																name={`question-${asst.id}`}
+																value={option}
+																onChange={() => handleOptionChange(option, asst.id)}
+															/>
+															<label htmlFor={inputId} className="ms-2">
+																{option}
+															</label>
+														</div>
+													);
+												})}
 											</div>
 										</div>
 									</div>
 								</div>
 							</>
 						))
-					) : (
-						<div className="col-lg-12 col-md-12">
-							<div className="text-center border p-3 fs-6">
-								Empty
-							</div>
-						</div>
+
 					)}
 				</div>
 			</div>

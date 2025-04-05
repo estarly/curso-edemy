@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CourseOverview from "@/components/Learning/CourseOverview";
 import CourseAsset from "@/components/Learning/CourseAsset";
 import CourseRating from "@/components/Learning/CourseRating";
@@ -9,8 +9,8 @@ import CourseWhatYouWillLearn from "@/components/Learning/CourseWhatYouWillLearn
 import CourseWhoIsThisCourseFor from "@/components/Learning/CourseWhoIsThisCourseFor";
 
 const Content = ({ description,requirements,  what_you_will_learn, who_is_this_course_for, assets, reviews }) => {
-	
-	const [activeTab, setActiveTab] = useState(0);
+
+	const [activeTab, setActiveTab] = useState(1);
 
 	const handleTabClick = (index) => {
 		setActiveTab(index);
@@ -22,19 +22,19 @@ const Content = ({ description,requirements,  what_you_will_learn, who_is_this_c
 					onClick={() => handleTabClick(0)}
 					className={` ${activeTab === 0 ? "active" : ""}`}
 				>
-					Overview
+					Acerca del curso
 				</li>
 				<li
 					onClick={() => handleTabClick(1)}
 					className={` ${activeTab === 1 ? "active" : ""}`}
 				>
-					Assets
+					Leccion y Evaluación
 				</li>
 				<li
 					onClick={() => handleTabClick(2)}
 					className={` ${activeTab === 2 ? "active" : ""}`}
 				>
-					Reviews
+					Reseñas
 				</li>
 			</ul>
 
@@ -47,7 +47,7 @@ const Content = ({ description,requirements,  what_you_will_learn, who_is_this_c
 						<CourseWhoIsThisCourseFor content={who_is_this_course_for} />
 					</>
 				)}
-				{activeTab === 1 && <CourseAsset assets={assets} />}
+				{activeTab === 1 && <CourseAsset assets={assets[0]} />}
 				{activeTab === 2 && <CourseRating reviews={reviews} />}
 			</div>
 		</>

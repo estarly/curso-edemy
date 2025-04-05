@@ -46,6 +46,20 @@ export async function myLearningPlay(params) {
 					},
 					include: {
 						assetType: true,
+						assignments: true,
+					},
+				},
+				reviews: {
+					orderBy: {
+						created_at: "desc",
+					},
+					include: {
+						user: {
+							select: {
+								name: true,
+								image: true,
+							},
+						},
 					},
 				},
 			},
