@@ -7,9 +7,11 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Input from "../FormHelpers/Input";
+import styles from "./LoginForm.module.css";
 
 const LoginForm =  () => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 	const router = useRouter();
 
 	const {
@@ -60,15 +62,23 @@ const LoginForm =  () => {
 					required
 				/>
 
-				<Input
-					label="Password"
-					id="password"
-					type="password"
-					disabled={isLoading}
-					register={register}
-					errors={errors}
-					required
-				/>
+				<div className={styles.passwordInputContainer}>
+					<Input
+						label="Password"
+						id="password"
+						type={showPassword ? "text" : "password"}
+						disabled={isLoading}
+						register={register}
+						errors={errors}
+						required
+					/>
+					<span 
+						className={styles.togglePassword} 
+						onClick={() => setShowPassword(!showPassword)}
+					>
+						{showPassword ? "🔓" : "🔒"}
+					</span>
+				</div>
 
 				<div className="row align-items-center">
 					<div className="col-lg-6 col-md-6 col-sm-6 remember-me-wrap">

@@ -1,18 +1,24 @@
 'use client';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { ModuleModal } from "./ModuleModal";
-import { ModulesTable } from "./ModulesTable";
+import { ModulesByCourseTable } from "./ModulesByCourseTable";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
-import Header from "../Header";
+import Header from "../../Header";
+import CategorySelect from "@/components/FormHelpers/CategorySelect";
 
-export const ContentPage = ({ modules, isAdmin }) => {
+export const ContentPage = ({ modules, isAdmin, courseModules }) => {  
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [selectedModule, setSelectedModule] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
+
+
+  const handleModuleChange = (module) => {
+    setSelectedModule(module);
+  };
 
   const handleEditClick = (module) => {
     setSelectedModule(module);
@@ -80,9 +86,6 @@ export const ContentPage = ({ modules, isAdmin }) => {
           status: 2,
         }
       );
-      /*const response = await axios.delete(
-        `/api/modules/${selectedModule.id}`
-      );*/
       console.log('Módulo eliminado:', response.data);
     } catch (error) {
       console.error("Error al eliminar el módulo:", error);
@@ -104,19 +107,12 @@ export const ContentPage = ({ modules, isAdmin }) => {
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
                 <Header />
-                <div className="d-flex justify-content-between mb-3">
-                  <h4></h4>
-                  <button
-                    className="btn btn-success btn-sm"
-                    onClick={handleAddClick}
-                  >
-                    <i className="fas fa-plus me-1"></i> Nuevo Módulo
-                  </button>
+                <div className="d-flex justify-content-end mb-3">
+                  <CategorySelect label="Filtrar por módulo:" placeholder="Seleccione un módulo" valueId={selectedModule} data={modules} onChange={handleModuleChange}/>
                 </div>
 
-                <ModulesTable
-                  items={modules}
-                  onEditClick={handleEditClick}
+                <ModulesByCourseTable
+                  items={courseModules}
                   onDeleteClick={handleDeleteClick}
                 />
               </div>
