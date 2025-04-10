@@ -192,30 +192,6 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
               </div>
 
               <div className="mb-3">
-                <label htmlFor="image" className="form-label">
-                  URL de la Imagen
-                </label>
-                <input
-                  type="text"
-                  className="form-control bg-light"
-                  id="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                />
-                {formData.image && (
-                  <div className="mt-2">
-                    <small>Vista previa:</small>
-                    <img
-                      src={formData.image}
-                      alt="Vista previa"
-                      className="d-block mt-1 rounded"
-                      style={{ maxWidth: "100%", maxHeight: "150px", objectFit: "contain" }}
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-3">
                 <ImageUploader
                   type="banner"
                   onChange={handleImageUpload}
