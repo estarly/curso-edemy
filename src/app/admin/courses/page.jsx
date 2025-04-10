@@ -90,7 +90,7 @@ const Page = async () => {
 												<tr>
 													<td colSpan="7">
 														<div className="text-center">
-															Empty
+															No hay cursos
 														</div>
 													</td>
 												</tr>
