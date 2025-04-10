@@ -14,7 +14,7 @@ export const ModuleModal = ({ show, onClose, module, onSave, isEditing = false }
         title: module.title || "",
         description: module.description || "",
         status: module.status || 1,
-        logo: module.logo || ""
+        logo: ""
       });
     } else if (!isEditing) {
       setFormData({
@@ -106,6 +106,7 @@ export const ModuleModal = ({ show, onClose, module, onSave, isEditing = false }
                 ></textarea>
               </div>
 
+              {/*
               <div className="mb-3">
                 <label htmlFor="logo" className="form-label">
                   URL del Logo
@@ -129,6 +130,7 @@ export const ModuleModal = ({ show, onClose, module, onSave, isEditing = false }
                   </div>
                 )}
               </div>
+              */}
 
               <div className="mb-3 form-check">
                 <input

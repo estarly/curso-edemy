@@ -13,7 +13,6 @@ export const ModulesTable = ({
           <th scope="col">ID</th>
           <th scope="col">Título</th>
           <th scope="col">Descripción</th>
-          <th scope="col">Logo</th>
           <th scope="col">Estado</th>
           <th scope="col">Acciones</th>
         </tr>
@@ -29,19 +28,6 @@ export const ModulesTable = ({
                 <div className="max-300px max-height-60">
                   {item.description}
                 </div>
-              </td>
-              <td>
-                {item.logo ? (
-                  <img
-                    src={item.logo}
-                    alt={item.title}
-                    width="40"
-                    height="40"
-                    className="rounded"
-                  />
-                ) : (
-                  <span className="text-muted">Sin logo</span>
-                )}
               </td>
               <td>
                 <span className={`badge ${item.status === 1 ? 'bg-success' : 'bg-danger'}`}>
