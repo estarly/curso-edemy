@@ -34,6 +34,25 @@ const CourseLessons = ({ course, params }) => {
 	});
 
 	const onSubmit = (data) => {
+		let formData = {
+			title: data.title,
+			asset: data.asset
+		};
+
+		if (asset?.value === 1 || asset?.value === 2) {
+			formData.video_url = data.video_url;
+		} else if (asset?.value === 3) {
+			formData.config_asset = {
+				url: data.url,
+				platform: data.platform,
+				meeting_id: data.meeting_id,
+				password: data.password,
+				host: data.host,
+				duration: data.duration,
+				participants: data.participants
+			};
+		}
+
 		setIsLoading(true);
 
 		if (asset?.value === 1 && !data.video_url) {
@@ -54,8 +73,13 @@ const CourseLessons = ({ course, params }) => {
 			return;
 		}
 
+		let url = `/api/courses/${params.courseId}/video`;
+		if (asset?.value === 3) {
+			url = `/api/courses/${params.courseId}/asset`;
+		}
+
 		axios
-			.post(`/api/courses/${params.courseId}/video`, data)
+			.post(url, formData)
 			.then((response) => {
 				toast.success(response.data.message);
 				router.refresh();
