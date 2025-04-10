@@ -4,12 +4,12 @@ import React from "react";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { ContentPage } from "./_components/ContentPage";
 import { getModulesByStatus } from "../_actions";
-import { getCourseModules } from "./_actions";
+import { getCoursesByModule } from "./_actions";
 
 
 const Page = async () => {
   const { items: modules } = await getModulesByStatus(1);//active
-  const { courses } = await getCourseModules(1);
+  const { items: courses } = await getCoursesByModule(1);
   const moduleId = modules[0].id;
 
   console.log(courses,'courses');

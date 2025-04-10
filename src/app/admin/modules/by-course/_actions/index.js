@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import prisma from "../../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
-export async function getCourseModules(moduleId) {
+export async function getCoursesByModule(moduleId) {
 	const currentUser = await getCurrentUser();
 	if (!currentUser) {
 		redirect("/");
@@ -16,9 +16,9 @@ export async function getCourseModules(moduleId) {
 			},
 		});
 		// Extraer solo los cursos del arreglo de objetos
-		const courses = coursesData.map(courseModule => courseModule.course);
+		const items = coursesData.map(courseModule => courseModule.course);
 
-		return {courses};
+		return {items};
 	} catch (error) {
 		console.error("Error fetching counts:", error);
 	}
