@@ -5,22 +5,31 @@ import { myCourses } from "@/actions/myCourses";
 import InstructorHeaderMini from "@/components/Instructor/InstructorHeaderMini";
 import ProgressBarCourse from "@/components/Instructor/ProgressBarCourse";
 import CategorySelect from "@/components/FormHelpers/CategorySelect";
+import { getCategories } from "@/app/admin/categories/_actions";
 
 const Page = async () => {
 	const { courses } = await myCourses();
+	const {items:categories} = await getCategories();
+	//const [selectedCategory, setSelectedCategory] = useState(null);
+
+
+	// const handleCategoryChange = (category) => {
+	//   setSelectedCategory(category);
+	// };
+
 	return (
 		<>
 			<InstructorHeaderMini />
 			<div className="pb-1 pt-5">
 				<div className="container">
-					<div className="d-flex justify-content-between align-items-center mb-5">
-						<h3 className="text-left">Mis Cursos</h3>
-						<div className="align-items-center">
-							<label className="me-2">Filtrar por categoría:</label>
-							<CategorySelect/>
-						</div>
-					</div>
+					
 					<div className="row justify-content-center">
+						<div className="d-flex justify-content-between align-items-center mb-5" style={{zIndex: 1000}}>
+							<h3 className="text-left">Mis Cursos</h3>
+							<div className="align-items-center">
+								<CategorySelect label="Filtrar por categoria" data={categories}/>
+							</div>
+						</div>
 						{courses.map((course) => (
 							<div key={course.id} className="col-lg-4 col-md-6">
 								<div className="single-courses-box">
