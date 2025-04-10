@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ImageUploader from "@/app/admin/banners/_components/ImageUploader";
 
 export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }) => {
   const [formData, setFormData] = useState({
@@ -168,6 +169,12 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
                     />
                   </div>
                 )}
+              </div>
+
+              <div className="mb-3">
+                <ImageUploader type="banner" onChange={(value) => {
+                  console.log('value', value);
+                }} />
               </div>
 
               <div className="mb-3 form-check">
