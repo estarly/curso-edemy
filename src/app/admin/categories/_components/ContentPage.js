@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -9,6 +10,7 @@ import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
 
 export const ContentPage = ({ categories, isAdmin }) => {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -42,47 +44,63 @@ export const ContentPage = ({ categories, isAdmin }) => {
   };
 
   const handleSaveCategory = async (categoryData) => {
-    if (isEditing) {
-      // Aquí implementarías la lógica para actualizar una categoría existente
-      console.log("Actualizando categoría:", categoryData);
-      const response = await axios.put(
-        `/api/categories/${selectedCategory.id}`,
-        categoryData
-      );
-      console.log('Categoría actualizada:', response.data);
-    } else {
-      const response = await axios.post(
-        '/api/categories',
-        categoryData
-      );
-      console.log('Categoría creada:', response.data);
+    try {
+      let response;
 
-      // Aquí implementarías la lógica para crear una nueva categoría
-      console.log("Creando nueva categoría:", categoryData);
-    }
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
 
-    setShowModal(false);
-    setSelectedCategory(null);
-  };
-  
-  const handleConfirmDelete = async () => {
-    console.log("Eliminando categoría:", selectedCategory);
-    const response = await axios.put(
-      `/api/categories/${selectedCategory.id}`,
-      {
-        status: 2,
+      if (isEditing) {
+        if (categoryData instanceof FormData && !categoryData.has('id')) {
+          categoryData.append('id', selectedCategory.id);
+        }
+
+        response = await axios.put(
+          `/api/categories/${selectedCategory.id}`,
+          categoryData,
+          config
+        );
+      } else {
+        response = await axios.post(
+          '/api/categories',
+          categoryData,
+          config
+        );
       }
-    );
 
-   /* const response = await axios.delete(
-      `/api/categories/${selectedCategory.id}`
-    );*/
-    console.log('Categoría eliminada:', response.data);
+      setShowModal(false);
+      setSelectedCategory(null);
+      router.refresh();
 
-    // Aquí implementarías la lógica para eliminar la categoría
+    } catch (error) {
+      if (error.response) {
+        console.error('Respuesta del servidor:', error.response.data);
+      } else if (error.request) {
+        console.error('No se recibió respuesta del servidor');
+      }
+    }
+  };
 
-    setShowDeleteDialog(false);
-    setSelectedCategory(null);
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.put(
+        `/api/categories/${selectedCategory.id}`,
+        {
+          status: 2,
+        }
+      );
+
+      setShowDeleteDialog(false);
+      setSelectedCategory(null);
+      router.refresh();
+    } catch (error) {
+      if (error.response) {
+        console.error('Respuesta del servidor:', error.response.data);
+      }
+    }
   };
 
   return (
@@ -96,8 +114,7 @@ export const ContentPage = ({ categories, isAdmin }) => {
 
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
-                <Header />
-                <div className="d-flex justify-content-between mb-3">
+                <div className="d-flex justify-content-between mb-3 nav-style1 p-1">
                   <h4>Categorías</h4>
                   <button
                     className="btn btn-success btn-sm"
@@ -118,7 +135,6 @@ export const ContentPage = ({ categories, isAdmin }) => {
         </div>
       </div>
 
-      {/* Modal para editar o añadir categoría */}
       <CategoryModal
         show={showModal}
         onClose={handleCloseModal}
@@ -127,7 +143,6 @@ export const ContentPage = ({ categories, isAdmin }) => {
         isEditing={isEditing}
       />
 
-      {/* Diálogo de confirmación para eliminar */}
       <DeleteConfirmationDialog
         show={showDeleteDialog}
         onClose={handleCloseDeleteDialog}

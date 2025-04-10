@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { imageUploadService } from "@/services/imageUpload";
+import { processFormDataWithFile } from "@/utils/fileProcessing";
 
 export async function POST(request) {
   try {
@@ -23,12 +25,11 @@ export async function POST(request) {
       );
     }
 
-    const body = await request.json();
+    const { body, file: imageFile } = await processFormDataWithFile(request);
 
     const {
       name,
-      status,
-      logo
+      status
     } = body;
 
     if (!name) {
@@ -55,11 +56,38 @@ export async function POST(request) {
       );
     }
 
+    let logoUrl = null;
+
+    if (imageFile) {
+      try {
+        const timestamp = new Date().getTime();
+        const sanitizedName = name.toLowerCase().replace(/\s+/g, '-');
+        const fileName = `category-${sanitizedName}-${timestamp}`;
+
+        const uploadResult = await imageUploadService.uploadImage(imageFile, {
+          path: 'categories',
+          fileName: fileName
+        });
+
+        if (!uploadResult.success) {
+          throw new Error(uploadResult.error || 'Error al subir la imagen');
+        }
+
+        logoUrl = uploadResult.url;
+      } catch (uploadError) {
+        console.error('Error al subir la imagen:', uploadError);
+        return NextResponse.json(
+          { message: 'Error al subir la imagen: ' + uploadError.message },
+          { status: 500 }
+        );
+      }
+    }
+
     const category = await prisma.category.create({
       data: {
         name,
-        status: status === undefined ? 1 : status,
-        logo: logo || null,
+        status: status === undefined ? 1 : parseInt(status),
+        logo: logoUrl,
       },
     });
 
@@ -74,7 +102,7 @@ export async function POST(request) {
     console.error("Error:", error);
     return NextResponse.json(
       {
-        message: "Ocurrió un error al crear la categoría.",
+        message: "Ocurrió un error al crear la categoría: " + error.message,
       },
       { status: 500 }
     );

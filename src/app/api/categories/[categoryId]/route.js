@@ -1,24 +1,22 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { imageUploadService } from "@/services/imageUpload";
+import { processFormDataWithFile } from "@/utils/fileProcessing";
 
 export async function PUT(request, { params }) {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       return NextResponse.json(
-        {
-          message: "Usuario no autorizado.",
-        },
+        { message: "Usuario no autorizado." },
         { status: 401 }
       );
     }
 
     if (currentUser.role !== "ADMIN") {
       return NextResponse.json(
-        {
-          message: "Solo los administradores pueden editar categorías.",
-        },
+        { message: "Solo los administradores pueden editar categorías." },
         { status: 403 }
       );
     }
@@ -27,14 +25,12 @@ export async function PUT(request, { params }) {
 
     if (!categoryId || isNaN(parseInt(categoryId))) {
       return NextResponse.json(
-        {
-          message: "ID de categoría inválido.",
-        },
+        { message: "ID de categoría inválido." },
         { status: 400 }
       );
     }
 
-    const body = await request.json();
+    const { body, file: imageFile } = await processFormDataWithFile(request);
 
     const {
       name,
@@ -44,9 +40,7 @@ export async function PUT(request, { params }) {
 
     if (!name) {
       return NextResponse.json(
-        {
-          message: "El nombre de la categoría es obligatorio.",
-        },
+        { message: "El nombre de la categoría es obligatorio." },
         { status: 400 }
       );
     }
@@ -59,9 +53,7 @@ export async function PUT(request, { params }) {
 
     if (!categoryExists) {
       return NextResponse.json(
-        {
-          message: "Categoría no encontrada.",
-        },
+        { message: "Categoría no encontrada." },
         { status: 404 }
       );
     }
@@ -77,11 +69,43 @@ export async function PUT(request, { params }) {
 
     if (nameExists) {
       return NextResponse.json(
-        {
-          message: "Ya existe otra categoría con este nombre.",
-        },
+        { message: "Ya existe otra categoría con este nombre." },
         { status: 409 }
       );
+    }
+
+    let logoUrl = logo;
+
+    if (imageFile) {
+      try {
+        const timestamp = new Date().getTime();
+        const fileName = `category-${categoryId}-${timestamp}`;
+
+        const uploadResult = await imageUploadService.uploadImage(imageFile, {
+          path: 'categories',
+          fileName: fileName
+        });
+
+        if (!uploadResult.success) {
+          throw new Error(uploadResult.error || 'Error al subir la imagen');
+        }
+
+        logoUrl = uploadResult.url;
+
+        if (categoryExists.logo) {
+          try {
+            await imageUploadService.deleteImage(categoryExists.logo);
+          } catch (deleteError) {
+            console.error('Error al eliminar la imagen anterior:', deleteError);
+          }
+        }
+      } catch (uploadError) {
+        console.error('Error al subir la imagen:', uploadError);
+        return NextResponse.json(
+          { message: 'Error al subir la imagen: ' + uploadError.message },
+          { status: 500 }
+        );
+      }
     }
 
     const updatedCategory = await prisma.category.update({
@@ -90,9 +114,8 @@ export async function PUT(request, { params }) {
       },
       data: {
         name,
-        status: status === undefined ? categoryExists.status : status,
-        logo: logo === undefined ? categoryExists.logo : logo,
-        updated_at: new Date(),
+        status: status === undefined ? parseInt(categoryExists.status) : parseInt(status),
+        logo: logoUrl === undefined ? categoryExists.logo : logoUrl,
       },
     });
 
@@ -107,7 +130,7 @@ export async function PUT(request, { params }) {
     console.error("Error:", error);
     return NextResponse.json(
       {
-        message: "Ocurrió un error al actualizar la categoría.",
+        message: "Ocurrió un error al actualizar la categoría: " + error.message,
       },
       { status: 500 }
     );

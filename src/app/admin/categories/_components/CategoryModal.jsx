@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ImageUploader from "../../banners/_components/ImageUploader";
+import ImageUploader from "@/app/admin/banners/_components/ImageUploader";
 
 export const CategoryModal = ({ show, onClose, category, onSave, isEditing = false }) => {
   const [formData, setFormData] = useState({
@@ -8,21 +8,22 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
     logo: ""
   });
 
+  const [imageFile, setImageFile] = useState(null);
+
   useEffect(() => {
     if (category && isEditing) {
       setFormData({
         name: category.name || "",
-        status: category.status || 1,
-        logo: category.logo || "",
-        file: category.file || ""
+        status: category.status,
+        logo: category.logo || ""
       });
     } else if (!isEditing) {
       setFormData({
         name: "",
-        status: 1,
-        logo: "",
-        file: ""
+        status: 0,
+        logo: ""
       });
+      setImageFile(null);
     }
   }, [category, isEditing]);
 
@@ -36,23 +37,66 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isEditing) {
-      onSave({
-        ...category,
-        name: formData.name,
-        status: formData.status,
-        logo: formData.logo,
-        file: formData.file
+
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("status", formData.status);
+
+    if (formData.logo && !formData.logo.startsWith('blob:')) {
+      formDataToSend.append("logo", formData.logo);
+    }
+
+    if (imageFile) {
+      formDataToSend.append("imageFile", imageFile, imageFile.name || `category-logo-${Date.now()}.png`);
+    }
+
+    if (isEditing && category && category.id) {
+      formDataToSend.append("id", category.id);
+    }
+
+    onSave(formDataToSend);
+    onClose();
+  };
+
+  const handleImageUpload = (value) => {
+    if (value && typeof value === 'object' && value.url) {
+      if (value.url.startsWith('blob:')) {
+        fetch(value.url)
+          .then(response => response.blob())
+          .then(blob => {
+            const file = new File([blob], `category-logo-${Date.now()}.png`, { type: blob.type });
+            setImageFile(file);
+
+            setFormData({
+              ...formData,
+              logo: value.url
+            });
+          })
+          .catch(error => {
+            console.error('Error al obtener el blob:', error);
+          });
+      } else {
+        setFormData({
+          ...formData,
+          logo: value.url
+        });
+      }
+    } else if (typeof value === 'string') {
+      setFormData({
+        ...formData,
+        logo: value
+      });
+    } else if (value instanceof File) {
+      setImageFile(value);
+      const previewUrl = URL.createObjectURL(value);
+      setFormData({
+        ...formData,
+        logo: previewUrl
       });
     } else {
-      onSave({
-        name: formData.name,
-        status: formData.status,
-        logo: formData.logo,
-        file: formData.file
-      });
+      console.warn('Formato de imagen no reconocido:', value);
     }
-    onClose();
   };
 
   if (!show) return null;
@@ -94,17 +138,18 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
               </div>
 
               <div className="mb-3">
-                <label htmlFor="logo" className="form-label">
-                  URL del Logo
+                <label className="form-label">
+                  Logo
                 </label>
-               
-                <input
-                  type="text"
-                  className="form-control bg-light"
-                  id="logo"
-                  value={formData.logo}
-                  onChange={handleChange}
+                <ImageUploader
+                  type="category"
+                  onChange={handleImageUpload}
                 />
+                {imageFile && (
+                  <div className="mt-2">
+                    <small>Archivo seleccionado: {imageFile.name}</small>
+                  </div>
+                )}
                 {formData.logo && (
                   <div className="mt-2">
                     <small>Vista previa:</small>
@@ -117,15 +162,6 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
                   </div>
                 )}
               </div>
-              <div className="mb-3">
-                  <ImageUploader type="category" onChange={(value) => {
-                    console.log('value', value);
-                    setFormData({
-                      ...formData,
-                      file: value
-                    });
-                  }} />
-                </div>
 
               <div className="mb-3 form-check">
                 <input
