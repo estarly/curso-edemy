@@ -42,6 +42,7 @@ const CourseLessons = ({ course, params }) => {
 		if (asset?.value === 1 || asset?.value === 2) {
 			formData.video_url = data.video_url;
 		} else if (asset?.value === 3) {
+			formData.assetTypeId = 3;
 			formData.config_asset = {
 				url: data.url,
 				platform: data.platform,
