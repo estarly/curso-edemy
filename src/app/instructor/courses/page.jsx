@@ -7,15 +7,10 @@ import ProgressBarCourse from "@/components/Instructor/ProgressBarCourse";
 import CategorySelect from "@/components/FormHelpers/CategorySelect";
 import { getCategories } from "@/app/admin/categories/_actions";
 
-const Page = async () => {
-	const { courses } = await myCourses();
-	const {items:categories} = await getCategories();
-	//const [selectedCategory, setSelectedCategory] = useState(null);
-
-
-	// const handleCategoryChange = (category) => {
-	//   setSelectedCategory(category);
-	// };
+const Page = async ({ searchParams }) => {
+	const category = searchParams?.category ? parseInt(searchParams?.category) : undefined;
+	const { courses } = await myCourses(category);
+	const { items: categories } = await getCategories();
 
 	return (
 		<>
@@ -27,7 +22,7 @@ const Page = async () => {
 						<div className="d-flex justify-content-between align-items-center mb-5" style={{zIndex: 1000}}>
 							<h3 className="text-left">Mis Cursos</h3>
 							<div className="align-items-center">
-								<CategorySelect label="Filtrar por categoria" data={categories}/>
+								<CategorySelect label="Filtrar por categoria" data={categories} valueId={category} />
 							</div>
 						</div>
 						{courses.map((course) => (

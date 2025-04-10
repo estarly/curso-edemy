@@ -2,19 +2,32 @@
 
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import { useRouter } from "next/navigation";
 
-const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opción", onChange, data }) => {
+const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opción", data }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
+	const router = useRouter();
 	
 	useEffect(() => {
 		if(valueId){
 			let selected = data.find(
 				(item) => item.id === valueId
 			);		
-			setSelectedOption(selected);
+			setSelectedOption({...selected, value: selected.id});
+		} else {
+			setSelectedOption(null);
 		}
 		
-	}, [data,valueId]);
+	}, [data, valueId]);
+	
+	const handleChange = (value) => {
+		const {id} = value || {};
+		if (id){
+			router.push(`?category=${id}`);
+		} else {
+			router.push(`?category=`);
+		}
+	}
 
 	return (
 		<div className="form-gorup">
@@ -24,9 +37,12 @@ const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opci
 				required
 				isClearable
 				isSearchable={true}
-				options={data}
+				options={data.map((item) => ({
+					...item,
+					value: item.id,
+				}))}
 				value={selectedOption}
-				onChange={(val) => onChange(val)}
+				onChange={(val) => handleChange(val)}
 				formatOptionLabel={(option) => (
 					<div className="flex flex-row items-center gap-3">
 						<div>{option.id} - {option.name || option.title}</div>
