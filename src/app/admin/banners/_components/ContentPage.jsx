@@ -109,8 +109,8 @@ export const ContentPage = ({ items, isAdmin }) => {
 
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
-                <Header />
-                <div className="d-flex justify-content-between mb-3">
+                
+                <div className="d-flex justify-content-between mb-3 nav-style1 p-1">
                   <h4>Banners</h4>
                   <button
                     className="btn btn-success btn-sm"
@@ -144,7 +144,7 @@ export const ContentPage = ({ items, isAdmin }) => {
         onClose={handleCloseDeleteDialog}
         onConfirm={handleConfirmDelete}
         title="Eliminar Banner"
-        message={`¿Está seguro de que desea eliminar el banner "${selectedBanner?.name}"? Esta acción no se puede deshacer.`}
+        message={`¿Está seguro de que desea eliminar el banner "${selectedBanner?.name}"?  Esta acción no se puede deshacer.`}
       />
     </>
   );

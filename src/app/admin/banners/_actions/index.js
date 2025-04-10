@@ -15,6 +15,9 @@ export async function getBanners() {
           in: [0, 1],
         },
       },
+      orderBy: {
+        order: 'asc',
+      },
     });
     return { items };
   } catch (error) {

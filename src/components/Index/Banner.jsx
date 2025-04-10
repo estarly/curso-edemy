@@ -46,13 +46,21 @@ const Banner = ({banners}) => {
 												</div>
 												<div className="col-lg-6 col-md-12">
 													<div className="gym-banner-image">
-														<Image
-														src={`/images/banner/${(index+1)}.png`}
-														
+														{banner.image ? (
+															<Image
+															src={banner.image ? banner.image : '/images/banner/3.png'}
 															width={1920}
 															height={1080}
 															alt="image"
 														/>
+														) : (
+															<Image
+																src="/images/banner/3.png"
+																width={1920}
+																height={1080}
+																alt="image"
+															/>
+														)}
 													</div>
 												</div>
 											</div>

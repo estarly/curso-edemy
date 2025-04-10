@@ -10,12 +10,9 @@ export const BannersTable = ({
       <table className="table align-middle table-hover fs-14">
         <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Nombre</th>
+          <th scope="col">Orden</th>
           <th scope="col">Descripción</th>
           <th scope="col">Imagen</th>
-          <th scope="col">URL</th>
-          <th scope="col">Orden</th>
           <th scope="col">Estado</th>
           <th scope="col">Acciones</th>
         </tr>
@@ -24,11 +21,11 @@ export const BannersTable = ({
         <tbody>
         {items && items.length > 0 ? (
           items.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
+              <tr key={item.id}>
+                <td>{item.order}</td>
               <td>
-                <div className="max-300px max-height-60">
+                  <strong>{item.name}.</strong>
+                <div className="max-300px max-height-80">
                   {item.description}
                 </div>
               </td>
@@ -44,20 +41,22 @@ export const BannersTable = ({
                 ) : (
                   <span className="text-muted">Sin imagen</span>
                 )}
+                <br />
+                {
+                  item.url && (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-truncate d-inline-block fw-bold" style={{maxWidth: "100px"}}>
+                      Visitar sitio
+                    </a>
+                  )
+                }
               </td>
               <td>
-                <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-truncate d-inline-block" style={{maxWidth: "150px"}}>
-                  {item.url}
-                </a>
-              </td>
-              <td>{item.order}</td>
-              <td>
-                <span className={`badge ${item.status === 1 ? 'bg-success' : 'bg-danger'}`}>
+                <span className={`badge ${item.status === 1 ? 'bg-success' : 'bg-warning text-black'}`}>
                   {item.status === 1 ? 'Activo' : 'Inactivo'}
                 </span>
               </td>
               <td>
-                <div className="d-flex gap-2">
+                <div className="d-flex flex-column flex-sm-row gap-2">
                   <button
                     type="button"
                     className="btn btn-primary btn-sm"

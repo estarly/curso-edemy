@@ -20,7 +20,7 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
         description: banner.description || "",
         url: banner.url || "",
         image: banner.image || "",
-        status: banner.status || 1,
+        status: banner.status,
         order: banner.order || 0
       });
     } else if (!isEditing) {
@@ -29,7 +29,7 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
         description: "",
         url: "",
         image: "",
-        status: 1,
+        status: 0,
         order: 0
       });
       setImageFile(null);
@@ -177,18 +177,39 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
                 />
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="order" className="form-label">
-                  Orden
-                </label>
-                <input
-                  type="number"
-                  className="form-control bg-light"
-                  id="order"
-                  value={formData.order}
-                  onChange={handleChange}
-                  min="0"
-                />
+              <div className="mb-3 d-flex gap-2">
+                <div className="mb-3">
+                  <label htmlFor="order" className="form-label">
+                    Orden
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control bg-light"
+                    id="order"
+                    value={formData.order}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="mb-3 ">
+                   <label className="form-label" htmlFor="status">
+                    Activo / Inactivo
+                  </label>
+                  <br />
+                  <input
+                    type="checkbox"
+                    className="form-check-input p-3 m-1"
+                    id="status"
+                    checked={formData.status}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        status: e.target.checked ? 1 : 0
+                      });
+                    }}
+                  />
+                 
+                </div>
               </div>
 
               <div className="mb-3">
@@ -203,23 +224,6 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
                 )}
               </div>
 
-              <div className="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="status"
-                  checked={formData.status === 1}
-                  onChange={(e) => {
-                    setFormData({
-                      ...formData,
-                      status: e.target.checked ? 1 : 0
-                    });
-                  }}
-                />
-                <label className="form-check-label" htmlFor="status">
-                  Activo
-                </label>
-              </div>
             </div>
             <div className="modal-footer">
               <button

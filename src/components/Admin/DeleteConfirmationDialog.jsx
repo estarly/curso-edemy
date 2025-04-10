@@ -28,7 +28,7 @@ const DeleteConfirmationDialog = ({
                 aria-label="Cerrar"
               ></button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body p-4">
               <p>{message}</p>
             </div>
             <div className="modal-footer">

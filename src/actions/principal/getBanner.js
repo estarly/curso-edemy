@@ -6,6 +6,9 @@ export async function getBanner() {
 		const banners = await prisma.banner.findMany({
 			where: {
 				status: 1
+			},
+			orderBy: {
+				order: 'asc'
 			}
 		});
 
