@@ -40,6 +40,7 @@ const MainContent = ({ course }) => {
 									{(index+1)} - {asset.title} 
 									<span className="d-block text-muted fs-13 mt-1">
 										<i className={`bx ${asset.assetTypeId === 1 ? 'bx-play-circle' : asset.assetTypeId === 2 ? 'bx-file' : 'bx-link'}`}></i>{" "}
+										
 										{asset.assetType.name}
 									</span>
 									{asset.assignments.length > 0 && (

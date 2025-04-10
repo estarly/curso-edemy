@@ -56,16 +56,16 @@ export async function getCourses(params,stack=10) {
 			},
 		});
 
-		// console.log(courses);
-
 		return { courses };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
+		return { courses: [] };
 	}
 }
 
 export async function getHomepageCourses() {
 	try {
+
 		const courses = await prisma.course.findMany({
 			where: { status: "Approved" },
 			take: 3,
@@ -82,10 +82,9 @@ export async function getHomepageCourses() {
 			},
 		});
 
-		// console.log(courses);
-
 		return { courses };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
+		return { courses: [] };
 	}
 }
