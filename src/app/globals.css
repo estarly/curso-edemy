@@ -1,0 +1,4 @@
+/* OVERRIDE - REACT SELECT*/
+.react-select > div[class*="control"] > div[class*="ValueContainer"] {
+    height: 50px !important;
+}

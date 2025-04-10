@@ -34,7 +34,8 @@ const AssetSelect = ({ label, value, onChange }) => {
 		<div className="form-gorup">
 			<label>{label}</label>
 			<Select
-				placeholder="Select Asset"
+				className="react-select"
+				placeholder="Selecciona un tipo de asset"
 				required
 				isClearable
 				isSearchable={true}
