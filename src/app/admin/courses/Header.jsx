@@ -10,10 +10,10 @@ const Header = () => {
 		<ul className="nav-style1">
 			<li>
 				<Link
-					href="/admin/modules"
-					className={pathname === "/admin/modules" ? "active" : null}
+					href="/admin/courses"
+					className={pathname === "/admin/courses" ? "active" : null}
 				>
-					Módulos
+					Cursos
 				</Link>
 			</li>
 		</ul>

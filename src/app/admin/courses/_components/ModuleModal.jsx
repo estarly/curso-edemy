@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from "react";
-import ImageUploader from "../../banners/_components/ImageUploader";
 
-export const CategoryModal = ({ show, onClose, category, onSave, isEditing = false }) => {
+export const ModuleModal = ({ show, onClose, module, onSave, isEditing = false }) => {
   const [formData, setFormData] = useState({
-    name: "",
+    title: "",
+    description: "",
     status: 1,
     logo: ""
   });
 
   useEffect(() => {
-    if (category && isEditing) {
+    if (module && isEditing) {
       setFormData({
-        name: category.name || "",
-        status: category.status || 1,
-        logo: category.logo || "",
-        file: category.file || ""
+        title: module.title || "",
+        description: module.description || "",
+        status: module.status || 1,
+        logo: module.logo || ""
       });
     } else if (!isEditing) {
       setFormData({
-        name: "",
+        title: "",
+        description: "",
         status: 1,
-        logo: "",
-        file: ""
+        logo: ""
       });
     }
-  }, [category, isEditing]);
+  }, [module, isEditing]);
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -38,18 +38,18 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
     e.preventDefault();
     if (isEditing) {
       onSave({
-        ...category,
-        name: formData.name,
+        ...module,
+        title: formData.title,
+        description: formData.description,
         status: formData.status,
-        logo: formData.logo,
-        file: formData.file
+        logo: formData.logo
       });
     } else {
       onSave({
-        name: formData.name,
+        title: formData.title,
+        description: formData.description,
         status: formData.status,
-        logo: formData.logo,
-        file: formData.file
+        logo: formData.logo
       });
     }
     onClose();
@@ -69,7 +69,7 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                {isEditing ? "Editar Categoría" : "Añadir Nueva Categoría"}
+                {isEditing ? "Editar Módulo" : "Añadir Nuevo Módulo"}
               </h5>
               <button
                 type="button"
@@ -80,24 +80,36 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
             </div>
             <div className="modal-body">
               <div className="mb-3">
-                <label htmlFor="name" className="form-label">
-                  Nombre
+                <label htmlFor="title" className="form-label">
+                  Título
                 </label>
                 <input
                   type="text"
                   className="form-control bg-light"
-                  id="name"
-                  value={formData.name}
+                  id="title"
+                  value={formData.title}
                   onChange={handleChange}
                   required
                 />
               </div>
 
               <div className="mb-3">
+                <label htmlFor="description" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  className="form-control bg-light"
+                  id="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <div className="mb-3">
                 <label htmlFor="logo" className="form-label">
                   URL del Logo
                 </label>
-               
                 <input
                   type="text"
                   className="form-control bg-light"
@@ -117,15 +129,6 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
                   </div>
                 )}
               </div>
-              <div className="mb-3">
-                  <ImageUploader type="category" onChange={(value) => {
-                    console.log('value', value);
-                    setFormData({
-                      ...formData,
-                      file: value
-                    });
-                  }} />
-                </div>
 
               <div className="mb-3 form-check">
                 <input
@@ -158,7 +161,7 @@ export const CategoryModal = ({ show, onClose, category, onSave, isEditing = fal
                 className="btn btn-primary"
                 onClick={handleSubmit}
               >
-                {isEditing ? "Guardar Cambios" : "Crear Categoría"}
+                {isEditing ? "Guardar Cambios" : "Crear Módulo"}
               </button>
             </div>
           </div>

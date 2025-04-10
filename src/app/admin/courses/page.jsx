@@ -1,12 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
-import { approvedCourses } from "@/actions/approvedCourses";
 import Header from "./Header";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { getCourses } from "./_actions";
 
 const Page = async () => {
-	const { courses } = await approvedCourses();
+	const { items: courses } = await getCourses();
+	console.log(courses);
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
 	return (

@@ -81,7 +81,7 @@ model Category {
 model Course {
   id                     Int      @id @default(autoincrement())
   userId                 Int
-  category_id            Int
+  categoryId             Int
   title                  String
   slug                   String
   description            String   @db.Text
@@ -101,7 +101,7 @@ model Course {
   created_at             DateTime @default(now())
   updated_at             DateTime @updatedAt
 
-  categories    Category       @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  category    Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   favourites    Favourite[]
   enrolments    Enrolment[]
@@ -111,7 +111,7 @@ model Course {
   StateCourse   StateCourse[]
 
   @@index([userId])
-  @@index([category_id])
+  @@index([categoryId])
 }
 
 model Review {
