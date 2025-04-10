@@ -1,24 +1,21 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { imageUploadService } from "@/services/imageUpload";
 
 export async function PUT(request, { params }) {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       return NextResponse.json(
-        {
-          message: "Usuario no autorizado.",
-        },
+        { message: "Usuario no autorizado." },
         { status: 401 }
       );
     }
 
     if (currentUser.role !== "ADMIN") {
       return NextResponse.json(
-        {
-          message: "Solo los administradores pueden editar banners.",
-        },
+        { message: "Solo los administradores pueden editar banners." },
         { status: 403 }
       );
     }
@@ -27,14 +24,34 @@ export async function PUT(request, { params }) {
 
     if (!bannerId || isNaN(parseInt(bannerId))) {
       return NextResponse.json(
-        {
-          message: "ID de banner inválido.",
-        },
+        { message: "ID de banner inválido." },
         { status: 400 }
       );
     }
 
-    const body = await request.json();
+    const contentType = request.headers.get('content-type') || '';
+    let body;
+    let imageFile = null;
+
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      body = {};
+
+      for (const [key, value] of formData.entries()) {
+        if (key === 'imageFile' && value instanceof Blob) {
+          imageFile = {
+            buffer: Buffer.from(await value.arrayBuffer()),
+            originalname: value.name || 'image.jpg',
+            mimetype: value.type || 'image/jpeg',
+            size: value.size
+          };
+        } else {
+          body[key] = value;
+        }
+      }
+    } else {
+      body = await request.json();
+    }
 
     const {
       name,
@@ -47,9 +64,7 @@ export async function PUT(request, { params }) {
 
     if (!name) {
       return NextResponse.json(
-        {
-          message: "El nombre del banner es obligatorio.",
-        },
+        { message: "El nombre del banner es obligatorio." },
         { status: 400 }
       );
     }
@@ -62,9 +77,7 @@ export async function PUT(request, { params }) {
 
     if (!bannerExists) {
       return NextResponse.json(
-        {
-          message: "Banner no encontrado.",
-        },
+        { message: "Banner no encontrado." },
         { status: 404 }
       );
     }
@@ -80,11 +93,43 @@ export async function PUT(request, { params }) {
 
     if (nameExists) {
       return NextResponse.json(
-        {
-          message: "Ya existe otro banner con este nombre.",
-        },
+        { message: "Ya existe otro banner con este nombre." },
         { status: 409 }
       );
+    }
+
+    let imageUrl = image;
+
+    if (imageFile) {
+      try {
+        const timestamp = new Date().getTime();
+        const fileName = `banner-${bannerId}-${timestamp}`;
+
+        const uploadResult = await imageUploadService.uploadImage(imageFile, {
+          path: 'banners',
+          fileName: fileName
+        });
+
+        if (!uploadResult.success) {
+          throw new Error(uploadResult.error || 'Error al subir la imagen');
+        }
+
+        imageUrl = uploadResult.url;
+
+        if (bannerExists.image) {
+          try {
+            await imageUploadService.deleteImage(bannerExists.image);
+          } catch (deleteError) {
+            console.error('Error al eliminar la imagen anterior:', deleteError);
+          }
+        }
+      } catch (uploadError) {
+        console.error('Error al subir la imagen:', uploadError);
+        return NextResponse.json(
+          { message: 'Error al subir la imagen: ' + uploadError.message },
+          { status: 500 }
+        );
+      }
     }
 
     const updatedBanner = await prisma.banner.update({
@@ -95,9 +140,9 @@ export async function PUT(request, { params }) {
         name,
         description: description === undefined ? bannerExists.description : description,
         url: url === undefined ? bannerExists.url : url,
-        image: image === undefined ? bannerExists.image : image,
-        status: status === undefined ? bannerExists.status : status,
-        order: order === undefined ? bannerExists.order : order
+        image: imageUrl === undefined ? bannerExists.image : imageUrl,
+        status: status === undefined ? parseInt(bannerExists.status) : parseInt(status),
+        order: order === undefined ? parseInt(bannerExists.order) : parseInt(order),
       },
     });
 
@@ -112,7 +157,7 @@ export async function PUT(request, { params }) {
     console.error("Error:", error);
     return NextResponse.json(
       {
-        message: "Ocurrió un error al actualizar el banner.",
+        message: "Ocurrió un error al actualizar el banner: " + error.message,
       },
       { status: 500 }
     );
@@ -165,7 +210,7 @@ export async function DELETE(request, { params }) {
         { status: 404 }
       );
     }
-     await prisma.banner.update({
+    await prisma.banner.update({
       where: {
         id: parseInt(bannerId),
       },
@@ -173,12 +218,6 @@ export async function DELETE(request, { params }) {
         status: 2,
       },
     });
-
-   /* await prisma.banner.delete({
-      where: {
-        id: parseInt(bannerId),
-      },
-    });*/
 
     return NextResponse.json(
       {

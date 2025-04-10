@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -9,6 +10,7 @@ import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
 
 export const ContentPage = ({ items, isAdmin }) => {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedBanner, setSelectedBanner] = useState(null);
@@ -42,44 +44,58 @@ export const ContentPage = ({ items, isAdmin }) => {
   };
 
   const handleSaveBanner = async (bannerData) => {
-    if (isEditing) {
-      try {
-        const response = await axios.put(
+    try {
+      let response;
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      if (isEditing) {
+        if (bannerData instanceof FormData && !bannerData.has('id')) {
+          bannerData.append('id', selectedBanner.id);
+        }
+
+        response = await axios.put(
           `/api/banners/${selectedBanner.id}`,
-          bannerData
+          bannerData,
+          config
         );
-        console.log('Banner actualizado:', response.data);
-      } catch (error) {
-        console.error("Error al actualizar el banner:", error);
-      }
-    } else {
-      try {
-        const response = await axios.post(
+      } else {
+        response = await axios.post(
           '/api/banners',
-          bannerData
+          bannerData,
+          config
         );
-        console.log('Banner creado:', response.data);
-      } catch (error) {
-        console.error("Error al crear el banner:", error);
+      }
+
+      setShowModal(false);
+      setSelectedBanner(null);
+      router.refresh();
+
+    } catch (error) {
+      if (error.response) {
+        console.error('Respuesta del servidor:', error.response.data);
+      } else if (error.request) {
+        console.error('No se recibió respuesta del servidor');
       }
     }
-
-    setShowModal(false);
-    setSelectedBanner(null);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await axios.delete(
-        `/api/banners/${selectedBanner.id}`
-      );
-      console.log('Banner eliminado:', response.data);
-    } catch (error) {
-      console.error("Error al eliminar el banner:", error);
-    }
+      await axios.delete(`/api/banners/${selectedBanner.id}`);
 
-    setShowDeleteDialog(false);
-    setSelectedBanner(null);
+      setShowDeleteDialog(false);
+      setSelectedBanner(null);
+      router.refresh();
+    } catch (error) {
+      if (error.response) {
+        console.error('Respuesta del servidor:', error.response.data);
+      }
+    }
   };
 
   return (

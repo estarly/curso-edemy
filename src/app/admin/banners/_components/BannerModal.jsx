@@ -11,6 +11,8 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
     order: 0
   });
 
+  const [imageFile, setImageFile] = useState(null);
+
   useEffect(() => {
     if (banner && isEditing) {
       setFormData({
@@ -30,6 +32,7 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
         status: 1,
         order: 0
       });
+      setImageFile(null);
     }
   }, [banner, isEditing]);
 
@@ -43,27 +46,69 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isEditing) {
-      onSave({
-        ...banner,
-        name: formData.name,
-        description: formData.description,
-        url: formData.url,
-        image: formData.image,
-        status: formData.status,
-        order: parseInt(formData.order)
+
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("url", formData.url);
+    formDataToSend.append("status", formData.status);
+    formDataToSend.append("order", parseInt(formData.order));
+
+    if (formData.image && !formData.image.startsWith('blob:')) {
+      formDataToSend.append("image", formData.image);
+    }
+
+    if (imageFile) {
+      formDataToSend.append("imageFile", imageFile, imageFile.name || `banner-image-${Date.now()}.png`);
+    }
+
+    if (isEditing && banner && banner.id) {
+      formDataToSend.append("id", banner.id);
+    }
+
+    onSave(formDataToSend);
+    onClose();
+  };
+
+  const handleImageUpload = (value) => {
+    if (value && typeof value === 'object' && value.url) {
+      if (value.url.startsWith('blob:')) {
+        fetch(value.url)
+          .then(response => response.blob())
+          .then(blob => {
+            const file = new File([blob], `banner-image-${Date.now()}.png`, { type: blob.type });
+            setImageFile(file);
+
+            setFormData({
+              ...formData,
+              image: value.url
+            });
+          })
+          .catch(error => {
+            console.error('Error al obtener el blob:', error);
+          });
+      } else {
+        setFormData({
+          ...formData,
+          image: value.url
+        });
+      }
+    } else if (typeof value === 'string') {
+      setFormData({
+        ...formData,
+        image: value
+      });
+    } else if (value instanceof File) {
+      setImageFile(value);
+      const previewUrl = URL.createObjectURL(value);
+      setFormData({
+        ...formData,
+        image: previewUrl
       });
     } else {
-      onSave({
-        name: formData.name,
-        description: formData.description,
-        url: formData.url,
-        image: formData.image,
-        status: formData.status,
-        order: parseInt(formData.order)
-      });
+      console.warn('Formato de imagen no reconocido:', value);
     }
-    onClose();
   };
 
   if (!show) return null;
@@ -156,7 +201,6 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
                   id="image"
                   value={formData.image}
                   onChange={handleChange}
-                  required
                 />
                 {formData.image && (
                   <div className="mt-2">
@@ -172,9 +216,15 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
               </div>
 
               <div className="mb-3">
-                <ImageUploader type="banner" onChange={(value) => {
-                  console.log('value', value);
-                }} />
+                <ImageUploader
+                  type="banner"
+                  onChange={handleImageUpload}
+                />
+                {imageFile && (
+                  <div className="mt-2">
+                    <small>Archivo seleccionado: {imageFile.name}</small>
+                  </div>
+                )}
               </div>
 
               <div className="mb-3 form-check">
