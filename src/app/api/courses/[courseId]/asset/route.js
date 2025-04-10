@@ -17,7 +17,7 @@ export async function POST(request, { params }) {
 
 		const body = await request.json();
 
-		const { title, file_url, config_asset } = body;
+		const { title, file_url, config_asset, assetTypeId } = body;
 
 		Object.keys(body).forEach((value) => {
 			if (!body[value]) {
@@ -35,6 +35,7 @@ export async function POST(request, { params }) {
 				title,
 				file_url,
 				courseId: parseInt(courseId),
+				assetTypeId: parseInt(assetTypeId),
 				config_asset: config_asset ?? null
 			},
 		});

@@ -9,7 +9,7 @@ import Link from "next/link";
 import Input from "../FormHelpers/Input";
 import styles from "./LoginForm.module.css";
 
-const LoginForm =  () => {
+const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const router = useRouter();
@@ -38,12 +38,11 @@ const LoginForm =  () => {
 			if (callback?.error) {
 				toast.error(callback.error);
 			}
-			
+
 			if (!callback?.error) {
-				toast.success("Logged in");
+				toast.success("Sesión iniciada");
 				router.refresh();
 			}
-
 		});
 	};
 
@@ -53,7 +52,7 @@ const LoginForm =  () => {
 
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Input
-					label="Email"
+					label="Correo electrónico"
 					id="email"
 					type="email"
 					disabled={isLoading}
@@ -64,7 +63,7 @@ const LoginForm =  () => {
 
 				<div className={styles.passwordInputContainer}>
 					<Input
-						label="Password"
+						label="Contraseña"
 						id="password"
 						type={showPassword ? "text" : "password"}
 						disabled={isLoading}
@@ -72,31 +71,31 @@ const LoginForm =  () => {
 						errors={errors}
 						required
 					/>
-					<span 
-						className={styles.togglePassword} 
+					<span
+						className={styles.togglePassword}
 						onClick={() => setShowPassword(!showPassword)}
 					>
-						{showPassword ? "🔓" : "🔒"}
-					</span>
+            {showPassword ? "🔓" : "🔒"}
+          </span>
 				</div>
 
 				<div className="row align-items-center">
 					<div className="col-lg-6 col-md-6 col-sm-6 remember-me-wrap">
 						<p>
 							<input type="checkbox" id="test2" />
-							<label htmlFor="test2">Remember me</label>
+							<label htmlFor="test2">Recordarme</label>
 						</p>
 					</div>
 
 					<div className="col-lg-6 col-md-6 col-sm-6 lost-your-password-wrap">
 						<Link href="#" className="lost-your-password">
-							Lost your password?
+							¿Olvidaste tu contraseña?
 						</Link>
 					</div>
 				</div>
 
 				<button type="submit" disabled={isLoading}>
-					{isLoading ? "Please wait..." : "Log In"}
+					{isLoading ? "Por favor espere..." : "Iniciar Sesión"}
 				</button>
 			</form>
 		</div>
