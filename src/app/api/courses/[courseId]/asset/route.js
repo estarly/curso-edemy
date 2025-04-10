@@ -9,7 +9,7 @@ export async function POST(request, { params }) {
 		if (!currentUser) {
 			return NextResponse.json(
 				{
-					message: "Unauthorized user.",
+					message: "Usuario no autorizado.",
 				},
 				{ status: 401 }
 			);
@@ -17,13 +17,13 @@ export async function POST(request, { params }) {
 
 		const body = await request.json();
 
-		const { title, file_url } = body;
+		const { title, file_url, config_asset } = body;
 
 		Object.keys(body).forEach((value) => {
 			if (!body[value]) {
 				NextResponse.json(
 					{
-						message: "One or more fileds are empty!",
+						message: "Uno o más campos están vacíos!",
 					},
 					{ status: 404 }
 				);
@@ -34,14 +34,14 @@ export async function POST(request, { params }) {
 			data: {
 				title,
 				file_url,
-				type: "file",
 				courseId: parseInt(courseId),
+				config_asset: config_asset ?? null
 			},
 		});
 
 		return NextResponse.json(
 			{
-				message: "Video uploaded.",
+				message: "Lección subida.",
 			},
 			{ status: 200 }
 		);
@@ -49,7 +49,7 @@ export async function POST(request, { params }) {
 		console.error("Error:", error);
 		return NextResponse.json(
 			{
-				message: "An error occurred.",
+				message: "Ocurrió un error.",
 			},
 			{ status: 500 }
 		);
