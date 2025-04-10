@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { imageUploadService } from "@/services/imageUpload";
+import {processFormDataWithFile} from "@/utils/fileProcessing";
 
 export async function PUT(request, { params }) {
   try {
@@ -29,29 +30,7 @@ export async function PUT(request, { params }) {
       );
     }
 
-    const contentType = request.headers.get('content-type') || '';
-    let body;
-    let imageFile = null;
-
-    if (contentType.includes('multipart/form-data')) {
-      const formData = await request.formData();
-      body = {};
-
-      for (const [key, value] of formData.entries()) {
-        if (key === 'imageFile' && value instanceof Blob) {
-          imageFile = {
-            buffer: Buffer.from(await value.arrayBuffer()),
-            originalname: value.name || 'image.jpg',
-            mimetype: value.type || 'image/jpeg',
-            size: value.size
-          };
-        } else {
-          body[key] = value;
-        }
-      }
-    } else {
-      body = await request.json();
-    }
+    const { body, file: imageFile } = await processFormDataWithFile(request);
 
     const {
       name,
