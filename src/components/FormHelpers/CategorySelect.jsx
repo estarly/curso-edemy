@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
 
-const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opción", data }) => {
+const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opción", data= [] }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
 	const router = useRouter();
 	

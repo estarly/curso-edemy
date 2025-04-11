@@ -18,3 +18,18 @@ export async function getAssetsByCourseId(courseId) {
     return { items: [] };
   }
 }
+
+export async function getAssignmentTypes() {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    redirect("/");
+  }
+
+  try {
+    const items = await prisma.assignmentType.findMany();
+
+    return { items };
+  } catch (error) {
+    return { items: [] };
+  }
+}

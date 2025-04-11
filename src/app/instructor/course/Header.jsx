@@ -61,6 +61,19 @@ const Header = () => {
 					</li>
 					<li>
 						<Link
+							href={`/instructor/course/${params.courseId}/assignments`}
+							className={
+								pathname ==
+								`/instructor/course/${params.courseId}/assignments`
+									? "active"
+									: null
+							}
+						>
+							Asignaciones
+						</Link>
+					</li>
+					<li>
+						<Link
 							href={`/instructor/course/${params.courseId}/videos`}
 							className={
 								pathname ==
