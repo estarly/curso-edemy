@@ -9,12 +9,12 @@ const Links = ({ currentUser }) => {
 
 	useEffect(() => {
 		if (!currentUser) {
-			redirect("/auth");
+			redirect("/auth/login");
 		}
 	}, [currentUser]);
 	return (
 		<>
-			<h2 className="fw-bold mb-4">Profile & Settings</h2>
+			<h2 className="fw-bold mb-4">Perfil & Configuración</h2>
 			<ul className="nav-style1">
 				<li>
 					<Link
@@ -25,7 +25,7 @@ const Links = ({ currentUser }) => {
 						}
 						href="/profile/basic-information/"
 					>
-						Profile
+						Información Personal
 					</Link>
 				</li>
 				<li>
@@ -35,7 +35,19 @@ const Links = ({ currentUser }) => {
 						}
 						href="/profile/photo/"
 					>
-						Profile Picture
+						Foto de Perfil
+					</Link>
+				</li>
+				<li>
+					<Link
+						className={
+							pathname === "/profile/session-data"
+								? "active"
+								: null
+						}
+						href="/profile/session-data/"
+					>
+						Datos de Sesión
 					</Link>
 				</li>
 			</ul>

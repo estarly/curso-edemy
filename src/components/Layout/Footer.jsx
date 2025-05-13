@@ -13,14 +13,14 @@ const Footer = () => {
 	}
 
 	return (
-		<footer className="footer-area">
+		<footer className="footer-area" style={{paddingTop: '30px',textAlign: 'center'}}>
 			<div className="container">
 				<div className="row">
 					<div className="col-lg-4 col-md-6 col-sm-6">
 						<div className="single-footer-widget">
 							<Link href="/" className="logo">
 								<Image
-									src="/images/logo2.png"
+									src="/images/landing/logo/logo2.png"
 									width={87}
 									height={24}
 									alt="logo"
@@ -28,13 +28,10 @@ const Footer = () => {
 							</Link>
 
 							<p>
-								Working to bring significant changes in
-								online-based learning by doing extensive
-								research for course curriculum preparation,
-								student engagements, and looking forward to the
-								flexible education!
+								Estamos trabajando para traer cambios significativos en el aprendizaje en línea, haciendo una extensa investigación para la preparación del currículo del curso, la participación de los estudiantes y buscando una educación flexible.	
 							</p>
 
+							{/*
 							<ul className="social-link">
 								<li>
 									<a
@@ -72,36 +69,66 @@ const Footer = () => {
 										<i className="bx bxl-linkedin"></i>
 									</a>
 								</li>
+							</ul>*/
+							}
+						</div>
+					</div>
+					<div className="col-lg-4 col-md-6 col-sm-6">
+						<div className="single-footer-widget">
+							<h3>Contacto</h3>
+							<ul className="footer-contact-info" style={{textAlign: 'center'}}>
+								<li>
+									{/*<i className="bx bx-map"></i>*/}
+									Av. 27 de Febrero 1234, Santiago, Chile
+								</li>
+								<li>
+									{/*<i className="bx bx-phone-call"></i>*/}
+									<a href="tel:+44587154756">
+										+1 (123) 456 7890
+									</a>
+								</li>
+								<li>
+									{/*<i className="bx bx-envelope"></i>*/}
+									<a href="mailto:hello@edemy.com">
+										hello@edemy.com
+									</a>
+								</li>
+								
 							</ul>
 						</div>
 					</div>
-
-					<div className="col-lg-2 col-md-6 col-sm-6">
-						<div className="single-footer-widget pl-5">
-							<h3>Explore</h3>
+					
+					<div className="col-lg-4 col-md-6 col-sm-6 justify-content-center">
+						<div className="single-footer-widget">
+							<h3>Explorar</h3>
 							<ul className="footer-links-list">
 								<li>
-									<Link href="/">Home</Link>
+									<Link href="/">Inicio</Link>
+								</li>
+								{/*<li>
+									<Link href="/about">Acerca de</Link>
+								</li>*/}
+								<li>
+									<Link href="/courses">Cursos</Link>
 								</li>
 								<li>
-									<Link href="/about">About</Link>
+									<Link href="/auth/register">Inscribirse</Link>
 								</li>
-								<li>
-									<Link href="/courses">Courses</Link>
-								</li>
-								<li>
-									<Link href="/events">Events</Link>
+								{/*<li>
+									<Link href="/events">Eventos</Link>
 								</li>
 								<li>
 									<Link href="/contact">Contact</Link>
-								</li>
+								</li>*/}
 							</ul>
 						</div>
 					</div>
+					
 
-					<div className="col-lg-2 col-md-6 col-sm-6">
+					{/*
+					<div className="col-lg-2 col-md-6 col-sm-6 hide">
 						<div className="single-footer-widget">
-							<h3>Resources</h3>
+							<h3>Recursos</h3>
 							<ul className="footer-links-list">
 								<li>
 									<Link href="#">Student Success</Link>
@@ -121,66 +148,32 @@ const Footer = () => {
 							</ul>
 						</div>
 					</div>
+					*/}
 
-					<div className="col-lg-4 col-md-6 col-sm-6">
-						<div className="single-footer-widget">
-							<h3>Address</h3>
-							<ul className="footer-contact-info">
-								<li>
-									<i className="bx bx-map"></i>
-									2750 Quadra Street Golden Victoria Road, New
-									York, USA
-								</li>
-								<li>
-									<i className="bx bx-phone-call"></i>
-									<a href="tel:+44587154756">
-										+1 (123) 456 7890
-									</a>
-								</li>
-								<li>
-									<i className="bx bx-envelope"></i>
-									<a href="mailto:hello@edemy.com">
-										hello@edemy.com
-									</a>
-								</li>
-								<li>
-									<i className="bx bxs-inbox"></i>
-									<a href="tel:+557854578964">
-										+55 785 4578964
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+					
 				</div>
 
-				<div className="footer-bottom-area">
+				<div className="footer-bottom-area" style={{marginTop: '0px'}}>
 					<div className="row align-items-center">
 						<div className="col-lg-6 col-md-6">
 							<p>
 								<i className="bx bx-copyright"></i>
-								{currentYear} eDemy is Proudly Powered by{" "}
-								<a
-									target="_blank"
-									href="https://envytheme.com/"
-								>
-									EnvyTheme
-								</a>
+								{currentYear}  - eDemy es una plataforma de aprendizaje en línea.
 							</p>
 						</div>
 
 						<div className="col-lg-6 col-md-6">
 							<ul>
 								<li>
-									<Link href="/privacy-policy">
-										Privacy Policy
+									<Link href="https://www.boomkend.com">
+										Desarrollado por Boomkend
 									</Link>
 								</li>
-								<li>
+								{/*<li>
 									<Link href="/terms-of-service">
 										Terms & Conditions
 									</Link>
-								</li>
+								</li>*/}
 							</ul>
 						</div>
 					</div>
@@ -188,6 +181,7 @@ const Footer = () => {
 			</div>
 
 			<div className="lines">
+				<div className="line"></div>
 				<div className="line"></div>
 				<div className="line"></div>
 				<div className="line"></div>

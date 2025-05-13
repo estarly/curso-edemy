@@ -34,7 +34,7 @@ const Page = async ({}) => {
 											<tr>
 												<th scope="col">Nombre / Descripción</th>
 												<th scope="col">Correo Electrónico / Teléfono</th>
-												<th scope="col">Text</th>
+												<th scope="col">Bibliografía</th>
 												<th scope="col">Make Admin</th>
 											</tr>
 										</thead>
@@ -49,7 +49,7 @@ const Page = async ({}) => {
 														<td>{instructor.email || "N/A"} <br /> {instructor.phone || "N/A"}</td>
 														<td>
 															<div className="max-300px max-height-60">
-																{instructor.text || "N/A"}
+																{instructor.bio || "N/A"}
 															</div>
 														</td>
 														<td>

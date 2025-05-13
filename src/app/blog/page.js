@@ -5,10 +5,10 @@ const page = () => {
 	return (
 		<>
 			<PageBanner
-				pageTitle="Blog Grid (2 in Row)"
+				pageTitle="Blog Grid (2 en fila)"
 				homePageUrl="/"
-				homePageText="Home"
-				activePageText="Blog Grid (2 in Row)"
+				homePageText="Inicio"
+				activePageText="Blog Grid (2 en fila)"
 			/>
 			<Content />
 		</>

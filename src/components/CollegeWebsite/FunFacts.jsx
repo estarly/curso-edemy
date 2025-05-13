@@ -16,25 +16,25 @@ const FunFacts = async () => {
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.courses : 0}</h3>
-								<p>Total de cursos</p>
+								<p>cursos</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.instructors : 0}</h3>
-								<p>Total de instructores</p>
+								<p>instructores</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.students : 0}</h3>
-								<p>Total de estudiantes</p>
+								<p>estudiantes</p>
 							</div>
 						</div>
 						<div className="col-lg-3 col-md-6 col-sm-6">
 							<div className="cw-funfacts single-funfacts-item">
 								<h3>{funFacts ? funFacts.progress : 0} %</h3>
-								<p>Progreso de cursos</p>
+								<p>Progreso</p>
 							</div>
 						</div>
 					</div>

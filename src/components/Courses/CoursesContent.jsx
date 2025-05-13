@@ -4,7 +4,7 @@ import React from "react";
 import CourseCard from "../Shared/CourseCard";
 import Filter from "./Filter";
 
-const CoursesContent = ({ courses, currentUser }) => {
+const CoursesContent = ({ courses, currentUser, categories }) => {
 	return (
 		<div className="courses-area courses-section pbt-70 pt-100">
 			<div className="container">
@@ -18,7 +18,7 @@ const CoursesContent = ({ courses, currentUser }) => {
 						</p>
 					</div>
 
-					<Filter />
+					<Filter categories={categories} />
 				</div>
 
 				<div className="row">

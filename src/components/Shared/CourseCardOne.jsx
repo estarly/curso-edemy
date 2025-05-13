@@ -15,7 +15,7 @@ const CourseCardOne = ({id,
 	user,
 	enrolments,
 	grid = "col-lg-6 col-md-12",
-	currentUser,}) => {
+	currentUser}) => {
 	return (
 		<div className={grid}>
 			<div className="single-courses-item without-box-shadow">
@@ -23,7 +23,7 @@ const CourseCardOne = ({id,
 					<div className="col-lg-4 col-md-4">
 						<div className="courses-image">
 							<Image
-								src="/images/courses-small/courses-small7.jpg"
+								src="/images/landing/course/small/courses-small7.jpg"
 								width={380}
 								height={380}
 								alt="image"

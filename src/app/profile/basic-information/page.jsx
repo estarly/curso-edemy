@@ -1,10 +1,16 @@
 import React from "react";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { getCountries } from "@/actions/getCountries";
 import Links from "../Links";
 import InfoForm from "./InfoForm";
-
+import { redirect } from "next/navigation";
 const Page = async () => {
 	const currentUser = await getCurrentUser();
+	const countries = await getCountries();
+	
+	if (!currentUser) {
+		redirect("/");
+	}
 	return (
 		<>
 			<div className="ptb-100">
@@ -12,7 +18,7 @@ const Page = async () => {
 					<Links currentUser={currentUser} />
 
 					<div className="basic-profile-information-form">
-						<InfoForm currentUser={currentUser} />
+						<InfoForm currentUser={currentUser} countries={countries} />
 					</div>
 				</div>
 			</div>

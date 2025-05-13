@@ -9,7 +9,7 @@ export async function POST(request, { params }) {
 		if (!currentUser) {
 			return NextResponse.json(
 				{
-					message: "Unauthorized user.",
+					message: "Usuario no autorizado.",
 				},
 				{ status: 401 }
 			);
@@ -20,9 +20,9 @@ export async function POST(request, { params }) {
 		const { image } = body;
 
 		if (!image) {
-			NextResponse.json(
+			return NextResponse.json(
 				{
-					message: "Image is required!",
+					message: "La imagen es requerida!",
 				},
 				{ status: 404 }
 			);
@@ -37,7 +37,7 @@ export async function POST(request, { params }) {
 
 		return NextResponse.json(
 			{
-				message: "Profile picture uploaded.",
+				message: "Imagen de perfil subida.",
 			},
 			{ status: 200 }
 		);
@@ -45,7 +45,7 @@ export async function POST(request, { params }) {
 		console.error("Error:", error);
 		return NextResponse.json(
 			{
-				message: "An error occurred.",
+				message: "Ocurrió un error.",
 			},
 			{ status: 500 }
 		);

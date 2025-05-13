@@ -16,7 +16,7 @@ const ImageUpload = ({ onChange, value }) => {
 
 	return (
 		<div className="form-group">
-			<label className="form-label fw-semibold">Profile Picture</label>
+			<label className="form-label fw-semibold">Foto de perfil</label>
 			<CldUploadWidget
 				onUpload={handleUpload}
 				uploadPreset={uploadPreset}
@@ -27,19 +27,9 @@ const ImageUpload = ({ onChange, value }) => {
 				{({ open }) => {
 					return (
 						<>
-							<div
-								onClick={() => open?.apply()}
-								className="img-thumbnail mb-3"
-							>
-								<div className="text-center">
-									Click to upload
-									<div className="form-text">
-										Upload image size 200x200
-									</div>
-								</div>
-							</div>
-
-							{value && (
+							<div onClick={() => open?.apply()} className="img-thumbnail mb-3" >
+								
+								{value && (
 								<div className="text-center position-relative mb-3">
 									<Image
 										src={value}
@@ -49,6 +39,15 @@ const ImageUpload = ({ onChange, value }) => {
 									/>
 								</div>
 							)}
+							<div className="text-center">
+									Click para subir
+									<div className="form-text">
+										Imagen de perfil 200x200
+									</div>
+								</div>
+							</div>
+
+							
 						</>
 					);
 				}}

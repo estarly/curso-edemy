@@ -39,12 +39,16 @@ model Profile {
   gender   String?
   address  String?
   phone    String?
+  whatsapp String?
+  countryId Int?
   website  String?
   twitter  String?
   facebook String?
   linkedin String?
   youtube  String?
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([countryId])
 }
 
 model Account {

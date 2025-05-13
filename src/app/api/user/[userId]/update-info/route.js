@@ -9,7 +9,7 @@ export async function POST(request, { params }) {
 		if (!currentUser) {
 			return NextResponse.json(
 				{
-					message: "Unauthorized user.",
+					message: "Usuario no autorizado.",
 				},
 				{ status: 401 }
 			);
@@ -29,12 +29,15 @@ export async function POST(request, { params }) {
 			facebook,
 			linkedin,
 			youtube,
+			whatsapp,
+			countryId,
 		} = body;
 
+		//tablas user
 		if (!name || !designation) {
-			NextResponse.json(
+			return NextResponse.json(
 				{
-					message: "Name is required!",
+					message: !name ? "Nombre es requerido!" : !designation ? "Designación es requerida!" : "Nombre y designación son requeridos!",
 				},
 				{ status: 404 }
 			);
@@ -48,6 +51,7 @@ export async function POST(request, { params }) {
 			},
 		});
 
+		//tablas profile
 		const existingProfile = await prisma.profile.findUnique({
 			where: { userId: parseInt(userId) },
 		});
@@ -66,6 +70,8 @@ export async function POST(request, { params }) {
 					facebook,
 					linkedin,
 					youtube,
+					whatsapp,
+					countryId: parseInt(countryId),
 				},
 			});
 		} else {
@@ -82,16 +88,19 @@ export async function POST(request, { params }) {
 					facebook,
 					linkedin,
 					youtube,
+					whatsapp,
+					countryId,
 				},
 			});
 		}
 
 		return NextResponse.json(
 			{
-				message: "Profile updated.",
+				message: "Perfil actualizado.",
 			},
 			{ status: 200 }
 		);
+		
 	} catch (error) {
 		console.error("Error:", error);
 		return NextResponse.json(

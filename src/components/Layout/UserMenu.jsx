@@ -14,7 +14,7 @@ const UserMenu = ({ currentUser }) => {
 	//console.log(currentUser,'UserMenu');
 	//console.log(currentUser.role, currentUser.is_instructor,'UserMenu');
 	const dummyImage =
-		"https://res.cloudinary.com/dev-empty/image/upload/v1661245253/wqsnxv0pfdwl2abdakf5.jpg";
+		"/images/landing/profile/profile.png";
 
 	return (
 		<>

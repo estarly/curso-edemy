@@ -14,10 +14,10 @@ export default function NotFound() {
 								height={198}
 								alt="image"
 							/>
-							<h3>Error 404 : Page Not Found</h3>
+							<h3>Error 404 : Pagina no encontrada</h3>
 							<p>
-								The page you are looking for might have been
-								removed had its name changed or is temporarily
+								La página que está buscando podría haber sido
+								eliminada, haber cambiado de nombre o estar temporalmente
 								unavailable.
 							</p>
 

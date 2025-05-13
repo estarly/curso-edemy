@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const Banner = ({banners}) => {
+	const [bannerss, setBanners] = useState([]);
+
+	useEffect(() => {
+		setBanners(banners);
+	}, [bannerss]);
 
 	return (
 		<>
@@ -20,7 +25,7 @@ const Banner = ({banners}) => {
 						modules={[Pagination, Navigation]}
 						className="gym-banner-slides"
 					>
-						{banners.map((banner, index) => (
+						{bannerss.map((banner, index) => (
 							<SwiperSlide key={index}>
 								<div className="hero-banner-area" style={{paddingBottom: '50px'}}>
 									<div className="gym-banner-item maxWidth-1920">
@@ -37,7 +42,7 @@ const Banner = ({banners}) => {
 																target='_blank'
 																className="default-btn sm-btn"
 															>
-																<i className="flaticon-user"></i>
+																<i className="flaticon-search"></i>
 																Ver 
 																<span></span>
 															</Link>
@@ -48,14 +53,14 @@ const Banner = ({banners}) => {
 													<div className="gym-banner-image">
 														{banner.image ? (
 															<Image
-															src={banner.image ? banner.image : '/images/banner/3.png'}
+															src={banner.image ? banner.image : '/images/landing/banner/banner01.png'}
 															width={1920}
 															height={1080}
 															alt="image"
 														/>
 														) : (
 															<Image
-																src="/images/banner/3.png"
+																src="/images/landing/banner/banner01.png"
 																width={1920}
 																height={1080}
 																alt="image"

@@ -6,10 +6,10 @@ const page = () => {
 	return (
 		<>
 			<PageBanner
-				pageTitle="Advisor"
+				pageTitle="Asesor"
 				homePageUrl="/"
-				homePageText="Home"
-				activePageText="Advisor"
+				homePageText="Inicio"
+				activePageText="Asesor"
 			/>
 
 			<Index />

@@ -8,9 +8,11 @@ import Input from "@/components/FormHelpers/Input";
 import TextArea from "./TextArea";
 import { useRouter } from "next/navigation";
 
-const InfoForm = ({ currentUser }) => {
+const InfoForm = ({ currentUser, countries }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
+	const [gender, setGender] = useState(currentUser.profile?.gender || "");
+	const [country, setCountry] = useState(parseInt(currentUser.profile?.countryId) || "");
 
 	const {
 		register,
@@ -25,8 +27,10 @@ const InfoForm = ({ currentUser }) => {
 			designation: "",
 			bio: "",
 			gender: "",
+			countryId: "",
 			address: "",
 			phone: "",
+			whatsapp: "",
 			website: "",
 			twitter: "",
 			facebook: "",
@@ -38,40 +42,23 @@ const InfoForm = ({ currentUser }) => {
 	useEffect(() => {
 		setValue("name", currentUser.name);
 		setValue("designation", currentUser.designation);
-		setValue("designation", currentUser.designation);
 		setValue("bio", currentUser.profile ? currentUser.profile.bio : "");
-		setValue(
-			"gender",
-			currentUser.profile ? currentUser.profile.gender : ""
-		);
-		setValue(
-			"address",
-			currentUser.profile ? currentUser.profile.address : ""
-		);
+		setValue("gender", currentUser.profile ? currentUser.profile.gender : "");
+		setValue("address", currentUser.profile ? currentUser.profile.address : "");
+		setValue("whatsapp", currentUser.profile ? currentUser.profile.whatsapp : "");
 		setValue("phone", currentUser.profile ? currentUser.profile.phone : "");
-		setValue(
-			"website",
-			currentUser.profile ? currentUser.profile.website : ""
-		);
-		setValue(
-			"twitter",
-			currentUser.profile ? currentUser.profile.twitter : ""
-		);
-		setValue(
-			"facebook",
-			currentUser.profile ? currentUser.profile.facebook : ""
-		);
-		setValue(
-			"linkedin",
-			currentUser.profile ? currentUser.profile.linkedin : ""
-		);
-		setValue(
-			"youtube",
-			currentUser.profile ? currentUser.profile.youtube : ""
-		);
-	}, [currentUser]);
+		setValue("countryId", currentUser.profile ? parseInt(currentUser.profile.countryId) : "");
+		setValue("website", currentUser.profile ? currentUser.profile.website : "");
+		setValue("twitter", currentUser.profile ? currentUser.profile.twitter : "");
+		setValue("facebook", currentUser.profile ? currentUser.profile.facebook : "");
+		setValue("linkedin", currentUser.profile ? currentUser.profile.linkedin : "");
+		setValue("youtube", currentUser.profile ? currentUser.profile.youtube : "");
+		
+		console.log(currentUser.profile, "currentUser");
+	}, [currentUser, setValue]);
 
 	const onSubmit = async (data) => {
+		console.log(data, "data");
 		setIsLoading(true);
 		await axios
 			.post(`/api/user/${currentUser.id}/update-info`, data)
@@ -91,15 +78,14 @@ const InfoForm = ({ currentUser }) => {
 			<div className="row">
 				<div className="col-md-6">
 					<Input
-						label="Full Name"
+						label="Nombre Completo"
 						id="name"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
-						required
 					/>
 					<Input
-						label="Designation"
+						label="Designación"
 						id="designation"
 						disabled={isLoading}
 						register={register}
@@ -109,21 +95,50 @@ const InfoForm = ({ currentUser }) => {
 
 					<TextArea
 						id="bio"
-						placeholder="Biography"
+						placeholder="Biografía"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
 					/>
 
-					<Input
-						label="Gender"
+					<label htmlFor="gender">Género</label>
+					<select
 						id="gender"
 						disabled={isLoading}
-						register={register}
-						errors={errors}
-					/>
+						{...register("gender")}
+						className={`form-control ${errors.gender ? "is-invalid" : ""}`}
+					>
+						<option value="">Seleccione género</option>
+						<option value="masculino">Masculino</option>
+						<option value="femenino">Femenino</option>
+					</select>
+					{errors.gender && (
+						<div className="invalid-feedback">{errors.gender.message}</div>
+					)}
+					
+					<br />
+					<label htmlFor="countryId">País</label>
+					<select
+						id="countryId"
+						disabled={isLoading}
+						{...register("countryId")}
+						className={`form-control ${errors.countryId ? "is-invalid" : ""}`}
+						onChange={(e) => setCountry(parseInt(e.target.id))}
+					>
+						<option value="">Seleccione país</option>
+						{countries.map((country) => (
+							<option key={country.id} value={country.id}>
+								{country.name} ({country.alpha2})
+							</option>
+						))}
+					</select>
+					{errors.countryId && (
+						<div className="invalid-feedback">{errors.countryId.message}</div>
+					)}
+					
+					<br />
 					<Input
-						label="Address"
+						label="Dirección"
 						id="address"
 						disabled={isLoading}
 						register={register}
@@ -132,15 +147,22 @@ const InfoForm = ({ currentUser }) => {
 				</div>
 
 				<div className="col-md-6">
+				<Input
+						label="WhatsApp"
+						id="whatsapp"
+						disabled={isLoading}
+						register={register}
+						errors={errors}
+					/>
 					<Input
-						label="Phone"
+						label="Teléfono"
 						id="phone"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
 					/>
 					<Input
-						label="Website URL"
+						label="Sitio Web"
 						id="website"
 						disabled={isLoading}
 						register={register}
@@ -180,10 +202,10 @@ const InfoForm = ({ currentUser }) => {
 					<button
 						type="submit"
 						className="btn default-btn"
-						disabled=""
+						disabled={isLoading}
 					>
 						<i className="flaticon-right-arrow"></i>
-						Save <span></span>
+						Guardar <span></span>
 					</button>
 				</div>
 			</div>

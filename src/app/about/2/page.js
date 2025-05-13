@@ -9,10 +9,10 @@ const page = () => {
 	return (
 		<>
 			<PageBanner
-				pageTitle="About Us"
+				pageTitle="Sobre nosotros"
 				homePageUrl="/"
-				homePageText="Home"
-				activePageText="About Us"
+				homePageText="Inicio"
+				activePageText="Sobre nosotros"
 			/>
 			<AboutArea />
 			<FunFacts />

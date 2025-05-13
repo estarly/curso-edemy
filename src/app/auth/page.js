@@ -12,10 +12,10 @@ const page = async () => {
 	return (
 		<>
 			<PageBanner
-				pageTitle="Profile Authentication"
+				pageTitle="Autenticación de perfil"
 				homePageUrl="/"
-				homePageText="Home"
-				activePageText="Profile Authentication"
+				homePageText="Inicio"
+				activePageText="Autenticación de perfil"
 			/>
 
 			<div className="profile-authentication-area ptb-100">

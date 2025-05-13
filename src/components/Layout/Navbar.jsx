@@ -52,7 +52,7 @@ const Navbar = ({ currentUser }) => {
 						<div className="navbar navbar-expand-lg navbar-light">
 							<Link href="/" className="navbar-brand">
 								<Image
-									src="/images/logo.png"
+									src="/images/landing/logo/logo.png"
 									width={87}
 									height={24}
 									alt="logo"

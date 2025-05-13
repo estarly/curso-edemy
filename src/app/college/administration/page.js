@@ -8,10 +8,10 @@ const page = () => {
 	return (
 		<>
 			<PageBanner
-				pageTitle="Administration"
+				pageTitle="Administración"
 				homePageUrl="/"
-				homePageText="Home"
-				activePageText="Administration"
+				homePageText="Inicio"
+				activePageText="Administración"
 			/>
 			<MessageFromCollegeChairman />
 			<MessageFromCollegePrincipal />

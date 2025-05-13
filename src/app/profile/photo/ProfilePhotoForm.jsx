@@ -32,7 +32,7 @@ const ProfilePhotoForm = ({ currentUser }) => {
 	const onSubmit = (data) => {
 		setIsLoading(true);
 		if (!data.image) {
-			toast.error("Please drop image 200x200 before submitting.");
+			toast.error("Por favor, suba una imagen 200x200 antes de enviar.");
 			setIsLoading(false);
 			return;
 		}
@@ -43,7 +43,7 @@ const ProfilePhotoForm = ({ currentUser }) => {
 				router.refresh();
 			})
 			.catch((error) => {
-				toast.error("Something went wrong!");
+				toast.error("Algo salió mal!");
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -75,7 +75,7 @@ const ProfilePhotoForm = ({ currentUser }) => {
 							disabled={isLoading}
 						>
 							<i className="flaticon-right-arrow"></i>
-							Upload <span></span>
+							Subir <span></span>
 							<span></span>
 						</button>
 					</div>

@@ -1,27 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 import CourseCardOne from "../Shared/CourseCardOne";
 
 const Courses = ({ courses, currentUser }) => {
+	const [coursess, setCourses] = useState([]);
+
+	useEffect(() => {
+		setCourses(courses);
+	}, [coursess]);
+
 	return (
 		<div className="courses-area ptb-100">
 			<div className="container">
 				<div className="section-title">
 					<span className="sub-title">A tu ritmo</span>
-					<h2>El mundo tiene miles de cursos</h2>
+					<h2>Listado de cursos</h2>
 					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-						sed do eiusmod tempor incididunt ut labore et dolore
-						magna aliqua.
+						Estos son los cursos que tenemos disponibles para ti.
 					</p>
 				</div>
 
 				<div className="row">
-					{courses.map((course) => (
+					{coursess.map((course) => (
 						<CourseCardOne
 							key={course.id}
 							{...course}

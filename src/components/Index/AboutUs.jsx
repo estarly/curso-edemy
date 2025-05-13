@@ -12,7 +12,7 @@ const AboutUs = () => {
 					<div className="col-lg-6 col-md-12">
 						<div className="about-image text-center">
 							<Image
-								src="/images/about-img10.png"
+								src="/images/landing/about/about01.png"
 								width={542}
 								height={458}
 								alt="image"
@@ -22,47 +22,43 @@ const AboutUs = () => {
 
 					<div className="col-lg-6 col-md-12">
 						<div className="about-content">
-							<span className="sub-title">About Us</span>
+							<span className="sub-title">Sobre nosotros</span>
 							<h2>
-								Develop Your Skills, Learn Something New, and
-								Grow Your Skills From Anywhere in the World!
+							Desarrolle sus habilidades, aprenda algo nuevo y mejore sus habilidades desde cualquier parte del mundo.
 							</h2>
 							<p>
-								We understand better that online-based learning
-								can make a significant change to reach students
-								from all over the world! Giving options to learn
-								better always can offer the best outcomes!
+							Entendemos mejor que el aprendizaje en línea puede hacer una significativa diferencia para llegar a estudiantes de todo el mundo. Ofrecer opciones de aprendizaje mejor siempre puede ofrecer los mejores resultados.
 							</p>
 
 							<ul className="features-list">
 								<li>
 									<span>
 										<i className="flaticon-experience"></i>{" "}
-										Skiled Teachers
+										Profesores capacitados
 									</span>
 								</li>
 								<li>
 									<span>
 										<i className="flaticon-time-left"></i>{" "}
-										Afordable Courses
+										Cursos accesibles
 									</span>
 								</li>
 								<li>
 									<span>
 										<i className="flaticon-tutorials"></i>{" "}
-										Efficient & Flexible
+										Eficiente y flexible
 									</span>
 								</li>
 								<li>
 									<span>
 										<i className="flaticon-self-growth"></i>{" "}
-										Lifetime Access
+										Acceso de por vida
 									</span>
 								</li>
 							</ul>
 
-							<Link href="/auth" className="default-btn">
-								<i className="flaticon-user"></i> Join For Free{" "}
+							<Link href="/auth/register" target="_blank" className="default-btn">
+								<i className="flaticon-user"></i> Únete gratis{" "}
 								<span></span>
 							</Link>
 						</div>

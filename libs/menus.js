@@ -1,15 +1,16 @@
 export const menuNew =[
 	{
-		label: "Home",
+		label: "Inicio",
 		link: "/",
 		submenu: null,
 	},
 	{
-		label: "Courses",
+		label: "Cursos",
 		link: "/courses",
 		submenu: null,
 	},
 ];
+
 export const menus = [
 	{
 		label: "Home",

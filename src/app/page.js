@@ -16,10 +16,10 @@ import { getCourses } from "@/actions/getCourses";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
 const page = async ({searchParams}) => {
-	const banners = await getBanner();
-	const topCategories = await getTopCategories();
+	
 	const { courses } = await getCourses(searchParams,4);
-	console.log(courses,'courses');
+	const topCategories = await getTopCategories();
+	const banners = await getBanner();
 	const currentUser = await getCurrentUser();
 
 	return (
