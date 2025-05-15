@@ -98,7 +98,7 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 						data={categories}
 						value={category}
 						onChange={(value) => {
-							console.log("Categoria seleccionada:", value);
+							console.log("Categoria seleccionada:", {value});
 							setCustomValue("category", value);
 						}}
 						label="Categoría"
