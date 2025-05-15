@@ -17,7 +17,7 @@ import SetPrice from "../FormHelpers/SetPrice";
 import CategorySelect from "../FormHelpers/CategorySelect";
 import ImageUpload from "../FormHelpers/ImageUpload";
 
-const CourseCreateForm = ({ currentUser }) => {
+const CourseCreateForm = ({ currentUser, categories }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 
@@ -95,8 +95,12 @@ const CourseCreateForm = ({ currentUser }) => {
 				</div>
 				<div className="col-md-6">
 					<CategorySelect
+						data={categories}
 						value={category}
-						onChange={(value) => setCustomValue("category", value)}
+						onChange={(value) => {
+							console.log("Categoria seleccionada:", value);
+							setCustomValue("category", value);
+						}}
 						label="Categoría"
 					/>
 				</div>

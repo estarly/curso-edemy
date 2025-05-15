@@ -2,8 +2,9 @@ import React from "react";
 import CourseCreateForm from "@/components/Instructor/CourseCreateForm";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import Header from "../Header";
-
+import { getCategories } from "@/app/admin/categories/_actions";
 const Page = async () => {
+	const { items: categories } = await getCategories();
 	const currentUser = await getCurrentUser();
 	return (
 		<>
@@ -14,7 +15,7 @@ const Page = async () => {
 					<Header />
 
 					<div className="create-course-form">
-						<CourseCreateForm currentUser={currentUser} />
+						<CourseCreateForm currentUser={currentUser} categories={categories} />
 					</div>
 				</div>
 			</div>

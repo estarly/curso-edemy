@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
 
-const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opción", data= [] }) => {
+const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opción", data = [], onChange }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
 	const router = useRouter();
 	
@@ -21,16 +21,24 @@ const CategorySelect = ({ label, valueId = null,placeholder="Seleccione una opci
 	}, [data, valueId]);
 	
 	const handleChange = (value) => {
-		const {id} = value || {};
-		if (id){
-			router.push(`?category=${id}`);
-		} else {
-			router.push(`?category=`);
+		// Si hay una función onChange proporcionada, la llamamos con el valor
+		if (onChange) {
+			const selectedId = value?.id || null;
+			onChange(selectedId);
+		} 
+		// Si no hay onChange pero hay un router, usamos el comportamiento original
+		else if (router) {
+			const {id} = value || {};
+			if (id){
+				router.push(`?category=${id}`);
+			} else {
+				router.push(`?category=`);
+			}
 		}
 	}
 
 	return (
-		<div className="form-gorup">
+		<div className="form-group">
 			<label>{label}</label>
 			<Select
 				placeholder={placeholder}

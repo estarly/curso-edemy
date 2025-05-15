@@ -8,8 +8,10 @@ import Input from "@/components/FormHelpers/Input";
 import TextArea from "./TextArea";
 import { useRouter } from "next/navigation";
 
-const InfoForm = ({ currentUser, countries }) => {
+const InfoForm = ({ currentUser, countries, validateUser }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [validate, setValidate] = useState(validateUser);
+
 	const router = useRouter();
 	const [gender, setGender] = useState(currentUser.profile?.gender || "");
 	const [country, setCountry] = useState(parseInt(currentUser.profile?.countryId) || "");
@@ -53,8 +55,10 @@ const InfoForm = ({ currentUser, countries }) => {
 		setValue("facebook", currentUser.profile ? currentUser.profile.facebook : "");
 		setValue("linkedin", currentUser.profile ? currentUser.profile.linkedin : "");
 		setValue("youtube", currentUser.profile ? currentUser.profile.youtube : "");
-		
-		console.log(currentUser.profile, "currentUser");
+
+		if(validate){
+			toast.success("Por favor, complete su perfil básico para continuar")
+		}
 	}, [currentUser, setValue]);
 
 	const onSubmit = async (data) => {
@@ -64,7 +68,9 @@ const InfoForm = ({ currentUser, countries }) => {
 			.post(`/api/user/${currentUser.id}/update-info`, data)
 			.then((response) => {
 				toast.success(response.data.message);
-				router.refresh();
+				setTimeout(() => {
+					router.refresh();
+				}, 1500);
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message);

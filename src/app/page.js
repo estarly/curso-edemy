@@ -13,7 +13,9 @@ import FunFacts from "@/components/CollegeWebsite/FunFacts";
 import { getBanner } from "@/actions/principal/getBanner";
 import { getTopCategories } from "@/actions/principal/getTopCategories";
 import { getCourses } from "@/actions/getCourses";
-import { getCurrentUser } from "@/actions/getCurrentUser";
+import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
+import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 const page = async ({searchParams}) => {
 	
@@ -21,6 +23,11 @@ const page = async ({searchParams}) => {
 	const topCategories = await getTopCategories();
 	const banners = await getBanner();
 	const currentUser = await getCurrentUser();
+	const validateUser = await validateDataUser();
+
+	if(validateUser){
+		redirect("/profile/basic-information");
+	}
 
 	return (
 		<>
