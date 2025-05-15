@@ -82,7 +82,7 @@ export async function PUT(request, { params }) {
         const fileName = `category-${categoryId}-${timestamp}`;
 
         const uploadResult = await imageUploadService.uploadImage(imageFile, {
-          path: 'categories',
+          path: 'upload_course/categories',
           fileName: fileName
         });
 

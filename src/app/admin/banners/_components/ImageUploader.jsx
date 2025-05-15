@@ -6,6 +6,7 @@ import ImageCropper from "./ImageCropper"
 const IMAGE_DIMENSIONS = {
   banner: { width: 843, height: 680, label: "Banner" },
   category: { width: 650, height: 433, label: "Categoría" },
+  profile: { width: 200, height: 200, label: "Perfil" },
 }
 
 export default function ImageUploader({ type = "banner", onChange }) {

@@ -17,6 +17,12 @@ const IMAGE_DIMENSIONS = {
     label: "Categoría",
     aspectRatio: 650 / 433,
   },
+  profile: {
+    width: 200,
+    height: 200,
+    label: "Perfil",
+    aspectRatio: 200 / 200,
+  },
 }
 
 export default function ImageCropper({ imageType, imageSrc, onCropComplete, onCancel }) {

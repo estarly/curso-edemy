@@ -77,7 +77,7 @@ export async function POST(request) {
         const fileName = `banner-${sanitizedName}-${timestamp}`;
 
         const uploadResult = await imageUploadService.uploadImage(imageFile, {
-          path: 'banners',
+          path: 'upload_course/banners',
           fileName: fileName
         });
 

@@ -65,7 +65,7 @@ export async function POST(request) {
         const fileName = `category-${sanitizedName}-${timestamp}`;
 
         const uploadResult = await imageUploadService.uploadImage(imageFile, {
-          path: 'categories',
+          path: 'upload_course/categories',
           fileName: fileName
         });
 

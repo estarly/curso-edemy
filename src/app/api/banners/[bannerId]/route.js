@@ -85,7 +85,7 @@ export async function PUT(request, { params }) {
         const fileName = `banner-${bannerId}-${timestamp}`;
 
         const uploadResult = await imageUploadService.uploadImage(imageFile, {
-          path: 'banners',
+          path: 'upload_course/banners',
           fileName: fileName
         });
 

@@ -14,8 +14,17 @@ export class ImageUploadService {
     return this.storageService.upload(file, imageOptions);
   }
 
-  async deleteImage(imageUrl) {
-    return this.storageService.delete(imageUrl);
+  async deleteImage(key) {
+    try {
+      console.log('Intentando eliminar imagen con clave:', key);
+      
+      const result =   this.storageService.delete(key);
+          
+      return { success: true, result };
+    } catch (error) {
+      console.error('Error detallado al eliminar imagen:', error);
+      return { success: false, error: error.message };
+    }
   }
 }
 
