@@ -5,7 +5,6 @@ import "../app/styles/animate.min.css";
 import "../app/styles/boxicons.min.css";
 import "../app/styles/meanmenu.min.css";
 import "../app/styles/flaticon.css";
-import "../app/styles/flaticon.css";
 import "react-modal-video/css/modal-video.min.css";
 import "react-accessible-accordion/dist/fancy-example.css";
 import "react-tabs/style/react-tabs.css";
@@ -64,7 +63,7 @@ export const metadata = {
 		images: [
 			"https://res.cloudinary.com/dev-empty/image/upload/v1707717581/znronmo1rj2gexfrmnmy.jpg",
 		],
-		locale: "en_US",
+		locale: "es_ES",
 		type: "website",
 	},
 };

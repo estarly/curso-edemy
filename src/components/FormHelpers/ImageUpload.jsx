@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const uploadPreset = process.env.NEXT_CLOUDINARY_PRESET;
 
-const ImageUpload = ({ onChange, value }) => {
+const ImageUpload = ({ onChange, value, title = "Imagen por defecto" }) => {
 	const handleUpload = useCallback(
 		(result) => {
 			onChange(result.info.secure_url);
@@ -16,7 +16,7 @@ const ImageUpload = ({ onChange, value }) => {
 
 	return (
 		<div className="form-group">
-			<label className="form-label fw-semibold">Course Image</label>
+			<label className="form-label fw-semibold">{title}</label>
 			<CldUploadWidget
 				onUpload={handleUpload}
 				uploadPreset={uploadPreset}

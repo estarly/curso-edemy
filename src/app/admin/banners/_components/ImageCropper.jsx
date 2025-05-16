@@ -23,6 +23,12 @@ const IMAGE_DIMENSIONS = {
     label: "Perfil",
     aspectRatio: 200 / 200,
   },
+  course: {
+    width: 750,
+    height: 500,
+    label: "Curso",
+    aspectRatio: 750 / 500,
+  },
 }
 
 export default function ImageCropper({ imageType, imageSrc, onCropComplete, onCancel }) {
@@ -104,7 +110,7 @@ export default function ImageCropper({ imageType, imageSrc, onCropComplete, onCa
   return (
     <div className="container">
       <h3 className="mb-4 fw-semibold">
-        Recortar imagen ({dimensions.label}: {dimensions.width}x{dimensions.height}px)
+        Recortar ({dimensions.width}x{dimensions.height}px)
       </h3>
 
       <div className="card mb-4">

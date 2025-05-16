@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
 	ssr: false,
 	loading: () => null,
@@ -15,10 +17,17 @@ import {
 import Input from "../FormHelpers/Input";
 import SetPrice from "../FormHelpers/SetPrice";
 import CategorySelect from "../FormHelpers/CategorySelect";
-import ImageUpload from "../FormHelpers/ImageUpload";
+//import ImageUpload from "../FormHelpers/ImageUpload";
+import ImageUploader from "@/app/admin/banners/_components/ImageUploader";
 
 const CourseCreateForm = ({ currentUser, categories }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [imageFile, setImageFile] = useState(null);
+	const [crop, setCrop] = useState({ aspect: 1.5 }); // Aspecto 750/500 = 1.5
+	const [completedCrop, setCompletedCrop] = useState(null);
+	const [imageRef, setImageRef] = useState(null);
+	const [croppedImagePreview, setCroppedImagePreview] = useState(null);
+	const [isCropping, setIsCropping] = useState(false);
 	const router = useRouter();
 
 	const {
@@ -33,32 +42,198 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 			category: "",
 			title: "",
 			description: "",
-			regular_price: "",
-			before_price: "",
-			lessons: "",
-			duration: "",
+			//regular_price: "",
+			//before_price: "",
+			//lessons: "",
+			//duration: "",
 			image: "",
-			access_time: "",
+			access_time: "Lifetime",
 			requirements: "",
 			what_you_will_learn: "",
 			who_is_this_course_for: "",
+			crop: {
+				x: 0,
+				y: 0,
+				width: 750,
+				height: 500,
+			},
 		},
 	});
 
-	const regular = watch("regular_price");
-	const before = watch("before_price");
+	//const regular = watch("regular_price");
+	//const before = watch("before_price");
 	const category = watch("category");
 	const image = watch("image");
 
+	const handleImageUpload = async (value) => {
+		console.log("Valor recibido:", value); // Agregar para depuración
+		
+		// Si value es un objeto con propiedad file o url
+		if (value && typeof value === 'object') {
+			if (value.file instanceof File) {
+				// Si tiene una propiedad file que es un objeto File
+				setImageFile(value.file);
+				setIsCropping(true);
+				setCroppedImagePreview(null);
+			} else if (value.url && value.url.startsWith('blob:')) {
+				// Si tiene una URL de blob, intentamos convertirla a File
+				try {
+					const response = await fetch(value.url);
+					const blob = await response.blob();
+					const file = new File([blob], `course-image-${Date.now()}.png`, { type: blob.type });
+					setImageFile(file);
+					setIsCropping(true);
+					setCroppedImagePreview(null);
+				} catch (error) {
+					console.error('Error al obtener el blob:', error);
+					toast.error("Error al procesar la imagen");
+				}
+			} else if (value instanceof File) {
+				// Si es directamente un objeto File
+				setImageFile(value);
+				setIsCropping(true);
+				setCroppedImagePreview(null);
+			} else {
+				console.warn("Formato de imagen no reconocido:", value);
+				toast.error("Formato de imagen no reconocido");
+			}
+		}
+	};
+
+	const onImageLoaded = (image) => {
+		setImageRef(image);
+		setIsCropping(true);
+		setCroppedImagePreview(null);
+	};
+
+	const onCropComplete = (crop) => {
+		setCompletedCrop(crop);
+	};
+
+	const applyCrop = async () => {
+		if (completedCrop && imageRef) {
+			const croppedFile = await getCroppedImg(imageRef, completedCrop);
+			setImageFile(croppedFile);
+			const previewUrl = URL.createObjectURL(croppedFile);
+			setCroppedImagePreview(previewUrl);
+			setIsCropping(false);
+			setCustomValue("image", previewUrl);
+		}
+	};
+
+	const resetCrop = () => {
+		setIsCropping(true);
+		setCroppedImagePreview(null);
+	};
+
+	// Función auxiliar para obtener la imagen recortada
+	const getCroppedImg = (image, crop) => {
+		return new Promise((resolve) => {
+			const canvas = document.createElement('canvas');
+			const scaleX = image.naturalWidth / image.width;
+			const scaleY = image.naturalHeight / image.height;
+			
+			canvas.width = crop.width;
+			canvas.height = crop.height;
+			
+			const ctx = canvas.getContext('2d');
+			
+			ctx.drawImage(
+				image,
+				crop.x * scaleX,
+				crop.y * scaleY,
+				crop.width * scaleX,
+				crop.height * scaleY,
+				0,
+				0,
+				crop.width,
+				crop.height
+			);
+			
+			canvas.toBlob(blob => {
+				if (blob) {
+					const file = new File([blob], `course-image-${Date.now()}.png`, { type: blob.type });
+					resolve(file);
+				}
+			}, 'image/png');
+		});
+	};
+
 	const onSubmit = (data) => {
 		setIsLoading(true);
-		if (!data.image) {
-			toast.error("Por favor, suba una imagen de 750x500 antes de enviar.");
-			setIsLoading(false);
-			return;
+		
+		// Verificar campos obligatorios
+		const camposFaltantes = [];
+		
+		if (!data.title || data.title.trim() === "") {
+			camposFaltantes.push("Título del curso");
 		}
+		
+		if (!data.category || data.category === "") {
+			camposFaltantes.push("Categoría");
+		}
+		
+		if (!data.description || data.description.trim() === "") {
+			camposFaltantes.push("Descripción");
+		}
+		
+		if (!data.requirements || data.requirements.trim() === "") {
+			camposFaltantes.push("Requisitos");
+		}
+		
+		if (!data.what_you_will_learn || data.what_you_will_learn.trim() === "") {
+			camposFaltantes.push("Lo que aprenderás");
+		}
+		
+		if (!data.who_is_this_course_for || data.who_is_this_course_for.trim() === "") {
+			camposFaltantes.push("Para quién es este curso");
+		}
+		
+		if (!imageFile) {
+			camposFaltantes.push("Imagen de portada");
+		}
+		
+		// Si hay campos faltantes, mostrar mensaje individual para cada uno
+		if (camposFaltantes.length > 0) {
+			console.log("Campos faltantes:", camposFaltantes); // Para debugging
+			
+			// Mostrar un toast de error para cada campo faltante
+			camposFaltantes.forEach(campo => {
+				toast.error(`El campo "${campo}" es requerido`,{
+					duration: 2000,
+				});
+			});
+			
+			setIsLoading(false);
+			return false; // Asegurar que detenemos la ejecución
+		}
+		
+		// Verificar dimensiones de la imagen
+		if (completedCrop && (completedCrop.width < 700 || completedCrop.height < 450)) {
+			console.log("Error de dimensiones de imagen"); // Para debugging
+			toast.error("La imagen debe tener aproximadamente 750x500 píxeles.");
+			setIsLoading(false);
+			return false; // Asegurar que detenemos la ejecución
+		}
+		
+		const formData = new FormData();
+		
+		// Agregar todos los campos del formulario
+		Object.keys(data).forEach(key => {
+			if (key !== 'image') {
+				formData.append(key, data[key]);
+			}
+		});
+		
+		// Agregar la imagen recortada
+		formData.append("imageFile", imageFile);
+		
 		axios
-			.post("/api/courses/create", data)
+			.post("/api/courses/create", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
 			.then((response) => {
 				toast.success(response.data.message);
 				router.push(
@@ -66,7 +241,7 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 				);
 			})
 			.catch((error) => {
-				toast.error("Algo salió mal!");
+				toast.error(error.response?.data?.message || "Algo salió mal!");
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -95,10 +270,10 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 				</div>
 				<div className="col-md-6">
 					<CategorySelect
+						required={false}
 						data={categories}
-						value={category}
+						valueId={category}
 						onChange={(value) => {
-							console.log("Categoria seleccionada:", {value});
 							setCustomValue("category", value);
 						}}
 						label="Categoría"
@@ -107,69 +282,82 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 
 				<div className="col-md-6">
 					<Input
-						label="Lecciones"
-						id="lessons"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-					/>
-				</div>
-
-				<div className="col-md-6">
-					<SetPrice
-						label="Precio Regular"
-						id="regular_price"
-						required
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-						value={regular}
-						onChange={(newValue) =>
-							setValue("regular_price", newValue)
-						}
-					/>
-				</div>
-
-				<div className="col-md-6">
-					<SetPrice
-						label="Precio Anterior"
-						id="before_price"
-						required
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-						value={before}
-						onChange={(newValue) =>
-							setValue("before_price", newValue)
-						}
-					/>
-				</div>
-
-				<div className="col-md-6">
-					<Input
-						label="Duración"
-						id="duration"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-					/>
-				</div>
-
-				<div className="col-md-6">
-					<Input
 						label="Tiempo de acceso"
 						id="access_time"
-						disabled={isLoading}
+						disabled={true}
 						register={register}
 						errors={errors}
 					/>
 				</div>
 
 				<div className="col-md-6">
-					<ImageUpload
-						onChange={(value) => setCustomValue("image", value)}
-						value={image}
-					/>
+					<div className="mb-4">
+						<label className="form-label fw-semibold">Imagen de portada (750x500)</label>
+						<div className="upload-container p-1 bg-light rounded">
+							<ImageUploader
+								type="course"
+								onChange={handleImageUpload}
+							/>
+						</div>
+					</div>
+					
+					{/**
+					 * {imageFile && isCropping && (
+						<div className="mb-4">
+							<h5 className="mb-3">Recortar imagen</h5>
+							<div className="crop-container p-3 bg-light rounded">
+								<ReactCrop
+									src={URL.createObjectURL(imageFile)}
+									crop={crop}
+									onImageLoaded={onImageLoaded}
+									onComplete={onCropComplete}
+									onChange={newCrop => setCrop(newCrop)}
+									className="img-fluid"
+								/>
+								{completedCrop && (
+									<div className="mt-3 d-flex justify-content-between">
+										<small className="text-muted">
+											Tamaño del recorte: {Math.round(completedCrop.width)} x {Math.round(completedCrop.height)}
+										</small>
+										<button 
+											type="button" 
+											className="btn btn-sm btn-primary"
+											onClick={applyCrop}
+										>
+											Aplicar recorte
+										</button>
+									</div>
+								)}
+							</div>
+						</div>
+					)}
+					 */}
+					
+					{imageFile && croppedImagePreview && !isCropping && (
+						<div className="mb-4">
+							<h5 className="mb-3">Vista previa</h5>
+							<div className="preview-container p-3 bg-light rounded text-center">
+								<img 
+									src={croppedImagePreview} 
+									alt="Vista previa de imagen recortada" 
+									className="img-fluid rounded shadow-sm" 
+									style={{ 
+										maxWidth: '100%', 
+										height: 'auto' 
+									}} 
+								/>
+								<div className="mt-3">
+									<button 
+										type="button" 
+										className="btn btn-sm btn-outline-secondary"
+										onClick={resetCrop}
+									>
+										Volver a recortar
+									</button>
+								</div>
+							</div>
+						</div>
+					)}
 				</div>
 
 				<div className="col-md-6">
@@ -281,9 +469,21 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 				</div>
 
 				<div className="col-12">
-					<button type="submit" className="default-btn">
-						<i className="flaticon-right-arrow"></i>Crear curso{" "}
-						<span></span>
+					<button 
+						type="submit" 
+						className="default-btn"
+						disabled={isLoading}
+					>
+						{isLoading ? (
+							<>
+								<span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+								Creando...
+							</>
+						) : (
+							<>
+								<i className="flaticon-right-arrow"></i>Crear curso <span></span>
+							</>
+						)}
 					</button>
 				</div>
 			</div>

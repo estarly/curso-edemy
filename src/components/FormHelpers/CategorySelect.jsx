@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
 
-const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opción", data = [], onChange }) => {
+const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opción", data = [], onChange,required=true }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
 	const router = useRouter();
 	
@@ -42,7 +42,7 @@ const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opc
 			<label>{label}</label>
 			<Select
 				placeholder={placeholder}
-				required
+				required={required}
 				isClearable
 				isSearchable={true}
 				options={data.map((item) => ({

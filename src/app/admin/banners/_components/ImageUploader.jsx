@@ -7,9 +7,10 @@ const IMAGE_DIMENSIONS = {
   banner: { width: 843, height: 680, label: "Banner" },
   category: { width: 650, height: 433, label: "Categoría" },
   profile: { width: 200, height: 200, label: "Perfil" },
+  course: { width: 750, height: 500, label: "Curso" },
 }
 
-export default function ImageUploader({ type = "banner", onChange }) {
+export default function ImageUploader({ type = "banner", onChange,title=false }) {
   const imageType = IMAGE_DIMENSIONS[type] ? type : "banner"
 
   const [originalImage, setOriginalImage] = useState(null)
@@ -102,9 +103,10 @@ export default function ImageUploader({ type = "banner", onChange }) {
   if (showCropper && originalImage) {
     return (
       <div className="container py-4">
-        <button className="btn btn-link mb-4 p-0 text-decoration-none" onClick={handleCropCancel}>
+        {/*<button className="btn btn-link mb-4 p-0 text-decoration-none" onClick={handleCropCancel}>
           <i className="bi bi-arrow-left me-2"></i> Volver
         </button>
+        */}
 
         <ImageCropper
           imageType={imageType}
@@ -118,9 +120,11 @@ export default function ImageUploader({ type = "banner", onChange }) {
 
   return (
     <div className="container py-4">
-      <h2 className="fw-bold mb-4">
-        {dimensions.label} ({dimensions.width}x{dimensions.height}px)
-      </h2>
+      {title && (
+        <h2 className="fw-bold mb-4">
+          {dimensions.label} ({dimensions.width}x{dimensions.height}px)
+        </h2>
+      )}
 
       <div className="card mb-4">
         <div className="card-body p-4">
@@ -148,11 +152,11 @@ export default function ImageUploader({ type = "banner", onChange }) {
                     style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
                   />
                   <button
-                    className="position-absolute top-0 end-0 btn btn-danger rounded-circle p-1"
+                    className="position-absolute top-0 end-0 btn btn-danger"
                     style={{ margin: "8px" }}
                     onClick={handleRemoveImage}
                   >
-                    <i className="bi bi-x"></i>
+                    <i className="flaticon-cancel"></i>
                   </button>
                 </div>
               ) : (
