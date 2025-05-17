@@ -91,7 +91,7 @@ model Course {
   description            String   @db.Text
   regular_price          Float
   before_price           Float
-  //lessons                String
+  lessons                String
   //duration               String
   image                  String
   access_time            String

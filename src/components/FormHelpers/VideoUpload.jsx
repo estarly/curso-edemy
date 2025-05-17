@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const uploadPreset = process.env.NEXT_CLOUDINARY_PRESET;
 
-const VideoUpload = ({ onChange, value }) => {
+const VideoUpload = ({ onChange, value,title="Subir video" }) => {
 	const handleUpload = useCallback(
 		(result) => {
 			onChange(result.info.secure_url);
@@ -18,7 +18,7 @@ const VideoUpload = ({ onChange, value }) => {
 
 	return (
 		<div className="form-group">
-			<label className="form-label fw-semibold">Course Video</label>
+			<label className="form-label fw-semibold">{title}</label>
 			<CldUploadWidget
 				onUpload={handleUpload}
 				uploadPreset={uploadPreset}
@@ -34,9 +34,9 @@ const VideoUpload = ({ onChange, value }) => {
 								className="img-thumbnail mb-3"
 							>
 								<div className="text-center">
-									Click to upload
+									Clic para subir
 									<div className="form-text">
-										The demo file size less than 10 MB
+										El archivo de demostración es menor de 10 MB
 									</div>
 								</div>
 							</div>
@@ -49,7 +49,7 @@ const VideoUpload = ({ onChange, value }) => {
 												src={value}
 												type="video/mp4"
 											/>
-											Your browser does not support HTML
+											Tu navegador no soporta HTML
 											video.
 										</video>
 									</div>

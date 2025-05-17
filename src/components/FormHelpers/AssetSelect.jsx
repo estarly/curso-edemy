@@ -4,20 +4,39 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 
 const types = [
-	{ value: 1, label: "Video", config: { } },
-	{ value: 2, label: "Archivo", config: { } },
-	{ value: 3, label: "Online", config: {
-			url: "",
-			platform: "",
-			meeting_id: "",
-			password: "",
-			credits: {
+	{ value: 1, label: "Subir Video", config: {
+		val: "",
+		type: "video",
+	 } },
+	{ value: 2, label: "Subir Audio", config: {
+		val: "",
+		type: "audio",
+	 } },
+	{ value: 3, label: "Subir Documento", config: {
+		val: "",
+		type: "document",
+	 } },
+	{ value: 4, label: "Link Externo", config: {
+		val: "",
+		type: "link",
+	 } },
+	 { value: 5, label: "Youtube", config: {
+		val: "",
+		type: "youtube",
+	 } },
+	{ value: 6, label: "Online", config: {
+		val: "",
+		type: "online",
+		platform: "",
+		meeting_id: "",
+		password: "",
+		credits: {
 				host: "",
 				duration: "",
 				participants: ""
 			}
 		}
-	}
+	},
 
 ];
 

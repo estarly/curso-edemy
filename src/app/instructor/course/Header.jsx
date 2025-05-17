@@ -59,7 +59,7 @@ const Header = () => {
 							Lecciones
 						</Link>
 					</li>
-					<li>
+					{/*<li>
 						<Link
 							href={`/instructor/course/${params.courseId}/assignments`}
 							className={
@@ -97,7 +97,7 @@ const Header = () => {
 						>
 							Subir archivos
 						</Link>
-					</li>
+					</li>*/}
 					
 				</>
 			)}
