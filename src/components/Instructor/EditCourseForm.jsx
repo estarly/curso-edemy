@@ -301,7 +301,7 @@ const EditCourseForm = ({ course, params, categories }) => {
 					<Input
 						label="Tiempo de acceso"
 						id="access_time"
-						disabled={isLoading}
+						disabled={true}
 						register={register}
 						errors={errors}
 					/>

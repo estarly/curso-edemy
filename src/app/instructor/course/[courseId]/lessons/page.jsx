@@ -5,11 +5,14 @@ import CourseLessons from "@/components/Instructor/CourseLessons";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./_components/EditButton";
 import { getAssetsByCourseId } from "@/app/instructor/actions";
+import AssignmentComponent from "@/app/instructor/course/[courseId]/lessons/_components/AssignmentComponent";
+import { getAssignmentTypes } from "@/app/instructor/actions";
 
 const Page = async ({ params }) => {
 	const { courseId } = params || {};
 	const { course, videos } = await getCourseById(params);
 	const { items: assets } = await getAssetsByCourseId(courseId);
+	const { items: assignments } = await getAssignmentTypes();
 
 	return (
 		<>
@@ -128,6 +131,7 @@ const Page = async ({ params }) => {
 											<div className="mt-2">
 												<EditButton videoId={asset.id} />
 												<DeleteButton videoId={asset.id} />
+												<AssignmentComponent idAsset={asset.id} assignments={assignments} />
 											</div>
 										</div>
 									</div>
@@ -137,6 +141,7 @@ const Page = async ({ params }) => {
 					</div>
 				</div>
 			</div>
+		
 		</>
 	);
 };

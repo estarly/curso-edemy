@@ -73,6 +73,9 @@ export default async function RootLayout({ children }) {
 	//console.log(currentUser,'RootLayout');
 	return (
 		<html lang="es">
+			<head>
+				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+			</head>
 			<body className={nunito.className} suppressHydrationWarning={true}>
 				<TosterProvider />
 				<Navbar currentUser={currentUser} />
