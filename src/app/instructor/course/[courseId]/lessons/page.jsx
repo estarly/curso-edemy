@@ -4,15 +4,20 @@ import Header from "../../Header";
 import CourseLessons from "@/components/Instructor/CourseLessons";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./_components/EditButton";
-import { getAssetsByCourseId } from "@/app/instructor/actions";
+import { getAssetsByCourseId, getAssignmentsByAssetId,getAssignmentTypes } from "@/app/instructor/actions";
 import AssignmentComponent from "@/app/instructor/course/[courseId]/lessons/_components/AssignmentComponent";
-import { getAssignmentTypes } from "@/app/instructor/actions";
+import Swal from "sweetalert2";
 
 const Page = async ({ params }) => {
 	const { courseId } = params || {};
 	const { course, videos } = await getCourseById(params);
 	const { items: assets } = await getAssetsByCourseId(courseId);
-	const { items: assignments } = await getAssignmentTypes();
+	const { items: assignmentsTypes } = await getAssignmentTypes();
+	//consutla todas la tareas de cada asset
+	/*const assignments = await Promise.all(assets.map(async (asset) => {
+		const { items } = await getAssignmentsByAssetId(asset.id);
+		return items;
+	}));*/
 
 	return (
 		<>
@@ -26,7 +31,7 @@ const Page = async ({ params }) => {
 						<CourseLessons course={course} params={params} />
 						<hr />
 						<div className="row row-gap-4">
-							{assets.map((asset) => (
+							{assets.map((asset, idx) => (
 								<div className="col-md-3" key={asset.id}>
 									<div className="card h-100">
 										{/* Video - Tipo 1 */}
@@ -131,7 +136,10 @@ const Page = async ({ params }) => {
 											<div className="mt-2">
 												<EditButton videoId={asset.id} />
 												<DeleteButton videoId={asset.id} />
-												<AssignmentComponent idAsset={asset.id} assignments={assignments} />
+												<AssignmentComponent
+													idAsset={asset.id}
+													assignmentsTypes={assignmentsTypes}
+												/>
 											</div>
 										</div>
 									</div>
@@ -144,6 +152,29 @@ const Page = async ({ params }) => {
 		
 		</>
 	);
+};
+
+// Función para eliminar pregunta de la base de datos usando la API interna
+const handleEliminarPreguntaDB = async (id) => {
+	const confirm = await Swal.fire({
+		title: "¿Estás seguro?",
+		text: "Esta pregunta se eliminará de la base de datos.",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonText: "Sí, eliminar",
+		cancelButtonText: "Cancelar",
+	});
+
+	if (confirm.isConfirmed) {
+		const res = await fetch(`/api/assignments/${id}`, { method: "DELETE" });
+		if (res.ok) {
+			Swal.fire("Eliminado", "La pregunta fue eliminada.", "success");
+			// Opcional: recarga la página o reconsulta las preguntas
+			// location.reload();
+		} else {
+			Swal.fire("Error", "No se pudo eliminar la pregunta.", "error");
+		}
+	}
 };
 
 export default Page;

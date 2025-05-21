@@ -2,30 +2,41 @@
 
 import React, { useState } from "react";
 import { Modal, Button, Form, Tab, Nav } from "react-bootstrap";
-import AssignmentTypeSelect from "../../assignments/_components/AssignmentTypeSelect";
 import Swal from "sweetalert2";
 
-const AssignmentComponent = ({ idAsset, assignments }) => {
+const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
   const [show, setShow] = useState(false);
   const [selectedTypeId, setSelectedTypeId] = useState(null);
 
-  // Para almacenar los valores de los inputs de cada pregunta
+  // Estado para los valores de los inputs de cada pregunta
   const [formData, setFormData] = useState({
     question: "",
     description: "",
     options: [],
     correctOption: "",
     correctAnswer: "",
-    correctOptions: [], // Nuevo: para selección múltiple con varias respuestas
+    correctOptions: [],
   });
+  const [assignments, setAssignments] = useState([]);
 
-  // Nuevo: Arreglo de preguntas agregadas
-  const [preguntas, setPreguntas] = useState([]);
-
-  // Nuevo: Estado para la pestaña activa
+  // Estado para la pestaña activa
   const [activeTab, setActiveTab] = useState("asignar");
 
-  const handleOpen = () => setShow(true);
+  const onOpenModal = async () => {
+    setShow(true);
+    try {
+      const res = await fetch(`/api/assignments/all/${idAsset}`);
+      const data = await res.json();
+      if (data.ok) {
+        setAssignments(data.items);
+      } else {
+        console.error("Error al obtener las preguntas:", data.error);
+      }
+    } catch (error) {
+      console.error("Error al obtener las preguntas:", error);
+    }
+  };
+
   const handleClose = () => {
     setShow(false);
     setSelectedTypeId(null);
@@ -37,7 +48,6 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
       correctAnswer: "",
       correctOptions: [],
     });
-    setPreguntas([]); // Opcional: limpiar preguntas al cerrar
   };
 
   // Cuando seleccionas un tipo de asignación
@@ -46,7 +56,7 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
     setSelectedTypeId(typeId);
 
     // Si el tipo tiene opciones, inicialízalas
-    const selected = assignments.find((a) => a.id === typeId);
+    const selected = assignmentsTypes.find((a) => a.id === typeId);
     if (selected && selected.config_type.options) {
       setFormData((prev) => ({
         ...prev,
@@ -130,7 +140,7 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
 
   // Renderizar inputs según el tipo seleccionado
   const renderInputs = () => {
-    const selected = assignments.find((a) => a.id === selectedTypeId);
+    const selected = assignmentsTypes.find((a) => a.id === selectedTypeId);
     if (!selected) return null;
 
     switch (selected.name) {
@@ -289,9 +299,9 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
     }
   };
 
-  // Nuevo: Agregar pregunta al arreglo
-  const handleAgregarPregunta = () => {
-    const selected = assignments.find((a) => a.id === selectedTypeId);
+  // Función para agregar pregunta
+  const handleAgregarPregunta = async () => {
+    const selected = assignmentsTypes.find((a) => a.id === selectedTypeId);
     if (!selected) return;
 
     let nuevaPregunta = {
@@ -300,81 +310,77 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
       tipoId: selected.id,
       pregunta: formData.question,
       descripcion: formData.description,
+      opciones: formData.options,
+      respuesta: selected.name === "Verdadero o Falso" 
+        ? formData.correctOption 
+        : selected.name === "Selección múltiple" 
+        ? formData.correctOptions 
+        : formData.correctAnswer,
     };
 
-    if (selected.name === "Verdadero o Falso") {
-      nuevaPregunta.config = {
-        options: selected.config_type.options,
-        response_user: " ",
-        correct_option: formData.correctOption,
-      };
-      nuevaPregunta.opciones = selected.config_type.options;
-      nuevaPregunta.respuesta = formData.correctOption;
-    } else if (selected.name === "Selección múltiple") {
-      nuevaPregunta.config = {
-        options: formData.options,
-        response_user: " ",
-        correct_options: formData.correctOptions, // Ahora es un array
-      };
-      nuevaPregunta.opciones = formData.options;
-      nuevaPregunta.respuesta = formData.correctOptions;
-    } else if (selected.name === "Completar") {
-      nuevaPregunta.config = {
-        response_user: " ",
-        correct_answer: formData.correctAnswer || "",
-      };
-      if (formData.correctAnswer) {
-        nuevaPregunta.respuesta = formData.correctAnswer;
+    try {
+      const res = await fetch(`/api/assignments/save/${idAsset}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevaPregunta),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        Swal.fire("Guardado", "La pregunta fue guardada.", "success");
+        // Limpiar el formulario
+        setFormData({
+          question: "",
+          description: "",
+          options: [],
+          correctOption: "",
+          correctAnswer: "",
+          correctOptions: [],
+        });
+        // Opcional: recargar las preguntas
+        // location.reload();
+      } else {
+        Swal.fire("Error", "No se pudo guardar la pregunta.", "error");
       }
+    } catch (error) {
+      console.error("Error al guardar la pregunta:", error);
+      Swal.fire("Error", "Hubo un problema al guardar la pregunta.", "error");
     }
-
-    setPreguntas((prev) => {
-      const updated = [...prev, nuevaPregunta];
-      console.log("Preguntas generadas:", updated);
-      return updated;
-    });
-
-    // Limpiar solo los campos de la pregunta, NO el título ni la descripción general de la tarea
-    setFormData({
-      question: "",
-      description: "",
-      options: selected.name === "Selección múltiple"
-        ? [...selected.config_type.options]
-        : selected.config_type.options || [],
-      correctOption: "",
-      correctAnswer: "",
-      correctOptions: [],
-    });
   };
 
-  // Eliminar una pregunta del arreglo con confirmación
-  const handleEliminarPregunta = (idx) => {
-    Swal.fire({
+  // Función para eliminar pregunta de la base de datos
+  const handleEliminarPreguntaDB = async (id) => {
+    const confirm = await Swal.fire({
       title: "¿Estás seguro?",
-      text: "Esta pregunta se eliminará de la lista.",
+      text: "Esta pregunta se eliminará de la base de datos.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setPreguntas((prev) => prev.filter((_, i) => i !== idx));
-      }
     });
+
+    if (confirm.isConfirmed) {
+      const res = await fetch(`/api/assignments/delete/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.ok) {
+        Swal.fire("Eliminado", "La pregunta fue eliminada.", "success");
+        // Opcional: recarga la página o reconsulta las preguntas
+        // location.reload();
+      } else {
+        Swal.fire("Error", "No se pudo eliminar la pregunta.", "error");
+      }
+    }
   };
 
   return (
     <>
-      <button
-        className="btn btn-info btn-sm"
-        onClick={handleOpen}
-      >
+      <button className="btn btn-info btn-sm" onClick={onOpenModal}>
         <i className="bx bx-list-plus"></i>
       </button>
 
       <Modal show={show} onHide={handleClose} centered size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>Asignación</Modal.Title>
+          <Modal.Title>Asignación de preguntas</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
@@ -397,7 +403,7 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
                         onChange={handleTypeChange}
                       >
                         <option value="">Selecciona un tipo</option>
-                        {assignments.map((a) => (
+                        {assignmentsTypes.map((a) => (
                           <option key={a.id} value={a.id}>{a.name}</option>
                         ))}
                       </Form.Select>
@@ -407,7 +413,7 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
                         <span style={{ fontWeight: "bold" }}>Nota: </span>
                         <span>
                           {
-                            assignments.find((a) => a.id === selectedTypeId)
+                            assignmentsTypes.find((a) => a.id === selectedTypeId)
                               ?.description
                           }
                         </span>
@@ -423,9 +429,9 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
                           disabled={
                             !formData.question ||
                             (["Verdadero o Falso"].includes(
-                              assignments.find((a) => a.id === selectedTypeId)?.name
+                              assignmentsTypes.find((a) => a.id === selectedTypeId)?.name
                             ) && !formData.correctOption) ||
-                            (assignments.find((a) => a.id === selectedTypeId)?.name === "Selección múltiple" &&
+                            (assignmentsTypes.find((a) => a.id === selectedTypeId)?.name === "Selección múltiple" &&
                               (formData.options.length < 3 ||
                                 formData.options.some(opt => !opt) ||
                                 formData.correctOptions.length === 0)
@@ -443,25 +449,31 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
               <Tab.Pane eventKey="listado">
                 <div className="row">
                   <div className="col-md-12">
-                    {preguntas.length > 0 ? (
+                    {assignments.length > 0 ? (
                       <div className="mt-2">
-                        <h5>Preguntas agregadas:</h5>
+                        <h5>Preguntas:</h5>
                         <ul className="list-group">
-                          {preguntas.map((p, idx) => (
-                            <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+                          {assignments.map((p) => (
+                            <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
                               <span>
-                                <strong>{p.tipo}:</strong> {p.pregunta}{" "}
+                                <strong>
+                                  {p.assignmentTypeId === 1 && "Verdadero o Falso"}
+                                  {p.assignmentTypeId === 2 && "Selección múltiple"}
+                                  {p.assignmentTypeId === 3 && "Completar"}
+                                </strong>
+                                : {p.title}{" "}
                                 <span className="text-success">
-                                  {Array.isArray(p.respuesta)
-                                    ? p.respuesta.join(", ")
-                                    : p.respuesta
-                                  }
+                                  {p.assignmentTypeId === 1 && p.config_assignment?.correct_option}
+                                  {p.assignmentTypeId === 2 && Array.isArray(p.config_assignment?.correct_options)
+                                    ? p.config_assignment.correct_options.join(", ")
+                                    : ""}
+                                  {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer}
                                 </span>
                               </span>
                               <button
                                 className="btn btn-sm btn-danger"
                                 title="Eliminar"
-                                onClick={() => handleEliminarPregunta(idx)}
+                                onClick={() => handleEliminarPreguntaDB(p.id)}
                               >
                                 <i className="bx bx-trash"></i>
                               </button>
@@ -482,7 +494,6 @@ const AssignmentComponent = ({ idAsset, assignments }) => {
           <Button variant="secondary" onClick={handleClose}>
             Cerrar
           </Button>
-          {/* Aquí podrías agregar un botón para guardar todas las preguntas */}
         </Modal.Footer>
       </Modal>
     </>
