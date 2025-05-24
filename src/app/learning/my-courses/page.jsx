@@ -2,13 +2,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { myLearning } from "@/actions/myLearning";
 import Links from "../Links";
-import { getCurrentUser } from "@/actions/getCurrentUser";
+import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
 	const result = await myLearning();
 	const enrolments = result?.enrolments || [];
 	const currentUser = await getCurrentUser();
-	console.log(enrolments, "enrolments");
+	const validateUser = await validateDataUser();
+
+	// Si el usuario está autenticado y no tiene información de perfil, lo redirigimos a la página de perfil
+	if(currentUser && validateUser){
+		redirect("/profile/basic-information");
+	}
 	
 	return (
 		<>

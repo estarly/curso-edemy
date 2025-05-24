@@ -51,11 +51,13 @@ const CourseCardOne = ({id,
 							<ul className="courses-content-footer d-flex justify-content-between align-items-center">
 								<li>
 									<i className="flaticon-agenda"></i>{" "}
-									{lessons} Lecciones
+									{/*{lessons}*/}
+									555 Lecciones
 								</li>
 								<li>
 									<i className="flaticon-people"></i>{" "}
-									{enrolments} Estudiantes
+									{/*{enrolments}*/}
+									555 Estudiantes
 								</li>
 							</ul>
 						</div>

@@ -23,9 +23,9 @@ const DetailsContent = ({ currentUser, course }) => {
 							<Tabs>
 								<TabList>
 									<Tab>Descripción</Tab>
-									<Tab>Currículum</Tab>
+									<Tab>Lecciones</Tab>
 									<Tab>Instructor</Tab>
-									<Tab>Reseñas</Tab>
+									{/*<Tab>Reseñas</Tab>*/}
 								</TabList>
 								<TabPanel>
 									<Description {...course} />

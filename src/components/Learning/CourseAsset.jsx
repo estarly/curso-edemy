@@ -18,20 +18,24 @@ const CourseAsset = ({ assets }) => {
 			<div className="courses-details-desc-style-two">
 				<div className="row justify-content-left">
 					{assets.assignments.length && (
-						assets.assignments.map((asst) => (
-							<>
-								<div className="col-md-4">
+						assets.assignments.map((asst) => {
+							const options = asst.config_assignment.options || asst.config_assignment.create?.options || [];
+							const correctOption = asst.config_assignment.correct_option || asst.config_assignment.create?.correct_option || null;
+
+							return (
+								<div className="col-md-4" key={asst.id}>
 									<div className="card">
 										<div className="card-body align-items-center">
-											<h5 className="card-title d-flex justify-content-left ">
+											<h5 className="card-title d-flex justify-content-left">
 												<strong>{asst.title}</strong>
 											</h5>
-											<span className="text-muted">
-												{asst.description}
-											</span>
+											<span className="text-muted">{asst.description}</span>
 											<div>
-												{asst.config_assignment.options.map((option, index) => {
+												{options.map((option, index) => {
 													const inputId = `question-${asst.id}-option-${index}`;
+													const isCorrect = option === correctOption;
+													const isSelected = option === asst.config_assignment.response_user;
+
 													return (
 														<div key={index}>
 															<input
@@ -40,8 +44,9 @@ const CourseAsset = ({ assets }) => {
 																name={`question-${asst.id}`}
 																value={option}
 																onChange={() => handleOptionChange(option, asst.id)}
+																checked={isSelected}
 															/>
-															<label htmlFor={inputId} className="ms-2">
+															<label htmlFor={inputId} className={`ms-2 ${isCorrect ? "text-success" : ""}`}>
 																{option}
 															</label>
 														</div>
@@ -51,9 +56,8 @@ const CourseAsset = ({ assets }) => {
 										</div>
 									</div>
 								</div>
-							</>
-						))
-
+							);
+						})
 					)}
 				</div>
 			</div>

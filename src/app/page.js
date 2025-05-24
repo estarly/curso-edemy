@@ -25,7 +25,8 @@ const page = async ({searchParams}) => {
 	const currentUser = await getCurrentUser();
 	const validateUser = await validateDataUser();
 
-	if(validateUser){
+	// Si el usuario está autenticado y no tiene información de perfil, lo redirigimos a la página de perfil
+	if(currentUser && validateUser){
 		redirect("/profile/basic-information");
 	}
 

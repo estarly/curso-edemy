@@ -7,6 +7,15 @@ import MixedFiles from "@/components/Learning/MixedFiles";
 
 const MainContent = ({ course }) => {
 	const [myAsset, setMyAsset] = useState(course.assets[0]);
+	const [reviews, setReviews] = useState(course.reviews);
+	const [assetIndex, setAssetIndex] = useState(0);
+	const [activeTab, setActiveTab] = useState(1);
+
+	const setMyAssetFunction = (asset) => {
+		setAssetIndex(1);
+		setMyAsset(asset);
+		setActiveTab(1);
+	};
 
 	return (
 		<div className="row">
@@ -16,9 +25,11 @@ const MainContent = ({ course }) => {
 					<br />
 					<Content
 						{...course}
-						assetIndex={0}
-						assets={course.assets}
-						reviews={course.reviews}
+						indexAsset={assetIndex}
+						assets={myAsset}
+						reviews={reviews}
+						activeTab={activeTab}
+						setActiveTab={setActiveTab}
 					/>
 				</div>
 			</div>
@@ -32,7 +43,7 @@ const MainContent = ({ course }) => {
 								<li
 									key={asset.id}
 									onClick={() => {
-										setMyAsset(asset);
+										setMyAssetFunction(asset);
 									}}
 									className={`${myAsset.id === asset.id ? "active" : ""}`}
 									style={{ cursor: "pointer" }}

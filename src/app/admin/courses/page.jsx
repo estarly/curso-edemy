@@ -54,7 +54,7 @@ const Page = async () => {
 															}
 														</td>
 														<td>
-															{course.category}
+															{course.category.name}
 														</td>
 														<td>
 															{course.user.name}
@@ -64,6 +64,7 @@ const Page = async () => {
 																? course.assets
 																		.length
 																: 0}
+																5555
 														</td>
 
 														<td>

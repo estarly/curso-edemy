@@ -92,7 +92,6 @@ model Course {
   regular_price          Float
   before_price           Float
   lessons                String
-  //duration               String
   image                  String
   access_time            String
   requirements           String   @db.Text
@@ -329,4 +328,5 @@ enum PaymentStatus {
   PAID
   CANCELLED
   HOLD
+  FREE
 }

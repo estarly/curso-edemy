@@ -37,7 +37,7 @@ const CourseCard = ({
 
 					<HeartButton currentUser={currentUser} courseId={id} />
 
-					<div className="price shadow">${regular_price}</div>
+					{/*<div className="price shadow">${regular_price}</div>*/}
 				</div>
 
 				<div className="courses-content">
@@ -60,12 +60,11 @@ const CourseCard = ({
 
 					<ul className="courses-box-footer d-flex justify-content-between align-items-center">
 						<li>
-							<i className="flaticon-agenda"></i> {lessons}{" "}
+							<i className="flaticon-agenda"></i> ??{" "}
 							Lessons
 						</li>
 						<li>
-							<i className="flaticon-people"></i>{" "}
-							{enrolments ? enrolments.length : 0} Students
+							<i className="flaticon-people"></i> ?? Students
 						</li>
 					</ul>
 				</div>

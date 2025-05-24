@@ -3,21 +3,15 @@ import { getCourseById } from "@/actions/getCourseById";
 import Header from "../../Header";
 import CourseLessons from "@/components/Instructor/CourseLessons";
 import DeleteButton from "./DeleteButton";
-import EditButton from "./_components/EditButton";
-import { getAssetsByCourseId, getAssignmentsByAssetId,getAssignmentTypes } from "@/app/instructor/actions";
+import EditAssetButton from "./_components/EditAssetButton";
+import { getAssetsByCourseId, getAssignmentTypes } from "@/app/instructor/actions";
 import AssignmentComponent from "@/app/instructor/course/[courseId]/lessons/_components/AssignmentComponent";
-import Swal from "sweetalert2";
 
 const Page = async ({ params }) => {
 	const { courseId } = params || {};
 	const { course, videos } = await getCourseById(params);
 	const { items: assets } = await getAssetsByCourseId(courseId);
 	const { items: assignmentsTypes } = await getAssignmentTypes();
-	//consutla todas la tareas de cada asset
-	/*const assignments = await Promise.all(assets.map(async (asset) => {
-		const { items } = await getAssignmentsByAssetId(asset.id);
-		return items;
-	}));*/
 
 	return (
 		<>
@@ -134,7 +128,7 @@ const Page = async ({ params }) => {
 												)}
 											</div>
 											<div className="mt-2">
-												<EditButton videoId={asset.id} />
+												<EditAssetButton/>
 												<DeleteButton videoId={asset.id} />
 												<AssignmentComponent
 													idAsset={asset.id}
@@ -152,29 +146,6 @@ const Page = async ({ params }) => {
 		
 		</>
 	);
-};
-
-// Función para eliminar pregunta de la base de datos usando la API interna
-const handleEliminarPreguntaDB = async (id) => {
-	const confirm = await Swal.fire({
-		title: "¿Estás seguro?",
-		text: "Esta pregunta se eliminará de la base de datos.",
-		icon: "warning",
-		showCancelButton: true,
-		confirmButtonText: "Sí, eliminar",
-		cancelButtonText: "Cancelar",
-	});
-
-	if (confirm.isConfirmed) {
-		const res = await fetch(`/api/assignments/${id}`, { method: "DELETE" });
-		if (res.ok) {
-			Swal.fire("Eliminado", "La pregunta fue eliminada.", "success");
-			// Opcional: recarga la página o reconsulta las preguntas
-			// location.reload();
-		} else {
-			Swal.fire("Error", "No se pudo eliminar la pregunta.", "error");
-		}
-	}
 };
 
 export default Page;

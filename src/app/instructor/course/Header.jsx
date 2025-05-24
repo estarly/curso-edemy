@@ -69,7 +69,7 @@ const Header = () => {
 									: null
 							}
 						>
-							Asignaciones
+							Asignaciones (Quitar)
 						</Link>
 					</li>
 					{/*<li>

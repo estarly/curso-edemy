@@ -1,11 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import LinksModule from "../LinksModule";
-import { getCurrentUser } from "@/actions/getCurrentUser";
+import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
 import { byModule } from "@/actions/byModule";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
 	const currentUser = await getCurrentUser();
+	const validateUser = await validateDataUser();
+
+	// Si el usuario está autenticado y no tiene información de perfil, lo redirigimos a la página de perfil
+	if(currentUser && validateUser){
+		redirect("/profile/basic-information");
+	}
 	const result = await byModule();
 	//console.log(result?.enrolments[0], "by-module-result");
 

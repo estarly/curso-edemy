@@ -8,38 +8,55 @@ import CourseRequirements from "@/components/Learning/CourseRequirements";
 import CourseWhatYouWillLearn from "@/components/Learning/CourseWhatYouWillLearn";
 import CourseWhoIsThisCourseFor from "@/components/Learning/CourseWhoIsThisCourseFor";
 
-const Content = ({ description,requirements,  what_you_will_learn, who_is_this_course_for, assets, reviews }) => {
+const Content = ({
+	description,
+	requirements,
+	what_you_will_learn,
+	who_is_this_course_for,
+	assets,
+	reviews,
+	indexAsset,
+	activeTab,
+	setActiveTab,
+}) => {
+	const [activeTabLocal, setActiveTabLocal] = useState(activeTab || indexAsset);
 
-	const [activeTab, setActiveTab] = useState(1);
+	useEffect(() => {
+		setActiveTabLocal(activeTab);
+	}, [activeTab]);
 
 	const handleTabClick = (index) => {
-		setActiveTab(index);
+		setActiveTabLocal(index);
+		if (setActiveTab) {
+			setActiveTab(index);
+		}
 	};
+
 	return (
 		<>
 			<ul className="nav-style1 learning-course-nav">
 				<li
 					onClick={() => handleTabClick(0)}
-					className={` ${activeTab === 0 ? "active" : ""}`}
+					className={`${activeTabLocal === 0 ? "active" : ""}`}
 				>
 					Acerca del curso
 				</li>
 				<li
 					onClick={() => handleTabClick(1)}
-					className={` ${activeTab === 1 ? "active" : ""}`}
+					className={`${activeTabLocal === 1 ? "active" : ""}`}
 				>
-					Leccion y Evaluación
+					Lecciones y Evaluación
 				</li>
 				<li
 					onClick={() => handleTabClick(2)}
-					className={` ${activeTab === 2 ? "active" : ""}`}
+					className={`${activeTabLocal === 2 ? "active" : ""}`}
 				>
 					Reseñas
 				</li>
 			</ul>
 
 			<div>
-				{activeTab === 0 && (
+				{activeTabLocal === 0 && (
 					<>
 						<CourseOverview content={description} />
 						<CourseRequirements content={requirements} />
@@ -47,8 +64,8 @@ const Content = ({ description,requirements,  what_you_will_learn, who_is_this_c
 						<CourseWhoIsThisCourseFor content={who_is_this_course_for} />
 					</>
 				)}
-				{activeTab === 1 && <CourseAsset assets={assets[0]} />}
-				{activeTab === 2 && <CourseRating reviews={reviews} />}
+				{activeTabLocal === 1 && <CourseAsset assets={assets} />}
+				{activeTabLocal === 2 && <CourseRating reviews={reviews} />}
 			</div>
 		</>
 	);

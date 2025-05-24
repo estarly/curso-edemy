@@ -89,7 +89,7 @@ export async function POST(request, { params }) {
 					linkedin,
 					youtube,
 					whatsapp,
-					countryId,
+					countryId: parseInt(countryId),
 				},
 			});
 		}

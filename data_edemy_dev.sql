@@ -1,10 +1,12 @@
-INSERT INTO `User` (`id`, `name`, `email`, `emailVerified`, `image`, `hashedPassword`, `role`, `is_instructor`, `created_at`, `updated_at`, `designation`) VALUES
-(1, 'Administrador', 'admin@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'ADMIN', 0, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', 'CEO At ImportDesk'),
-(2, 'Instructor', 'instructor@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'INSTRUCTOR', 1, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', 'CEO At ImportDesk'),
-(3, 'Estudiante', 'student@gmail.com', NULL, 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'USER', 1, '2025-03-20 07:17:13.567', '2024-03-05 07:38:42.966', '---');
+INSERT INTO `user` (`id`, `name`, `designation`, `email`, `emailVerified`, `image`, `hashedPassword`, `role`, `is_instructor`, `created_at`, `updated_at`) VALUES
+(1, 'Administrador', 'CEO At ImportDesk', 'admin@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408', '$2b$10$LyqBjAOLKSJY.wRImyQ22uytJ785JjdR6WyyQott4i1cxXxfjIWua', 'ADMIN', 0, '2025-03-20 07:17:13.567', '2025-05-15 13:29:39.700'),
+(2, 'Instructor Apellido', 'CEO At ImportDesk ', 'instructor@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'INSTRUCTOR', 1, '2025-03-20 07:17:13.567', '2025-05-15 20:40:34.312'),
+(3, 'Name Studiant', 'DesignaciDesignaci', 'student@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/profile/profile-3-1747856010035', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'USER', 1, '2025-03-20 07:17:13.567', '2025-05-21 19:33:33.488');
 
-INSERT INTO `Profile` (`id`, `userId`, `bio`, `gender`, `address`, `phone`, `website`, `twitter`, `facebook`, `linkedin`, `youtube`) VALUES
-(1, 1, 'This page describes how to perform CRUD operations with your generated Prisma Client API. CRUD is an acronym that stands for.', 'Male', 'Nurani 05, Subid Bazar, Sylhet', '+8801646295918', 'https://themes.gallery/', 'https://twitter.com', 'https://facebook.com', 'https://linkedin.com', 'https://youtube.com');
+INSERT INTO `profile` (`id`, `userId`, `bio`, `gender`, `address`, `phone`, `website`, `twitter`, `facebook`, `linkedin`, `youtube`, `countryId`, `whatsapp`) VALUES
+(1, 1, 'This page describes how to perform CRUD operations with your generated Prisma Client API. CRUD is an acronym that stands for.', 'masculino', 'Nurani 05, Subid Bazar, Sylhet', '+8801646295918', 'https://themes.gallery/', 'https://twitter.com', 'https://facebook.com', NULL, 'https://youtube.com', 173, '+584245348207'),
+(2, 2, 'BiographyBiographyBiography', 'masculino', 'direcio', 'eléfono', 'itio Web', 'witter', 'acebook', 'inkedin', 'https://youtube.com', 188, 'hatsApp');
+
 
 INSERT INTO `Module` (`id`, `title`, `description`, `logo`,`status`) VALUES
 (1, '1 Módulo', 'Descripción 1', 'https://res.cloudinary.com/dev-empty/image/upload/v1709624320/nespuvdu16rvdcdc4xnw.jpg', 1),
@@ -13,7 +15,7 @@ INSERT INTO `Module` (`id`, `title`, `description`, `logo`,`status`) VALUES
 
 INSERT INTO `Category` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Web Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(2, 'App Development', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(2, 'Personalizada', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
 (3, 'Business', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
 (4, 'Finance & Accounting', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
 (5, 'IT & Software', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
@@ -28,26 +30,28 @@ INSERT INTO `Category` (`id`, `name`, `status`, `created_at`, `updated_at`) VALU
 (14, 'Teaching & Academics', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
 
 INSERT INTO `AssetType` (`id`, `name`, `config`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'video', '{"url": "", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(2, 'file', '{"url": "", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(3, 'online', '{"url": "", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
+(1, 'video', '{"val": "", "type": "video"}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(2, 'audio', '{"val": "", "type": "audio"}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(3, 'document', '{"val": "", "type": "document"}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(4, 'link', '{"val": "", "type": "link"}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(5, 'youtube', '{"val": "", "type": "youtube"}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(6, 'online', '{"val": "", "type": "online", "platform": "", "meeting_id": "", "password": "", "credits": {"host": "", "duration": "", "participants": ""}}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
 
 INSERT INTO `AssignmentType` (`id`, `name`, `description`, `config_type`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Verdadero o Falso', 'Contiene una pregunta y dos opciones: Verdadero y Falso. El usuario debe seleccionar la opción correcta.', '{"options": ["Verdadero", "Falso"], "correct_option": "Verdadero"}', 1, NOW(), NOW()),
 (2, 'Selección múltiple', 'Contiene una pregunta y varias opciones de respuesta. El usuario debe seleccionar la opción correcta.', '{"options": ["A", "B", "C"], "correct_option": "C"}', 1, NOW(), NOW()),
 (3, 'Completar', 'Contiene una pregunta y una respuesta. El usuario debe completar la respuesta.', '{"correct_answer": "Respuesta correcta"}', 1, NOW(), NOW());
 
-INSERT INTO `Course` (`id`, `userId`, `category_id`, `title`, `slug`, `description`, `regular_price`, `before_price`, `lessons`, `duration`, `image`, `access_time`, `requirements`, `what_you_will_learn`, `who_is_this_course_for`, `status`, `is_module`, `in_home_page`, `in_home_page_set_at`, `created_at`, `updated_at`) VALUES
-(1, 2, 1, 'Complete JavaScript Course 2024', 'complete-javascript-course-2024', '<p><em>Well-made course. Super in-depth, with great challenges and projects that will solidify your Javascript understanding.</em></p>', 99, 149, '21', '68h 34m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707203985/mwg8hiewqc1cfl7k3dvt.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780'),
-(2, 2, 2, 'The Complete Flutter Development Course', 'dart-flutter-the-complete-flutter-development-course', '<p>Welcome to <strong>The Complete Flutter 2.0 Development Course</strong>.</p>', 149, 199, '20', '3h 25m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707204269/pmyhthvg0xixlirzpmbk.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:25:23.890', '2024-02-06 07:25:23.890'),
-(3, 2, 2, 'Build an E-commerce and Admin App', 'build-an-e-commerce-and-admin-app', '<p>Learn to design, build, and debug fully functional shopping applications with Flutter and Firebase.</p>', 99, 199, '20', '28h 7m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707716814/ahooraqaikeoou3tqp7a.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:47:45.728', '2024-02-12 05:47:45.728'),
-(4, 2, 3, 'Introduction to Finance and Accounting', 'introduction-to-finance-and-accounting', '<p>By the end of this course, you will also know how to value companies using several different valuation methodologies.</p>', 199, 249, '15', '3h 25m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717191/vwbqavr8tyzitktghuuo.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:54:14.226', '2024-02-12 05:54:14.226'),
-(5, 2, 4, 'An Entire MBA in 1 Course - Complete', 'an-entire-mba-in-1-course', '<p>This course will focus on business concepts that you need to know.</p>', 200, 300, '80', '28h 7m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717581/znronmo1rj2gexfrmnmy.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:00:56.394', '2024-02-12 06:00:56.394'),
-(6, 2, 5, 'Apple Mac Basics Complete Course', 'apple-mac-basics-complete-course', '<p>The Apple Mac OS for beginners course is designed with Apple Mac OS beginners in mind.</p>', 9, 99, '20', '1h 28m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717815/kuz7crwi6y9rsrlrms5k.jpg', 'Lifetime', 'NULL','NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:04:19.017', '2024-02-12 06:04:19.017'),
-(7, 2, 6, 'Graphic Design Masterclass - Learn GREAT Design', 'graphic-design-masterclass', '<p>We also learn the basics of Adobe Photoshop, illustrator and InDesign.</p>', 99, 149, '20', '5h 35m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707718012/kfqgp5giv1iyjlqdoaz1.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:07:37.343', '2024-02-12 06:07:37.343'),
-(8, 2, 7, 'Complete Listing Optimization Training', 'complete-listing-optimization-training', '<p>Are you looking for a Google My Business (GMB) course that shows you how to rank Google My Business listings?</p>', 19, 29, '10', '3h 25m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707718314/nlvyu6eejci1nuri8olx.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:13:22.117', '2024-02-12 06:13:22.117'),
-(9, 2, 8, 'Spa Relaxation Massage Certificate Course', 'spa-relaxation-massage-certificate-course', '<p>Wouldnt you just love to know how to do this incredible form of massage?</p>', 199, 399, '20', '2h 6m total length', 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:20:01.046', '2024-02-12 06:20:01.046');
-
+INSERT INTO `Course` (`id`, `userId`, `categoryId`, `title`, `slug`, `description`, `regular_price`, `before_price`, `lessons`, `image`, `access_time`, `requirements`, `what_you_will_learn`, `who_is_this_course_for`, `status`, `is_module`, `in_home_page`, `in_home_page_set_at`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'Complete JavaScript Course 2024', 'complete-javascript-course-2024', '<p><em>Well-made course. Super in-depth, with great challenges and projects that will solidify your Javascript understanding.</em></p>', 99, 149, '21', 'https://res.cloudinary.com/dev-empty/image/upload/v1707203985/mwg8hiewqc1cfl7k3dvt.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780'),
+(2, 2, 2, 'The Complete Flutter Development Course', 'dart-flutter-the-complete-flutter-development-course', '<p>Welcome to <strong>The Complete Flutter 2.0 Development Course</strong>.</p>', 149, 199, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707204269/pmyhthvg0xixlirzpmbk.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:25:23.890', '2024-02-06 07:25:23.890'),
+(3, 2, 2, 'Build an E-commerce and Admin App', 'build-an-e-commerce-and-admin-app', '<p>Learn to design, build, and debug fully functional shopping applications with Flutter and Firebase.</p>', 99, 199, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707716814/ahooraqaikeoou3tqp7a.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:47:45.728', '2024-02-12 05:47:45.728'),
+(4, 2, 3, 'Introduction to Finance and Accounting', 'introduction-to-finance-and-accounting', '<p>By the end of this course, you will also know how to value companies using several different valuation methodologies.</p>', 199, 249, '15', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717191/vwbqavr8tyzitktghuuo.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:54:14.226', '2024-02-12 05:54:14.226'),
+(5, 2, 4, 'An Entire MBA in 1 Course - Complete', 'an-entire-mba-in-1-course', '<p>This course will focus on business concepts that you need to know.</p>', 200, 300, '80', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717581/znronmo1rj2gexfrmnmy.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:00:56.394', '2024-02-12 06:00:56.394'),
+(6, 2, 5, 'Apple Mac Basics Complete Course', 'apple-mac-basics-complete-course', '<p>The Apple Mac OS for beginners course is designed with Apple Mac OS beginners in mind.</p>', 9, 99, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717815/kuz7crwi6y9rsrlrms5k.jpg', 'Lifetime', 'NULL','NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:04:19.017', '2024-02-12 06:04:19.017'),
+(7, 2, 6, 'Graphic Design Masterclass - Learn GREAT Design', 'graphic-design-masterclass', '<p>We also learn the basics of Adobe Photoshop, illustrator and InDesign.</p>', 99, 149, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707718012/kfqgp5giv1iyjlqdoaz1.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:07:37.343', '2024-02-12 06:07:37.343'),
+(8, 2, 7, 'Complete Listing Optimization Training', 'complete-listing-optimization-training', '<p>Are you looking for a Google My Business (GMB) course that shows you how to rank Google My Business listings?</p>', 19, 29, '10', 'https://res.cloudinary.com/dev-empty/image/upload/v1707718314/nlvyu6eejci1nuri8olx.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:13:22.117', '2024-02-12 06:13:22.117'),
+(9, 2, 8, 'Spa Relaxation Massage Certificate Course', 'spa-relaxation-massage-certificate-course', '<p>Wouldnt you just love to know how to do this incredible form of massage?</p>', 199, 399, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 06:20:01.046', '2024-02-12 06:20:01.046');
 
 INSERT INTO `Asset` (`id`, `courseId`, `assetTypeId`, `title`, `file_url`, `video_url`, `video_length`, `is_preview`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'Introduction', NULL, 'https://res.cloudinary.com/dev-empty/video/upload/v1707204118/ysmbjh5xxrddowskbrb4.mp4', NULL, 0, '2024-02-06 07:22:03.383', '2024-02-06 07:22:03.383'),
@@ -89,26 +93,32 @@ INSERT INTO `Asset` (`id`, `courseId`, `assetTypeId`, `title`, `file_url`, `vide
 (38, 9, 1, 'Why I Dont include these things in my massages', NULL, 'https://res.cloudinary.com/dev-empty/video/upload/v1707717325/naqqf7oy5awhy2xwzy8k.mp4', NULL, 0, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
 (39, 1, 2, 'Project catalog', 'https://res.cloudinary.com/dev-empty/image/upload/v1709709677/hl3uhhhpibsr5lhmm8xe.png', NULL, NULL, 0, '2024-03-06 07:21:20.610', '2024-03-06 07:21:20.610');
 
+	
+INSERT INTO `assignment` (`id`, `assetId`, `assignmentTypeId`, `title`, `description`, `config_assignment`, `status`, `created_at`, `updated_at`) VALUES
+(1, 15, 1, 'Otra pregunta', 'Tenga en consideración las practicas y la teorida dada en la clase.', '{\"options\": [\"A\", \"B\", \"C\"], \"response_user\": \"C\", \"correct_option\": \"B\"}', 1, '2025-04-04 19:38:20.000', '2025-04-04 19:38:20.000'),
+(2, 16, 1, 'Azul lleva acento? ', 'son preguntas de selecion simple, solo escoga la que usted crea que es correcta.', '{\"create\": {\"options\": [\"Verdadero\", \"Falso\"], \"correct_answer\": \"Verdadero\", \"correct_option\": \"Verdadero\", \"correct_options\": \"Verdadero\"}}', 1, '2025-05-21 01:39:47.241', '2025-05-21 01:39:47.241'),
+(3, 10, 2, 'Esta es la pregunta¡? ', '', '{\"create\": {\"options\": [\"AA\", \"BBB\", \"C\", \"GG\"], \"correct_answer\": [\"C\"], \"correct_option\": [\"C\"], \"correct_options\": [\"C\"]}}', 1, '2025-05-21 11:26:57.048', '2025-05-21 11:26:57.048');
+
+
+INSERT INTO `favourite` (`id`, `userId`, `courseId`, `created_at`) VALUES
+(1, 3, 8, '2025-04-26 19:37:04.130');
+
+
 INSERT INTO `CourseModule` (`courseId`, `moduleId`) VALUES
 (3, 1),
 (4, 1),
 (5, 1);
 
-INSERT INTO `Enrolment` (`id`, `userId`, `courseId`, `moduleId`, `order_number`, `price`, `paymentId`, `payment_status`, `status`, `payment_via`, `created_at`, `updated_at`) VALUES
-(28, 3, 1, NULL, 'ORD-1785', 149, 'pi_3OhRE7GkYVWSHYLW0PhFkBIf', 'PAID', 'PAID', 'Stripe', '2024-02-08 06:36:51.846', '2024-02-08 06:36:53.641'),
-(29, 3, 2, NULL, 'ORD-1768', 149, 'pi_3OhRE7GkYVWSHYLW0PhFkBIf', 'PAID', 'PAID', 'Stripe', '2024-02-08 06:36:51.846', '2024-02-08 06:36:53.641'),
-(30, 3, NULL, 1, 'ORD-6673', 99, 'pi_3OhRE7GkYVWSHYLW0PhFkBIf', 'PAID', 'PAID', 'Stripe', '2024-02-08 06:36:51.850', '2024-02-08 06:36:53.644');
 
-INSERT INTO `Review` (`id`, `rating`, `comment`, `userId`, `courseId`, `created_at`, `updated_at`) VALUES
-(1, 5, 'I learned a lot!!!', 1, 9, '2024-03-04 07:16:57.966', '2024-03-04 07:16:57.966'),
-(2, 4, 'Average :)', 1, 9, '2024-03-04 07:17:39.887', '2024-03-04 07:17:39.887'),
-(3, 3, 'Was easy to implement and they quickly answered my additional questions!', 1, 9, '2024-03-04 07:18:02.910', '2024-03-04 07:18:02.910'),
+INSERT INTO `review` (`id`, `rating`, `comment`, `userId`, `courseId`, `created_at`, `updated_at`) VALUES
+(1, 5, 'I learned a lot!!!', 1, 1, '2024-03-04 07:16:57.966', '2024-03-04 07:16:57.966'),
+(2, 4, 'Average :)', 2, 1, '2024-03-04 07:17:39.887', '2024-03-04 07:17:39.887'),
+(3, 3, 'Was easy to implement and they quickly answered my additional questions!', 3, 1, '2024-03-04 07:18:02.910', '2024-03-04 07:18:02.910'),
 (4, 1, 'Crazy !!', 1, 9, '2024-03-04 07:38:31.367', '2024-03-04 07:38:31.367'),
 (5, 5, 'Nice', 1, 9, '2024-03-04 09:56:15.274', '2024-03-04 09:56:15.274'),
 (6, 5, 'Nice course', 1, 1, '2024-03-06 07:11:19.357', '2024-03-06 07:11:19.357');
 
+
 INSERT INTO `Banner` (`id`, `name`, `description`, `url`, `status`, `image`, `order`, `created_at`, `updated_at`) VALUES
 (1, 'Banner 1', 'Descripción  1', 'http://localhost:3000/', 1, 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 0, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780'),
 (2, 'Banner 2', 'Descripción  2', 'http://localhost:3000/', 0, 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');
-
-    

@@ -8,22 +8,41 @@ const Description = ({
 	what_you_will_learn,
 	who_is_this_course_for,
 }) => {
+	console.log(requirements);
 	return (
 		<>
 			<div className="courses-overview">
-				<h3>Description</h3>
-				<div dangerouslySetInnerHTML={{ __html: description }} />
-				<h3>Requirements</h3>
-				<div dangerouslySetInnerHTML={{ __html: requirements }} />
+				{description && description !== "" && (
+					<>
+						<h3>Descripción</h3>
+						<div dangerouslySetInnerHTML={{ __html: description }} />
+					</>
+				)}
 
-				<h3>What you will learn?</h3>
-				<div
-					dangerouslySetInnerHTML={{ __html: what_you_will_learn }}
-				/>
-				<h3>Who is this course for?</h3>
-				<div
-					dangerouslySetInnerHTML={{ __html: who_is_this_course_for }}
-				/>
+				{requirements && requirements !== "" && (
+					<>
+						<h3>Requisitos</h3>
+						<div dangerouslySetInnerHTML={{ __html: requirements }} />
+					</>
+				)}
+
+				{what_you_will_learn && what_you_will_learn !== "" && (
+					<>
+						<h3>Qué aprenderás?</h3>
+						<div
+							dangerouslySetInnerHTML={{ __html: what_you_will_learn }}
+						/>
+					</>
+				)}
+
+				{who_is_this_course_for && who_is_this_course_for !== "" && (
+					<>
+						<h3>Para quién es este curso?</h3>
+						<div
+							dangerouslySetInnerHTML={{ __html: who_is_this_course_for }}
+						/>
+					</>
+				)}
 			</div>
 		</>
 	);

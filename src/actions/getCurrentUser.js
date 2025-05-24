@@ -45,7 +45,7 @@ export async function validateDataUser() {
 		const session = await getCurrentSession();
 		
 		if (!session?.user?.email) {
-			return true; // No hay usuario autenticado, consideramos que falta información
+			return false; // No hay usuario autenticado, consideramos que falta información
 		}
 		
 		// Consultamos directamente las tablas de usuario y perfil
@@ -105,6 +105,6 @@ export async function validateDataUser() {
 		return false;
 	} catch (error) {
 		console.error('Error al validar datos del usuario:', error);
-		return true; // En caso de error, consideramos que falta información
+		return false; // En caso de error, consideramos que falta información
 	}
 }

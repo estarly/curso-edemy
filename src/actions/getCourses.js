@@ -18,7 +18,7 @@ export async function getCourses(params,stack=10) {
 	const getFilters = () => {
 		let filters = {};
 		if (id && id !== "all") {
-			filters.category_id = parseInt(id);
+			filters.categoryId = parseInt(id);
 		}
 		
 		return filters;
@@ -76,9 +76,9 @@ export async function getCategories() {
 	const categories = await prisma.category.findMany({
 		where: {
 			status: 1,
-			courses: {
+			/*courses: {
 				some: {},
-			},
+			},*/
 		},
 		orderBy: {
 			name: 'asc',
