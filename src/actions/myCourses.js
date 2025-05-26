@@ -125,3 +125,40 @@ export async function myCourses(category = null) {
 		return { courses: [], error: error.message };
 	}
 }
+
+export async function myCourseGet() {
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
+		redirect("/");
+	}
+
+	try {
+		console.log("Buscando cursos para el usuario:", currentUser.id);
+		
+		// Obtener los cursos (corrigiendo la relación con módulos)
+		const courses = await prisma.course.findMany({
+			where: {
+				userId: currentUser.id,
+				status: "approved"
+			},
+			orderBy: {
+				title: "asc"
+			},
+			include: {
+				assets: {
+					assignment: true,
+				},
+			}
+		});
+
+		return { courses: courses };
+		
+	} catch (error) {
+		console.error("Error completo:", error);
+		
+		// Error fatal, no se pudieron obtener cursos
+		return { courses: [], error: error.message };
+	}
+}
+
+

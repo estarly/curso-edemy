@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { slugify } from "@/utils/slugify";
 import { imageUploadService } from "@/services/imageUpload";
 import { processFormDataWithFile } from "@/utils/fileProcessing";
+import prisma from "../../../../../../libs/prismadb";
+
 
 export async function POST(request, { params }) {
 	const { courseId } = params;
@@ -52,7 +53,6 @@ export async function POST(request, { params }) {
 			regular_price,
 			before_price,
 			lessons,
-			duration,
 			access_time,
 			requirements,
 			what_you_will_learn,
@@ -91,18 +91,19 @@ export async function POST(request, { params }) {
 		const updateData = {
 			title,
 			slug,
-			categoryId: parseInt(category),
+			category: {
+				connect: { id: parseInt(category) },
+			},
 			description,
 			regular_price: regular_price ? parseFloat(regular_price) : 0,
 			before_price: before_price ? parseFloat(before_price) : 0,
 			lessons: lessons || '0',
-			duration: duration || '0',
 			access_time: access_time || "Lifetime",
 			requirements,
 			what_you_will_learn,
 			who_is_this_course_for,
 		};
-
+console.log(updateData, "updateData");
 		// Si hay una nueva imagen, procesarla y actualizarla
 		if (imageFile) {
 			try {

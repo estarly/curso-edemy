@@ -129,7 +129,7 @@ const Page = async ({ params }) => {
 											</div>
 											<div className="mt-2">
 												<EditAssetButton/>
-												<DeleteButton videoId={asset.id} />
+												<DeleteButton assetId={asset.id} />
 												<AssignmentComponent
 													idAsset={asset.id}
 													assignmentsTypes={assignmentsTypes}

@@ -4,24 +4,38 @@ import React from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2';
 
-const DeleteButton = ({ videoId }) => {
+const DeleteButton = ({ assetId }) => {
 	const router = useRouter();
-	const handleDelete = (vdoId) => {
-		axios
-			.delete(`/api/courses/${vdoId}/video`)
-			.then((response) => {
-				toast.success(response.data.message);
-				router.refresh();
-			})
-			.catch((error) => {
-				toast.error("Something went wrong!");
-			});
+	const handleDelete = (assetId) => {
+		Swal.fire({
+			title: '¿Estás seguro?',
+			text: "¡No podrás revertir esta acción!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Sí, eliminar',
+			cancelButtonText: 'Cancelar',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				axios
+					.delete(`/api/courses/${assetId}/delete`)
+					.then((response) => {
+						toast.success(response.data.message);
+						router.refresh();
+					})
+					.catch((error) => {
+						toast.error("¡Algo salió mal!");
+					});
+			}
+		});
 	};
 	return (
 		<button
 			className="btn btn-danger btn-sm"
-			onClick={() => handleDelete(videoId)}
+			onClick={() => handleDelete(assetId)}
 		>
 			<i className="bx bx-trash"></i>
 		</button>

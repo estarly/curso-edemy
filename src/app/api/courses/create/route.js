@@ -104,7 +104,7 @@ export async function POST(request) {
 				regular_price: regular_price ? parseFloat(regular_price) : 0,
 				before_price: before_price ? parseFloat(before_price) : 0,
 				lessons:  '0',
-				duration:  '0',
+				//duration:  '0',
 				image: imageUrl, // Usamos la URL de la imagen subida
 				access_time: access_time || "Lifetime",
 				requirements,

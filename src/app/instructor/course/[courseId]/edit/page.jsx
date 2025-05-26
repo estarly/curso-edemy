@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import EditCourseForm from "@/components/Instructor/EditCourseForm";
 import { getCourseById } from "@/actions/getCourseById";
 import Header from "../../Header";

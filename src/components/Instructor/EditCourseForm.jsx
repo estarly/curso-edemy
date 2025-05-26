@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import Input from "../FormHelpers/Input";
-import SetPrice from "../FormHelpers/SetPrice";
 import CategorySelect from "../FormHelpers/CategorySelect";
 import ImageUploader from "@/app/admin/banners/_components/ImageUploader";
 
@@ -255,7 +254,7 @@ const EditCourseForm = ({ course, params, categories }) => {
 			})
 			.then((response) => {
 				toast.success(response.data.message);
-				router.push("/instructor/courses");
+				//router.push("/instructor/courses");
 			})
 			.catch((error) => {
 				toast.error(error.response?.data?.message || "Algo salió mal!");

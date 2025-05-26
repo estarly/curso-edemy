@@ -237,7 +237,7 @@ const CourseCreateForm = ({ currentUser, categories }) => {
 			.then((response) => {
 				toast.success(response.data.message);
 				router.push(
-					`/instructor/course/${response.data.course.id}/videos`
+					`/instructor/course/${response.data.course.id}/edit`
 				);
 			})
 			.catch((error) => {

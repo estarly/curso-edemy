@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
   const [show, setShow] = useState(false);
   const [selectedTypeId, setSelectedTypeId] = useState(null);
+  const [assignments, setAssignments] = useState([]);
 
   // Estado para los valores de los inputs de cada pregunta
   const [formData, setFormData] = useState({
@@ -17,7 +18,6 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     correctAnswer: "",
     correctOptions: [],
   });
-  const [assignments, setAssignments] = useState([]);
 
   // Estado para la pestaña activa
   const [activeTab, setActiveTab] = useState("asignar");
@@ -374,22 +374,30 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
 
   return (
     <>
-      <button className="btn btn-info btn-sm" onClick={onOpenModal}>
-        <i className="bx bx-list-plus"></i>
+      <button
+			className="btn btn-info btn-sm" onClick={onOpenModal}>
+        <i className="bx bx-task"></i>
       </button>
 
-      <Modal show={show} onHide={handleClose} centered size="lg">
+     
+
+      <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>Asignación de preguntas</Modal.Title>
+          <Modal.Title>Asignar tarea</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
             <Nav variant="tabs" className="mb-3">
               <Nav.Item>
-                <Nav.Link eventKey="asignar">Asignar</Nav.Link>
+                <Nav.Link eventKey="asignar">Asignar nueva tarea</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="listado">Listado</Nav.Link>
+                <Nav.Link eventKey="listado">
+                  Tareas asignadas{" "}
+                  {assignments.length > 0 && (
+                    <span>({assignments.length})</span>
+                  )}
+                </Nav.Link>
               </Nav.Item>
             </Nav>
             <Tab.Content>
@@ -469,6 +477,16 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                                     : ""}
                                   {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer}
                                 </span>
+                                {/* Mostrar las opciones debajo de la respuesta correcta */}
+                                <div className="mt-1">
+                                  {p.assignmentTypeId === 2 && p.config_assignment?.options ? (
+                                    <small className="text-muted">
+                                      Opciones: {p.config_assignment.options.join(", ")}
+                                    </small>
+                                  ) : (
+                                    <small className="text-muted">(Por revisar)</small>
+                                  )}
+                                </div>
                               </span>
                               <button
                                 className="btn btn-sm btn-danger"
