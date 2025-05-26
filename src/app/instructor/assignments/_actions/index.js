@@ -24,8 +24,10 @@ export async function myAssignmentsCourse() {
 			},
 			include: {
 				assets: {
-					
-				},
+					include: {
+						assignments: true
+					}
+				}
 			}
 		});
 
