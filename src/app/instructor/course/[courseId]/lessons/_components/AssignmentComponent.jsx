@@ -55,14 +55,16 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     const typeId = parseInt(e.target.value, 10);
     setSelectedTypeId(typeId);
 
-    // Si el tipo tiene opciones, inicialízalas
+    // Buscar el tipo seleccionado
     const selected = assignmentsTypes.find((a) => a.id === typeId);
+
     if (selected && selected.config_type.options) {
       setFormData((prev) => ({
         ...prev,
-        options: [...selected.config_type.options], // Copia para poder editar
+        options: [...selected.config_type.options], // Copia las opciones por defecto
         correctOption: "",
         correctAnswer: "",
+        correctOptions: [],
       }));
     } else {
       setFormData((prev) => ({
@@ -70,6 +72,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
         options: [],
         correctOption: "",
         correctAnswer: "",
+        correctOptions: [],
       }));
     }
   };
@@ -310,11 +313,11 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
       tipoId: selected.id,
       pregunta: formData.question,
       descripcion: formData.description,
-      opciones: formData.options,
-      respuesta: selected.name === "Verdadero o Falso" 
-        ? formData.correctOption 
-        : selected.name === "Selección múltiple" 
-        ? formData.correctOptions 
+      opciones: (selected.id === 1 || selected.id === 2) ? formData.options : [],
+      respuesta: selected.name === "Verdadero o Falso"
+        ? formData.correctOption
+        : selected.name === "Selección múltiple"
+        ? formData.correctOptions
         : formData.correctAnswer,
     };
 
@@ -328,17 +331,36 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
 
       if (data.ok) {
         Swal.fire("Guardado", "La pregunta fue guardada.", "success");
-        // Limpiar el formulario
-        setFormData({
-          question: "",
-          description: "",
-          options: [],
-          correctOption: "",
-          correctAnswer: "",
-          correctOptions: [],
-        });
-        // Opcional: recargar las preguntas
-        // location.reload();
+
+        // Limpiar el formulario pero restaurar las opciones por defecto si es tipo 1 o 2
+        if (selected && selected.config_type.options) {
+          setFormData({
+            question: "",
+            description: "",
+            options: [...selected.config_type.options],
+            correctOption: "",
+            correctAnswer: "",
+            correctOptions: [],
+          });
+        } else {
+          setFormData({
+            question: "",
+            description: "",
+            options: [],
+            correctOption: "",
+            correctAnswer: "",
+            correctOptions: [],
+          });
+        }
+
+        // Refrescar la lista de tareas asignadas
+        const resAssignments = await fetch(`/api/assignments/all/${idAsset}`);
+        const dataAssignments = await resAssignments.json();
+        if (dataAssignments.ok) {
+          setAssignments(dataAssignments.items);
+        } else {
+          console.error("Error al obtener las preguntas:", dataAssignments.error);
+        }
       } else {
         Swal.fire("Error", "No se pudo guardar la pregunta.", "error");
       }
@@ -364,8 +386,8 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
       const data = await res.json();
       if (data.ok) {
         Swal.fire("Eliminado", "La pregunta fue eliminada.", "success");
-        // Opcional: recarga la página o reconsulta las preguntas
-        // location.reload();
+        // Eliminar la pregunta del estado assignments sin recargar la consulta
+        setAssignments((prev) => prev.filter((item) => item.id !== id));
       } else {
         Swal.fire("Error", "No se pudo eliminar la pregunta.", "error");
       }
@@ -470,16 +492,21 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                                   {p.assignmentTypeId === 3 && "Completar"}
                                 </strong>
                                 : {p.title}{" "}
+                                {/* Respuesta correcta entre paréntesis */}
                                 <span className="text-success">
-                                  {p.assignmentTypeId === 1 && p.config_assignment?.correct_option}
-                                  {p.assignmentTypeId === 2 && Array.isArray(p.config_assignment?.correct_options)
-                                    ? p.config_assignment.correct_options.join(", ")
+                                  (
+                                  {p.assignmentTypeId === 1 && Array.isArray(p.config_assignment?.correct_options)
+                                    ? p.config_assignment.correct_options.join(", ") // Verdadero o Falso
                                     : ""}
-                                  {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer}
+                                  {p.assignmentTypeId === 2 && Array.isArray(p.config_assignment?.correct_options)
+                                    ? p.config_assignment.correct_options.join(", ") // Selección múltiple
+                                    : ""}
+                                  {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer} {/* Completar */}
+                                  )
                                 </span>
-                                {/* Mostrar las opciones debajo de la respuesta correcta */}
+                                {/* Mostrar las opciones debajo del título */}
                                 <div className="mt-1">
-                                  {p.assignmentTypeId === 2 && p.config_assignment?.options ? (
+                                  {(p.assignmentTypeId === 1 || p.assignmentTypeId === 2) && p.config_assignment?.options ? (
                                     <small className="text-muted">
                                       Opciones: {p.config_assignment.options.join(", ")}
                                     </small>
