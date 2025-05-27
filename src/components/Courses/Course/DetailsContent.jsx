@@ -47,7 +47,7 @@ const DetailsContent = ({ currentUser, course }) => {
 					</div>
 
 					<div className="col-lg-4 col-md-12">
-						<CoursesDetailsSidebar {...course} />
+						<CoursesDetailsSidebar {...course} currentUser={currentUser} />
 					</div>
 				</div>
 			</div>

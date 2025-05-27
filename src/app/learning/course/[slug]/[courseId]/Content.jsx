@@ -24,7 +24,7 @@ const Content = ({
 	useEffect(() => {
 		setActiveTabLocal(activeTab);
 	}, [activeTab]);
-
+	
 	const handleTabClick = (index) => {
 		setActiveTabLocal(index);
 		if (setActiveTab) {

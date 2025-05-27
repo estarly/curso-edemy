@@ -4,12 +4,48 @@ import React, { useEffect, useState } from "react";
 import Player from "@/components/Learning/Player";
 import Content from "./Content";
 import MixedFiles from "@/components/Learning/MixedFiles";
+import toast from "react-hot-toast";
 
 const MainContent = ({ course }) => {
 	const [myAsset, setMyAsset] = useState(course.assets[0]);
 	const [reviews, setReviews] = useState(course.reviews);
 	const [assetIndex, setAssetIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState(1);
+
+	useEffect(() => {
+		if (myAsset) {
+			fetch("/api/stateCourse/registerInit", {
+				method: "POST",
+				body: JSON.stringify({ myAsset, courseId: course.id }),
+			}).then(res => res.json()).then(data => {
+				if (data.ok) {
+					if (data.items && data.items.pendiente && data.items.assetPendiente) {
+						// Buscar el asset pendiente y volver a él
+						const assetPendiente = course.assets.find(asset => asset.id === data.items.assetPendiente);
+						if (assetPendiente) {
+							
+							toast.error(data.items.message,{
+								position: "top-right",
+							});
+							setTimeout(() => {
+								const pendienteIndex = course.assets.findIndex(asset => asset.id === assetPendiente.id);
+								// Solo cambiar si el asset pendiente está "detrás" o igual al actual
+								if (pendienteIndex < assetIndex) {
+									setMyAsset(assetPendiente);
+									setAssetIndex(pendienteIndex);
+									setActiveTab(1);
+								}
+								// Si el usuario ya está más adelante, no hacer nada
+							}, 1000);
+							
+						}
+					}
+				} else {
+					toast.error(data.error);
+				}
+			});
+		}
+	}, [myAsset]);
 
 	const setMyAssetFunction = (asset) => {
 		setAssetIndex(1);

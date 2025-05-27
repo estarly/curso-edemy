@@ -46,7 +46,21 @@ export async function myLearningPlay(params) {
 					},
 					include: {
 						assetType: true,
-						assignments: true,
+						assignments: {
+							include: {
+								statecourse: {
+									where: {
+										userId: currentUser.id,
+									},
+									include: {
+										assignmentresults: {
+											orderBy: { created_at: "desc" },
+											take: 1,
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 				reviews: {
@@ -68,6 +82,14 @@ export async function myLearningPlay(params) {
 		return { course };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
+	}
+}
+
+export async function saveAssignment(params) {
+	const { courseId } = params;
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
+		redirect("/");
 	}
 }
 

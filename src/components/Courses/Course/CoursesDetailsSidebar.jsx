@@ -14,6 +14,7 @@ const CoursesDetailsSidebar = ({
 	lessons,
 	access_time,
 	user,
+	currentUser
 }) => {
 	const handleShareClick = () => {
 		const courseUrl = `${window.location.origin}/courses/${slug}`; // Genera la URL del curso
@@ -159,6 +160,7 @@ const CoursesDetailsSidebar = ({
 					regular_price={regular_price}
 					image={image}
 				/>*/}
+			
 				<button className="default-btn w-100" onClick={handleEnrolmentClick}>
 					<i className="flaticon-shopping-cart"></i> Inscribirme{" "}
 					<span></span>

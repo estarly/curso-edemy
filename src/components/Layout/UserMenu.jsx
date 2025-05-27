@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 const UserMenu = ({ currentUser }) => {
-	const pathname = usePathname();	
+	const pathname = usePathname();
 	const isAdmin = currentUser?.role === "ADMIN";
 	const isInstructor = currentUser?.role === "INSTRUCTOR";//currentUser?.is_instructor;
 	const isStudent = currentUser?.role === "USER";
@@ -95,15 +95,26 @@ const UserMenu = ({ currentUser }) => {
 
 								)}
 								{isInstructor && (
-									<li>
-										<Link
-											className="dropdown-item"
-											href="/instructor/courses"
-										>
-											<i className="bx bxs-dashboard"></i> Mis
-											Cursos
-										</Link>
-									</li>
+									<>
+										<li>
+											<Link
+												className="dropdown-item"
+												href="/instructor/courses"
+											>
+												<i className="bx bxs-dashboard"></i> Mis
+												Cursos
+											</Link>
+										</li>
+										<li>
+											<Link
+												className="dropdown-item"
+												href="/instructor/assignments"
+											>
+												<i className="bx bxs-dashboard"></i>
+												Asignaciones
+											</Link>
+										</li>
+									</>
 								)}
 								{isStudent && (
 
@@ -125,7 +136,7 @@ const UserMenu = ({ currentUser }) => {
 											</Link>
 										</li>
 										{/*Tareas de un curso*/}
-										
+
 									</>
 								)}
 

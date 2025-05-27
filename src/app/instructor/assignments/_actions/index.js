@@ -40,3 +40,21 @@ export async function myAssignmentsCourse() {
 		return { courses: [], error: error.message };
 	}
 }
+
+export async function getAssignmentsByCourse(courseId,lessonId,assignmentId) {
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
+		redirect("/");
+	} 
+
+	try {
+	console.log("Buscando asignaciones para el curso:", courseId, lessonId, assignmentId);
+
+		return { assignments: [] };
+	} catch (error) {
+		console.error("Error al obtener asignaciones:", error);
+		return { assignments: [], error: error.message };
+	}
+}
+
+

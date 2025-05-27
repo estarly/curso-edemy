@@ -1,32 +1,60 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { Selectors } from "./Selectors";
-//import { myAssignmentsCourse } from "../_actions";
 
 export const Content = ({items}) => {
   const [courses, setCourses] = useState([]);
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([
+    { id: 1, name: "Estudiante 1" },
+    { id: 2, name: "Estudiante 2" },
+    { id: 3, name: "Estudiante 3" },
+    { id: 4, name: "Estudiante 4" },
+    { id: 5, name: "Estudiante 5" },
+    { id: 6, name: "Estudiante 6" },
+    { id: 7, name: "Estudiante 7" },
+    { id: 8, name: "Estudiante 8" },
+    { id: 9, name: "Estudiante 9" },
+    { id: 10, name: "Estudiante 10" }
+  ]);
+  const [assignments, setAssignments] = useState([]);
    
   // Cargar los cursos al montar el componente
  useEffect(() => {
-   /*const fetchCourses = async () => {
-      const result = await myAssignmentsCourse();
-      setCourses(result.courses || []);
-    };
-    fetchCourses();*/
     setCourses(items.courses);
     console.log(courses, "courses");
   }, []);
 
-  // Función para manejar la consulta
-  const handleConsult = (selectedCourse, selectedLesson, selectedAssignment) => {
-    console.log("Consultar estudiantes para:", selectedCourse, selectedLesson, selectedAssignment);
-    // Datos estáticos de estudiantes (simulación)
-    setStudents([
-      { id: 1, name: "Estudiante 1" },
-      { id: 2, name: "Estudiante 2" },
-      { id: 3, name: "Estudiante 3" },
-    ]);
+  // Nueva función para consultar estudiantes desde la API
+  const fetchStudentsByAsset = async (courseId, lessonId, assignmentId) => {
+    try {
+      // Construir la URL con los parámetros de la query string
+      const url = `/api/assignments/studiants?courseId=${courseId}&lessonId=${lessonId}&assignmentId=${assignmentId}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.ok) {
+        console.log(data.items, "data.items");
+        //setStudents(data.items);
+      } else {
+        setStudents([]);
+        console.error("Error al obtener los estudiantes:", data.error);
+      }
+    } catch (error) {
+      setStudents([]);
+      console.error("Error al obtener los estudiantes:", error);
+    }
+  };
+
+  // Modifica handleConsult para usar la nueva función
+  const handleConsult = async (selectedCourse, selectedLesson, selectedAssignment) => {
+    if (selectedCourse && selectedLesson) {
+      await fetchStudentsByAsset(
+        selectedCourse.id,
+        selectedLesson.id,
+        selectedAssignment ? selectedAssignment.id : ""
+      );
+    } else {
+      setStudents([]);
+    }
   };
 
   return (
