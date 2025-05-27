@@ -49,9 +49,9 @@ const Content = () => {
 					<div className="coming-soon-content">
 						<Link href="/" className="logo">
 							<Image
-								src="/images/logo.png"
-								width={87}
-								height={24}
+								src="/images/landing/logo/logo.png"
+								width={104}
+								height={29}
 								alt="image"
 							/>
 						</Link>

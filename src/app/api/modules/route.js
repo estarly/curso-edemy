@@ -1,84 +1,49 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../libs/prismadb";
+import prisma from "../../../../../libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
-export async function POST(request) {
+export async function POST(req) {
+  const body = await req.json();
+  const { title, description, status, logo } = body;
   try {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return NextResponse.json(
-        {
-          message: "Usuario no autorizado.",
-        },
-        { status: 401 }
-      );
-    }
-
-    if (currentUser.role !== "ADMIN") {
-      return NextResponse.json(
-        {
-          message: "Solo los administradores pueden crear módulos.",
-        },
-        { status: 403 }
-      );
-    }
-
-    const body = await request.json();
-
-    const {
-      title,
-      description,
-      status,
-      logo
-    } = body;
-
-    if (!title) {
-      return NextResponse.json(
-        {
-          message: "El título del módulo es obligatorio.",
-        },
-        { status: 400 }
-      );
-    }
-
-    const moduleExists = await prisma.module.findFirst({
-      where: {
-        title: title,
-      },
-    });
-
-    if (moduleExists) {
-      return NextResponse.json(
-        {
-          message: "Ya existe un módulo con este título.",
-        },
-        { status: 409 }
-      );
-    }
-
     const module = await prisma.module.create({
-      data: {
-        title,
-        description: description || "",
-        status: status === undefined ? 1 : status,
-        logo: logo || null,
-      },
+      data: { title, description, status, logo },
     });
-
-    return NextResponse.json(
-      {
-        message: "Módulo creado exitosamente.",
-        module,
-      },
-      { status: 201 }
-    );
+    return NextResponse.json(module);
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json(
-      {
-        message: "Ocurrió un error al crear el módulo.",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Error al crear módulo" }, { status: 500 });
+  }
+}
+
+export async function PUT(req) {
+  const body = await req.json();
+  const { id, title, description, status, logo } = body;
+  try {
+    const module = await prisma.module.update({
+      where: { id },
+      data: { title, description, status, logo },
+    });
+    return NextResponse.json(module);
+  } catch (error) {
+    return NextResponse.json({ error: "Error al actualizar módulo" }, { status: 500 });
+  }
+}
+
+export async function ASSIGN(req) {
+  const body = await req.json();
+  const { courseId, moduleId } = body;
+  try {
+    const exists = await prisma.courseModule.findFirst({
+      where: { courseId, moduleId },
+    });
+    if (exists) {
+      return NextResponse.json({ error: "Ya está asignado" }, { status: 400 });
+    }
+    const result = await prisma.courseModule.create({
+      data: { courseId, moduleId },
+    });
+    return NextResponse.json(result);
+  } catch (error) {
+    return NextResponse.json({ error: "Error al asignar" }, { status: 500 });
   }
 }

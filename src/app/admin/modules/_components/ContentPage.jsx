@@ -1,19 +1,34 @@
 'use client';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import toast from "react-hot-toast";
 import { ModuleModal } from "./ModuleModal";
 import { ModulesTable } from "./ModulesTable";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
 import Header from "../Header";
+import Loader from "@/components/loader";
 
 export const ContentPage = ({ modules, isAdmin }) => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [modulesRefresh, setModulesRefresh] = useState(modules);
+  const [loading, setLoading] = useState(false);
 
+  const getActiveModules = async () => {
+    setLoading(true);
+    const response = await fetch('/api/modules/getActive', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    setModulesRefresh(data);
+    setLoading(false);
+  }
   const handleEditClick = (module) => {
     setSelectedModule(module);
     setIsEditing(true);
@@ -42,36 +57,51 @@ export const ContentPage = ({ modules, isAdmin }) => {
   };
 
   const handleSaveModule = async (moduleData) => {
+    setLoading(true);
     if (isEditing) {
       try {
-        // Actualizar un módulo existente
-        console.log("Actualizando módulo:", moduleData);
         const response = await axios.put(
           `/api/modules/${selectedModule.id}`,
           moduleData
         );
-        console.log('Módulo actualizado:', response.data);
+        await getActiveModules();
+        setShowModal(false);
+        setSelectedModule(null);
       } catch (error) {
-        console.error("Error al actualizar el módulo:", error);
+        if (error.response && error.response.status === 409) {
+          toast.error(error.response.data.message || "Ya existe otro módulo con este título.");
+        } else {
+          toast.error("Error al actualizar el módulo.");
+          console.error("Error al actualizar el módulo:", error);
+        }
+        setLoading(false);
+        return;
       }
     } else {
       try {
-        // Crear un nuevo módulo
         const response = await axios.post(
           '/api/modules',
           moduleData
         );
-        console.log('Módulo creado:', response.data);
+        await getActiveModules();
+        setShowModal(false);
+        setSelectedModule(null);
       } catch (error) {
-        console.error("Error al crear el módulo:", error);
+        if (error.response && error.response.status === 409) {
+          toast.error(error.response.data.message || "Ya existe otro módulo con este título.");
+        } else {
+          toast.error("Error al crear el módulo.");
+          console.error("Error al crear el módulo:", error);
+        }
+        setLoading(false);
+        return;
       }
     }
-
-    setShowModal(false);
-    setSelectedModule(null);
+    setLoading(false);
   };
 
   const handleConfirmDelete = async () => {
+    setLoading(true);
     try {
       console.log("Eliminando módulo:", selectedModule);
       const response = await axios.put(
@@ -80,20 +110,20 @@ export const ContentPage = ({ modules, isAdmin }) => {
           status: 2,
         }
       );
-      /*const response = await axios.delete(
-        `/api/modules/${selectedModule.id}`
-      );*/
-      console.log('Módulo eliminado:', response.data);
+      await getActiveModules();
+      //console.log('Módulo eliminado:', response.data);
     } catch (error) {
       console.error("Error al eliminar el módulo:", error);
     }
 
     setShowDeleteDialog(false);
     setSelectedModule(null);
+    setLoading(false);
   };
 
   return (
     <>
+     <Loader status={loading} title="Cargando módulos..." />
       <div className="main-content">
         <div className="container-fluid">
           <div className="row">
@@ -104,6 +134,7 @@ export const ContentPage = ({ modules, isAdmin }) => {
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
                 <Header />
+               
                 <div className="d-flex justify-content-between mb-3">
                   <h4></h4>
                   <button
@@ -115,7 +146,7 @@ export const ContentPage = ({ modules, isAdmin }) => {
                 </div>
 
                 <ModulesTable
-                  items={modules}
+                  items={modulesRefresh}
                   onEditClick={handleEditClick}
                   onDeleteClick={handleDeleteClick}
                 />

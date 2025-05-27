@@ -24,6 +24,14 @@ const Header = () => {
 					Cursos por módulo
 				</Link>
 			</li>
+			<li>
+				<Link
+					href="/admin/modules/asign-course"
+					className={pathname === "/admin/modules/asign-course" ? "active" : null}
+				>
+					Asignar curso
+				</Link>
+			</li>
 		</ul>
 	);
 };

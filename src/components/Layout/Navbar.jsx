@@ -53,8 +53,8 @@ const Navbar = ({ currentUser }) => {
 							<Link href="/" className="navbar-brand">
 								<Image
 									src="/images/landing/logo/logo.png"
-									width={87}
-									height={24}
+									width={104}
+									height={29}
 									alt="logo"
 								/>
 							</Link>
@@ -120,9 +120,9 @@ const Navbar = ({ currentUser }) => {
 						<div className="modal-header d-flex align-items-center justify-content-between">
 							<div>
 								<Image
-									src="/images/logo.png"
-									width={87}
-									height={24}
+									src="/images/landing/logo/logo.png"
+									width={104}
+									height={29}
 									alt="logo"
 								/>
 							</div>
