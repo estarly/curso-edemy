@@ -19,7 +19,6 @@ const CourseAsset = ({ assets }) => {
 
 		if (!result.isConfirmed) return;
 
-		// Aquí iría la lógica para buscar la tarea, stateCourse, etc.
 		try {
 			const res = await fetch("/api/stateCourse/registerResponseAssignment", {
 				method: "POST",
@@ -27,19 +26,23 @@ const CourseAsset = ({ assets }) => {
 				body: JSON.stringify({
 					selectedOption,
 					questionId,
-					// Puedes agregar más datos aquí si los necesitas (por ejemplo, assetId, courseId, etc.)
 				}),
 			});
 			const data = await res.json();
 			if (data.ok) {
 				Swal.fire("¡Respuesta guardada!", "", "success");
+				// Mantener la opción seleccionada en el estado
+				setInputValues(prev => ({
+					...prev,
+					[questionId]: selectedOption
+				}));
 			} else {
 				Swal.fire("Error", data.error || "No se pudo guardar la respuesta", "error");
+				// Si hay error, NO actualices el estado, así no se selecciona la opción
 			}
 		} catch (error) {
 			Swal.fire("Error", "Ocurrió un error al guardar la respuesta", "error");
 		}
-
 		console.log(`Opción seleccionada para la pregunta ${questionId}: ${selectedOption}`);
 	};
 	useEffect(() => {
@@ -60,7 +63,7 @@ const CourseAsset = ({ assets }) => {
 			});
 			setInputValues(initialValues);
 		}
-		console.log(assets, "assets");
+		console.log(assets, "CourseAsset:assets");
 	}, [assets]);
 
 	return (
@@ -129,7 +132,8 @@ const CourseAsset = ({ assets }) => {
 													options.map((option, index) => {
 														const inputId = `question-${asst.id}-option-${index}`;
 														const isCorrect = option === correctOption;
-														const isSelected = option === configWithUserAnswer.correct_answer;
+														// Usar inputValues para reflejar la selección en tiempo real
+														const isSelected = inputValues?.[asst.id] === option;
 
 														return (
 															<div key={index}>

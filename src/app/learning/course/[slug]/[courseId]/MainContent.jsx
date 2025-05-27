@@ -11,6 +11,7 @@ const MainContent = ({ course }) => {
 	const [reviews, setReviews] = useState(course.reviews);
 	const [assetIndex, setAssetIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState(1);
+	const [assetConsult, setAssetConsult] = useState(null);
 
 	useEffect(() => {
 		if (myAsset) {
@@ -46,11 +47,30 @@ const MainContent = ({ course }) => {
 			});
 		}
 	}, [myAsset]);
-
-	const setMyAssetFunction = (asset) => {
-		setAssetIndex(1);
+	
+	//crear una funcion para buscar el asset
+	const findAssetConsult = async (assetId) => {
+		// Llamar al API en vez de la función findAsset
+		const response = await fetch("/api/asset/findAsset", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ assetId: assetId.id }),
+		});
+		let asset = await response.json();
+		console.log(asset, "assetConsult");
 		setMyAsset(asset);
+		return asset;
+	};
+
+	const setMyAssetFunction = async (asset) => {
+		//llamar a la funcion para buscar el asset
+		await findAssetConsult(asset);
+		console.log(assetConsult);
+		/*
+		setAssetIndex(1);
+		setMyAsset(assetConsult);
 		setActiveTab(1);
+		*/
 	};
 
 	return (
