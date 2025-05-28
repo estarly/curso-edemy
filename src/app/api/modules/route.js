@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../libs/prismadb";
-import { getCurrentUser } from "@/actions/getCurrentUser";
+import prisma from "../../../../libs/prismadb";
 
 export async function POST(req) {
   const body = await req.json();

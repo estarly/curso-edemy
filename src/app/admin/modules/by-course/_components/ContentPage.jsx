@@ -9,7 +9,7 @@ import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialo
 import Header from "../../Header";
 import CategorySelect from "@/components/FormHelpers/CategorySelect";
 
-export const ContentPage = ({ modules, isAdmin, courseModules }) => {  
+export const ContentPage = ({ modules, isAdmin, courseModules, moduleId }) => {  
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);

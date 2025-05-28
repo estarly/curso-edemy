@@ -21,3 +21,27 @@ export async function getCategories() {
     return { items: [] };
   }
 }
+
+
+export async function getCategoriesStatus(status = undefined ) {
+  try {
+    let statusIn = [status];
+    if (status === undefined) {
+      statusIn = [0,1];
+    }
+    const categories = await prisma.category.findMany({
+      where: {
+        status: {
+          in: statusIn,
+        },
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return { items: categories };
+  } catch (error) {
+    console.log(error);
+    return { items: [] };
+  }
+}

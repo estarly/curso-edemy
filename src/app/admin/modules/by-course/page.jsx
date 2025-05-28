@@ -9,9 +9,8 @@ import { getCoursesByModule } from "./_actions";
 
 const Page = async () => {
   const { items: modules } = await getModulesByStatus(1);//active
-  const { items: courses } = await getCoursesByModule(1);
   const moduleId = modules[0].id;
-
+  const { items: courses } = await getCoursesByModule(moduleId);
   console.log(courses,'courses');
   const currentUser = await getCurrentUser();
   const isAdmin = currentUser?.role === "ADMIN";

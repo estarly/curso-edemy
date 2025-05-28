@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import { ModuleModal } from "./ModuleModal";
-import { ModulesByCourseTable } from "./ModulesByCourseTable";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
 import Header from "../../Header";
@@ -25,8 +23,7 @@ export const ContentPage = ({
   const [selectedCategory, setSelectedCategory] = useState(initialCategoryId);
   const [courses, setCourses] = useState(initialCourses);
 
-  // Cargar cursos cuando cambia la categoría
-  useEffect(() => {
+  const handleGetCourses = async () => {
     if (selectedCategory && selectedModule) {
       fetch('/api/courses/by-category', {
         method: "POST",
@@ -37,20 +34,24 @@ export const ContentPage = ({
         .then((data) => setCourses(data.items))
         .catch(() => setCourses([]));
     }
+  };
+
+  // Cargar cursos cuando cambia la categoría
+  useEffect(() => {
+   /* if (selectedCategory && selectedModule) {
+      fetch('/api/courses/by-category', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoryId: selectedCategory, moduleId: selectedModule }),
+      })
+        .then((res) => res.json())
+        .then((data) => setCourses(data.items))
+        .catch(() => setCourses([]));
+    }*/
+    handleGetCourses();
   }, [selectedCategory, selectedModule]);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedModule(null);
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setShowDeleteDialog(false);
-    setSelectedModule(null);
-  };
-
-
-  const handleConfirmDelete = async () => {
+  const handleDelete = async (course) => {
     const result = await Swal.fire({
       title: "¿Eliminar asignación?",
       text: "¿Estás seguro de que deseas eliminar la relación entre el curso y el módulo?",
@@ -62,35 +63,36 @@ export const ContentPage = ({
 
     if (result.isConfirmed) {
       try {
-        console.log("Eliminando módulo:", selectedModule);
+        
         const response = await fetch("/api/course-modules/deleteAsign", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            courseId: selectedModule.courseId, // Asegúrate de tener estos datos
-            moduleId: selectedModule.moduleId,
+            courseId: course.id, // Asegúrate de tener estos datos
+            moduleId: selectedModule,
           }),
         });
         const data = await response.json();
         console.log('Relación eliminada:', data);
         if (response.ok) {
           Swal.fire("¡Eliminado!", "La relación ha sido eliminada.", "success");
+          await handleGetCourses();
         } else {
-          Swal.fire("Error", data.error || "No se pudo eliminar la relación.", "error");
+          Swal.fire("Ops!", data.error || "No se pudo eliminar la relación.", "error");
         }
       } catch (error) {
         console.error("Error al eliminar la relación:", error);
-        Swal.fire("Error", "No se pudo eliminar la relación.", "error");
+        Swal.fire("Ops!", "No se pudo eliminar la relación.", "error");
       }
-      setShowDeleteDialog(false);
-      setSelectedModule(null);
+      //setShowDeleteDialog(false);
+      //setSelectedModule(null);
     }
   };
 
   const handleAssign = async (course) => {
     const result = await Swal.fire({
       title: "¿Asignar curso?",
-      text: `¿Deseas asignar el curso "${course.title}" al módulo seleccionado?`,
+      text: `Se asignará el curso "${course.title}" al módulo "${selectedModule} - ${modules.find(m => m.id === selectedModule)?.title}"`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Sí, asignar",
@@ -110,11 +112,12 @@ export const ContentPage = ({
         const data = await response.json();
         if (response.ok) {
           Swal.fire("¡Asignado!", "El curso ha sido asignado.", "success");
+          await handleGetCourses();
         } else {
-          Swal.fire("Error", data.error || "No se pudo asignar el curso.", "error");
+          Swal.fire("Ops!", data.error || "No se pudo asignar el curso.", "error");
         }
       } catch (error) {
-        Swal.fire("Error", "No se pudo asignar el curso.", "error");
+        Swal.fire("Ops!", "No se pudo asignar el curso.", "error");
       }
     }
   };
@@ -131,21 +134,28 @@ export const ContentPage = ({
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
                 <Header />
-                <div className="d-flex gap-3 mb-3">
-                  <CategorySelect
-                    label="Módulo:"
-                    placeholder="Seleccione un módulo"
-                    valueId={selectedModule}
-                    data={modules}
-                    onChange={setSelectedModule}
-                  />
-                  <CategorySelect
-                    label="Categoría:"
-                    placeholder="Seleccione una categoría"
-                    valueId={selectedCategory}
-                    data={categories}
-                    onChange={setSelectedCategory}
-                  />
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <CategorySelect
+                      label="Seleccione un módulo para asignar cursos"
+                      placeholder="Seleccione un módulo"
+                      valueId={selectedModule}
+                      data={modules}
+                      onChange={setSelectedModule}
+                    />
+                    <div className="form-text mt-0">
+                      Los cursos que asignes se relacionarán con el módulo seleccionado.
+                    </div>
+                  </div>
+                  <div>
+                    <CategorySelect
+                      label="Filtrar por categoría:"
+                      placeholder="Seleccione una categoría"
+                      valueId={selectedCategory}
+                      data={categories}
+                      onChange={setSelectedCategory}
+                    />
+                  </div>
                 </div>
 
                 <table className="table align-middle table-hover fs-14">
@@ -210,23 +220,6 @@ export const ContentPage = ({
         </div>
       </div>
 
-      {/* Modal para editar o añadir módulo */}
-      {/*<ModuleModal
-        show={showModal}
-        onClose={handleCloseModal}
-        module={selectedModule}
-        onSave={handleSaveModule}
-        isEditing={isEditing}
-      />*/}
-
-      {/* Diálogo de confirmación para eliminar */}
-      <DeleteConfirmationDialog
-        show={showDeleteDialog}
-        onClose={handleCloseDeleteDialog}
-        onConfirm={handleConfirmDelete}
-        title="Eliminar Módulo"
-        message={`¿Está seguro de que desea eliminar el módulo "${selectedModule?.title}"? Esta acción no se puede deshacer.`}
-      />
     </>
   );
 };

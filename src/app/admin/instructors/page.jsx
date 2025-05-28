@@ -32,6 +32,7 @@ const Page = async ({}) => {
 									<table className="table align-middle table-hover fs-14">
 										<thead>
 											<tr>
+												<th scope="col">Id</th>
 												<th scope="col">Nombre / Descripción</th>
 												<th scope="col">Correo Electrónico / Teléfono</th>
 												<th scope="col">Bibliografía</th>
@@ -42,6 +43,7 @@ const Page = async ({}) => {
 											{instructors.length > 0 ? (
 												instructors.map((instructor) => (
 													<tr key={instructor.id}>
+														<td>{instructor.id}</td>
 														<td>
 															<img src={instructor.image || "/images/default-user.png"} alt={instructor.name || "N/A"} className="img-fluid rounded-circle" style={{width: "50px"}}/>
 															{" "} {instructor.name || "N/A"}<br /> {instructor.designation || "N/A"}

@@ -15,7 +15,6 @@ const Page = async () => {
 
   const currentUser = await getCurrentUser();
   const isAdmin = currentUser?.role === "ADMIN";
- console.log(courses[0],'courses');
   return ( 
     <>
       <ContentPage

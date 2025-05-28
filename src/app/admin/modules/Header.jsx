@@ -16,14 +16,14 @@ const Header = () => {
 					Módulos
 				</Link>
 			</li>
-			<li>
+			{/*<li>
 				<Link
 					href="/admin/modules/by-course"
 					className={pathname === "/admin/modules/by-course" ? "active" : null}
 				>
 					Cursos por módulo
 				</Link>
-			</li>
+			</li>*/}
 			<li>
 				<Link
 					href="/admin/modules/asign-course"

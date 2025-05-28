@@ -31,20 +31,11 @@ export const metadata = {
 		canonical: "/",
 	},
 	title: {
-		template: "%s | eDemy - React Next.js Education LMS Template",
+		template: "%s | eDemy ",
 		default: "eDemy",
 	},
 	keywords: [
 		"Online coding courses",
-		"Programming tutorials",
-		"Learn Python online",
-		"Digital marketing classes",
-		"Web development training",
-		"SEO best practices",
-		"Graphic design workshops",
-		"Data science online courses",
-		"Online learning platform",
-		"Expert-led instruction",
 	],
 	description:
 		"Explore a world of knowledge with our online tutorial platform. Master coding languages, delve into effective marketing strategies, and elevate your skills in diverse courses. Join expert-led sessions for practical learning. Enroll now for a brighter future!",
@@ -75,6 +66,7 @@ export default async function RootLayout({ children }) {
 		<html lang="es">
 			<head>
 				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+				<link rel="icon" type="image/png" href="/favicon.png" />
 			</head>
 			<body className={nunito.className} suppressHydrationWarning={true}>
 				<TosterProvider />

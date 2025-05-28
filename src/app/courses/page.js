@@ -5,7 +5,7 @@ import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-	title: "Cursos | eDemy - React Next.js Education LMS Template",
+	title: "Cursos | eDemy",
 };
 
 const page = async ({ searchParams }) => {
