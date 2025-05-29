@@ -4,6 +4,7 @@ import LinksModule from "../LinksModule";
 import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
 import { byModule } from "@/actions/byModule";
 import { redirect } from "next/navigation";
+import CourseCard from "@/components/Shared/CourseCard";
 
 const Page = async () => {
 	const currentUser = await getCurrentUser();
@@ -52,7 +53,9 @@ const Page = async () => {
 					<div className="row">
 						{moduleArray.filter(mod => mod.view).length > 0 ? (
 							moduleArray.filter(mod => mod.view)[0].courses.map((mod) => (
-								<div
+								<>
+								<CourseCard {...mod} currentUser={currentUser} showHeartButton={true}/>
+							{/*}	<div
 									className="col-lg-4 col-md-6"
 									key={mod.id}
 								>
@@ -97,7 +100,8 @@ const Page = async () => {
 											</div>
 										</div>
 									</div>
-								</div>
+								</div>*/}
+								</>
 							))
 						) : (
 							<div className="col-lg-12 col-md-12">

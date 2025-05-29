@@ -4,10 +4,13 @@ import { myLearning } from "@/actions/myLearning";
 import Links from "../Links";
 import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
 import { redirect } from "next/navigation";
+import CourseCard from "@/components/Shared/CourseCard";
 
 const Page = async () => {
 	const result = await myLearning();
+
 	const enrolments = result?.enrolments || [];
+		console.log(enrolments[0],'aaa');
 	const currentUser = await getCurrentUser();
 	const validateUser = await validateDataUser();
 
@@ -24,7 +27,16 @@ const Page = async () => {
 					<div className="row">
 						{enrolments.length > 0 ? (
 							enrolments.map((enrl) => (
-								<div
+
+									<CourseCard
+										key={enrl.id}
+										{...enrl.course}
+										currentUser={currentUser}
+										urlDefault="/learning/course"
+									/>
+
+								/*
+									<div
 									className="col-lg-4 col-md-6"
 									key={enrl.id}
 								>
@@ -70,6 +82,7 @@ const Page = async () => {
 										</div>
 									</div>
 								</div>
+								*/
 							))
 						) : (
 							<div className="col-lg-12 col-md-12">

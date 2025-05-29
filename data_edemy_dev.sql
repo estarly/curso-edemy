@@ -1,7 +1,7 @@
-INSERT INTO `user` (`id`, `name`, `designation`, `email`, `emailVerified`, `image`, `hashedPassword`, `role`, `is_instructor`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', 'CEO At ImportDesk', 'admin@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408', '$2b$10$LyqBjAOLKSJY.wRImyQ22uytJ785JjdR6WyyQott4i1cxXxfjIWua', 'ADMIN', 0, '2025-03-20 07:17:13.567', '2025-05-15 13:29:39.700'),
-(2, 'Instructor Apellido', 'CEO At ImportDesk ', 'instructor@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'INSTRUCTOR', 1, '2025-03-20 07:17:13.567', '2025-05-15 20:40:34.312'),
-(3, 'Name Studiant', 'DesignaciDesignaci', 'student@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/profile/profile-3-1747856010035', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'USER', 1, '2025-03-20 07:17:13.567', '2025-05-21 19:33:33.488');
+INSERT INTO `user` (`id`, `name`, `designation`, `email`, `emailVerified`, `image`, `hashedPassword`, `role`, `is_instructor`, `created_at`, `updated_at`, `status`) VALUES
+(1, 'Administrador', 'CEO At ImportDesk', 'admin@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408', '$2b$10$LyqBjAOLKSJY.wRImyQ22uytJ785JjdR6WyyQott4i1cxXxfjIWua', 'ADMIN', 0, '2025-03-20 07:17:13.567', '2025-05-15 13:29:39.700', 1),
+(2, 'Instructor Apellido', 'CEO At ImportDesk ', 'instructor@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'INSTRUCTOR', 0, '2025-03-20 07:17:13.567', '2025-05-15 20:40:34.312', 1),
+(3, 'Name Studiant', 'DesignaciDesignaci', 'student@gmail.com', NULL, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/profile/profile-3-1747856010035', '$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja', 'USER', 0, '2025-03-20 07:17:13.567', '2025-05-21 19:33:33.488', 1);
 
 INSERT INTO `profile` (`id`, `userId`, `bio`, `gender`, `address`, `phone`, `website`, `twitter`, `facebook`, `linkedin`, `youtube`, `countryId`, `whatsapp`) VALUES
 (1, 1, 'This page describes how to perform CRUD operations with your generated Prisma Client API. CRUD is an acronym that stands for.', 'masculino', 'Nurani 05, Subid Bazar, Sylhet', '+8801646295918', 'https://themes.gallery/', 'https://twitter.com', 'https://facebook.com', NULL, 'https://youtube.com', 173, '+584245348207'),
@@ -93,16 +93,9 @@ INSERT INTO `Asset` (`id`, `courseId`, `assetTypeId`, `title`, `file_url`, `vide
 (38, 9, 1, 'Why I Dont include these things in my massages', NULL, 'https://res.cloudinary.com/dev-empty/video/upload/v1707717325/naqqf7oy5awhy2xwzy8k.mp4', NULL, 0, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
 (39, 1, 2, 'Project catalog', 'https://res.cloudinary.com/dev-empty/image/upload/v1709709677/hl3uhhhpibsr5lhmm8xe.png', NULL, NULL, 0, '2024-03-06 07:21:20.610', '2024-03-06 07:21:20.610');
 
-	
-INSERT INTO `assignment` (`id`, `assetId`, `assignmentTypeId`, `title`, `description`, `config_assignment`, `status`, `created_at`, `updated_at`) VALUES
-(1, 15, 1, 'Otra pregunta', 'Tenga en consideración las practicas y la teorida dada en la clase.', '{\"options\": [\"A\", \"B\", \"C\"], \"response_user\": \"C\", \"correct_option\": \"B\"}', 1, '2025-04-04 19:38:20.000', '2025-04-04 19:38:20.000'),
-(2, 16, 1, 'Azul lleva acento? ', 'son preguntas de selecion simple, solo escoga la que usted crea que es correcta.', '{\"create\": {\"options\": [\"Verdadero\", \"Falso\"], \"correct_answer\": \"Verdadero\", \"correct_option\": \"Verdadero\", \"correct_options\": \"Verdadero\"}}', 1, '2025-05-21 01:39:47.241', '2025-05-21 01:39:47.241'),
-(3, 10, 2, 'Esta es la pregunta¡? ', '', '{\"create\": {\"options\": [\"AA\", \"BBB\", \"C\", \"GG\"], \"correct_answer\": [\"C\"], \"correct_option\": [\"C\"], \"correct_options\": [\"C\"]}}', 1, '2025-05-21 11:26:57.048', '2025-05-21 11:26:57.048');
-
 
 INSERT INTO `favourite` (`id`, `userId`, `courseId`, `created_at`) VALUES
 (1, 3, 8, '2025-04-26 19:37:04.130');
-
 
 INSERT INTO `CourseModule` (`courseId`, `moduleId`) VALUES
 (3, 1),
@@ -120,5 +113,5 @@ INSERT INTO `review` (`id`, `rating`, `comment`, `userId`, `courseId`, `created_
 
 
 INSERT INTO `Banner` (`id`, `name`, `description`, `url`, `status`, `image`, `order`, `created_at`, `updated_at`) VALUES
-(1, 'Banner 1', 'Descripción  1', 'http://localhost:3000/', 1, 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 0, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780'),
-(2, 'Banner 2', 'Descripción  2', 'http://localhost:3000/', 0, 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');
+(1, 'Titulo de Banner', 'loren ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.', 'http://localhost:3000/', 1, 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 0, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780'),
+(2, 'Otro Titulo de Banner', 'loren ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.', 'http://localhost:3000/', 1, 'https://res.cloudinary.com/dev-empty/image/upload/v1707718696/daky6dsbqz17jo9pvo9.jpg', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');

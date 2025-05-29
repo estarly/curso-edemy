@@ -21,6 +21,7 @@ model User {
   hashedPassword String?
   role           Role          @default(USER)
   is_instructor  Boolean       @default(false)
+  status         Int           @default(1) //0: inactive, 1: active, 2: deleted
   created_at     DateTime      @default(now())
   updated_at     DateTime      @updatedAt
   accounts       Account[]

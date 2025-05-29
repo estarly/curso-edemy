@@ -2,11 +2,13 @@ import React from "react";
 import Link from "next/link";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import { getCurrentUser } from "@/actions/getCurrentUser";
-import TablePagination from "./_components/TablePagination";
+import TablePaginationAssign from "../_components/TablePaginationAssign";
+import { getModulesByStatus } from "../../modules/_actions";
 
 const Page = async ({}) => {
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
+	const { items: modules } = await getModulesByStatus(1);
 
 	return (
 		<>
@@ -26,12 +28,12 @@ const Page = async ({}) => {
 										</Link>
 									</li>
 									<li>
-										<Link href="/admin/students/assign-module">
+										<Link href="/admin/students/assign-module" className="active">
 											Asignar módulo
 										</Link>
 									</li>
 								</ul>
-								<TablePagination />
+								<TablePaginationAssign modules={modules} />
 							</div>
 						</div>
 					</div>

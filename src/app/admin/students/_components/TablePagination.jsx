@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 const PAGE_SIZE = 5;
 
 export default function TablePagination() {
-    const [instructors, setInstructors] = useState([]);
+    const [students, setStudents] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -26,17 +26,17 @@ export default function TablePagination() {
 
     useEffect(() => {
         setLoading(true);
-        fetch(`/api/instructrs/pagination?page=${page}&name=${encodeURIComponent(debouncedName)}`)
+        fetch(`/api/students/pagination?page=${page}&name=${encodeURIComponent(debouncedName)}`)
             .then(res => res.json())
             .then(data => {
-                setInstructors(data.items);
+                setStudents(data.items);
                 setTotalPages(data.totalPages);
                 setLoading(false);
             });
     }, [page, debouncedName]);
 
-    // Función para cambiar el estatus del instructor
-    const changeStatus = async (instructorId, status) => {
+    // Función para cambiar el estatus del estudiante
+    const changeStatus = async (studentId, status) => {
         let statusText = "";
         if (status === "active") statusText = "activar";
         else if (status === "inactive") statusText = "desactivar";
@@ -44,7 +44,7 @@ export default function TablePagination() {
 
         const confirmResult = await Swal.fire({
             title: "¿Estás seguro?",
-            text: `¿Quieres ${statusText} este instructor?${status === "deleted" ? " Esta acción no se puede deshacer." : ""}`,
+            text: `¿Quieres ${statusText} este estudiante?${status === "deleted" ? " Esta acción no se puede deshacer." : ""}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí, continuar",
@@ -54,19 +54,19 @@ export default function TablePagination() {
         if (confirmResult.isConfirmed) {
             try {
                 // Cambia la URL por la que corresponda a tu API
-                const res = await fetch("/api/instructrs/change-status", {
+                const res = await fetch("/api/students/change-status", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ instructorId, status }),
+                    body: JSON.stringify({ studentId, status }),
                 });
                 const data = await res.json();
                 if (data.success) {
-                    Swal.fire("¡Éxito!", "El estatus del instructor ha sido actualizado.", "success");
-                    setInstructors((prev) =>
-                        prev.map((i) =>
-                            i.id === instructorId
-                                ? { ...i, status: status === "active" ? 1 : status === "inactive" ? 0 : 2 }
-                                : i
+                    Swal.fire("¡Éxito!", "El estatus del estudiante ha sido actualizado.", "success");
+                    setStudents((prev) =>
+                        prev.map((s) =>
+                            s.id === studentId
+                                ? { ...s, status: status === "active" ? 1 : status === "inactive" ? 0 : 2 }
+                                : s
                         )
                     );
                 } else {
@@ -98,7 +98,6 @@ export default function TablePagination() {
                             <th scope="col">Nombre</th>
                             <th scope="col">Email</th>
                             <th scope="col">Fecha de registro</th>
-                            <th scope="col">Cursos</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -109,42 +108,41 @@ export default function TablePagination() {
                                     <div className="text-center">Cargando...</div>
                                 </td>
                             </tr>
-                        ) : instructors.length > 0 ? (
-                            instructors.map((instructor) => (
-                                <tr key={instructor.id}>
-                                    <td>{instructor.id}</td>
-                                    <td>{instructor.name}</td>
-                                    <td>{instructor.email}</td>
-                                    <td>{new Date(instructor.created_at).toLocaleDateString()}</td>
-                                    <td>{instructor.courses ? instructor.courses.length : 0}</td>
+                        ) : students.length > 0 ? (
+                            students.map((student) => (
+                                <tr key={student.id}>
+                                    <td>{student.id}</td>
+                                    <td>{student.name}</td>
+                                    <td>{student.email}</td>
+                                    <td>{new Date(student.created_at).toLocaleDateString()}</td>
                                     <td>
                                         <div className="d-flex flex-row gap-2">
-                                            {(instructor.status === 0 || instructor.status === 2) && (
+                                            {(student.status === 0 || student.status === 2) && (
                                                 <button
                                                     type="button"
                                                     className="btn btn-outline-success btn-sm"
-                                                    onClick={() => changeStatus(instructor.id, "active")}
-                                                    title="Activar instructor"
+                                                    onClick={() => changeStatus(student.id, "active")}
+                                                    title="Activar estudiante"
                                                 >
                                                     Activar
                                                 </button>
                                             )}
-                                            {(instructor.status === 1 || instructor.status === 2) && (
+                                            {(student.status === 1 || student.status === 2) && (
                                                 <button
                                                     type="button"
                                                     className="btn btn-outline-warning btn-sm"
-                                                    onClick={() => changeStatus(instructor.id, "inactive")}
-                                                    title="Desactivar instructor"
+                                                    onClick={() => changeStatus(student.id, "inactive")}
+                                                    title="Desactivar estudiante"
                                                 >
                                                     Desactivar
                                                 </button>
                                             )}
-                                            {(instructor.status !== 2) && (
+                                            {(student.status !== 2) && (
                                                 <button
                                                     type="button"
                                                     className="btn btn-outline-danger btn-sm"
-                                                    onClick={() => changeStatus(instructor.id, "deleted")}
-                                                    title="Eliminar instructor"
+                                                    onClick={() => changeStatus(student.id, "deleted")}
+                                                    title="Eliminar estudiante"
                                                 >
                                                     Eliminar
                                                 </button>
@@ -156,7 +154,7 @@ export default function TablePagination() {
                         ) : (
                             <tr>
                                 <td colSpan="5">
-                                    <div className="text-center">No hay instructores</div>
+                                    <div className="text-center">No hay estudiantes</div>
                                 </td>
                             </tr>
                         )}

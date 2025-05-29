@@ -41,9 +41,9 @@ export async function POST(request) {
       data: {
         userId: currentUser.id,
         courseId: parseInt(courseId),
-        payment_status: "PAID",
-        status: "PAID",
-		order_number: '0',
+        payment_status: "FREE",
+        status: "FREE",
+		order_number: 'FREE-'+currentUser.id+'-'+courseId+'-'+Date.now(),
 		price: 0,
 		paymentId: '0',
 		payment_via: "EMPI",
