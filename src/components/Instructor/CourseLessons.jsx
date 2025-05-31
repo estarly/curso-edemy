@@ -188,7 +188,7 @@ const CourseLessons = ({ course, params }) => {
 		
 		// Enviar datos a la API
 		axios
-			.post(`/api/courses/${params.courseId}/all`, formData)
+			.post(`/api/courses/${params.courseId}/save-lessons`, formData)
 			.then((response) => {
 				toast.success(response.data.message || "Lección añadida exitosamente");
 				router.refresh();

@@ -227,8 +227,6 @@ export const Content = ({ categories }) => {
 													{course.studentCount} Estudiantes
 												</li>
 											</ul>
-											{/*Progreso de un curso*/}
-											<ProgressBarCourse completedLessons={10} totalLessons={course.lessons} />
 										</div>
 									</div>
 								</div>

@@ -149,7 +149,7 @@ model Asset {
   courseId     Int
   assetTypeId  Int      @default(1)
   title        String
-  description  String?
+  description  String?  @db.Text
   file_url     String?
   video_url    String?
   video_length String?
