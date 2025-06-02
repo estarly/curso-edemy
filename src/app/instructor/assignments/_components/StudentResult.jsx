@@ -50,14 +50,52 @@ export const StudentResult = ({ students = [] }) => {
                   <div className="accordion-body">
                     <strong>Tareas realizadas:</strong>
                     <ul>
-                      {(student.tasks || [
-                        { id: 1, title: "Tarea 1", status: "Completada" },
-                        { id: 2, title: "Tarea 2", status: "Pendiente" }
-                      ]).map((task) => (
-                        <li key={task.id}>
-                          {task.title} - <span className={task.status === "Completada" ? "text-success" : "text-warning"}>{task.status}</span>
-                        </li>
-                      ))}
+                      {student.StateCourse?.[0]?.assignmentresults?.length > 0 ? (
+                        student.StateCourse[0].assignmentresults.map((result) => (
+                          <li key={result.id} className="mb-3">
+                            <div><strong>{result.response?.title}</strong></div>
+                            {result.response?.options ? (
+                              <ul>
+                                {result.response.options.map((option, idx) => {
+                                  const esCorrecta = result.response.correct_options?.includes(option);
+                                  const esRespuestaUsuario = result.response.correct_answer === option;
+                                  return (
+                                    <li
+                                      key={idx}
+                                      style={{
+                                        fontWeight: esCorrecta ? "bold" : "normal",
+                                        color: esCorrecta
+                                          ? "green"
+                                          : esRespuestaUsuario
+                                          ? "blue"
+                                          : "inherit",
+                                      }}
+                                    >
+                                      {option}
+                                      {esCorrecta && <span> ✔️ (Correcta)</span>}
+                                      {esRespuestaUsuario && !esCorrecta && <span> (Respuesta del usuario)</span>}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            ) : (
+                              <div>
+                                <div>
+                                  <strong>Respuesta correcta:</strong> {result.response?.correct_answer}
+                                </div>
+                              </div>
+                            )}
+                            <div>
+                              Estado:{" "}
+                              <span className={result.complete ? "text-success" : "text-warning"}>
+                                {result.complete ? "Completada" : "Pendiente"}
+                              </span>
+                            </div>
+                          </li>
+                        ))
+                      ) : (
+                        <li>No hay resultados de tareas.</li>
+                      )}
                     </ul>
                   </div>
                 </div>

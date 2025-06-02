@@ -17,16 +17,19 @@ export async function generateMetadata({ params }) {
 
 const page = async ({ params }) => {
 	const { course } = await getSingleCourse(params);
-	console.log(course,'course');
+	
 	const currentUser = await getCurrentUser();
+	console.log(currentUser,'currentUser');
+
+	
 	return (
 		<>
-			<PageBanner
+			{/*<PageBanner
 				pageTitle={course.title}
 				homePageUrl="/"
 				homePageText="Home"
 				activePageText={course.title}
-			/>
+			/>*/}
 			<DetailsContent currentUser={currentUser} course={course} />
 		</>
 	);

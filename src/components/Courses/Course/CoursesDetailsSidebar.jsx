@@ -13,6 +13,8 @@ const CoursesDetailsSidebar = ({
 	duration,
 	lessons,
 	access_time,
+	assets,
+	enrolledUserIds,
 	user,
 	currentUser
 }) => {
@@ -66,7 +68,7 @@ const CoursesDetailsSidebar = ({
 					// Mostrar mensaje de éxito con el ID del enrolamiento
 					Swal.fire({
 						title: "¡Asignado al curso!",
-						text: `Has sido asignado al curso con ID: ${data.id}`,
+						text: `Has sido asignado al curso: ${title}`,
 						icon: "success",
 						timer: 1500,
 						showConfirmButton: false,
@@ -94,9 +96,12 @@ const CoursesDetailsSidebar = ({
 		}
 	};
 
+	// Verifica si el usuario actual ya está inscrito
+	const yaInscrito = enrolledUserIds?.some(e => e.userId === currentUser?.id);
+
 	return (
 		<>
-			<div className="courses-details-info">
+			<div className="courses-details-info" style={{ marginTop: "-150px" }}>
 				<div className="image">
 					<img src={image} alt="image" />
 				</div>
@@ -113,26 +118,25 @@ const CoursesDetailsSidebar = ({
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
-								<i className="flaticon-teacher"></i> Instructor
+								<i className="flaticon-teacher"></i> {user.name}
 							</span>
-							{user.name}
 						</div>
 					</li>
-					<li>
+					{/*<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
 								<i className="flaticon-time"></i> Xd
 							</span>
 							xD
 						</div>
-					</li>
+					</li>*/}
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
 								<i className="flaticon-distance-learning"></i>{" "}
 								Lecciones
 							</span>
-							555
+							{assets.length}
 						</div>
 					</li>
 					<li>
@@ -140,15 +144,14 @@ const CoursesDetailsSidebar = ({
 							<span>
 								<i className="flaticon-web"></i> Inscritos
 							</span>
-							255 estudiantes
+							{enrolledUserIds.length}
 						</div>
 					</li>
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
 							<span>
-								<i className="flaticon-lock"></i> Acceso
+								<i className="flaticon-lock"></i> Libre Acceso
 							</span>
-							Libre
 						</div>
 					</li>
 				</ul>
@@ -161,10 +164,17 @@ const CoursesDetailsSidebar = ({
 					image={image}
 				/>*/}
 			
-				<button className="default-btn w-100" onClick={handleEnrolmentClick}>
-					<i className="flaticon-shopping-cart"></i> Inscribirme{" "}
+			{currentUser.role === 'USER' && (
+				<button
+					className={` w-100 ${yaInscrito ? "btn btn-secondary" : "default-btn"}`}
+					onClick={handleEnrolmentClick}
+					disabled={yaInscrito}
+				>
+					<i className={`${yaInscrito ? "flaticon-play" : "flaticon-shopping-cart"}`}></i>
+					{" "}{yaInscrito ? " Continuar" : " Inscribirme"}
 					<span></span>
 				</button>
+			)}
 
 				<div className="courses-share">
 					<div className="share-info">
