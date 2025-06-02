@@ -12,41 +12,55 @@ const MainContent = ({ course }) => {
 	const [assetIndex, setAssetIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState(1);
 	const [assetConsult, setAssetConsult] = useState(null);
-
+	const [hasRedirectedToPending, setHasRedirectedToPending] = useState(false);
+	
 	useEffect(() => {
-		if (myAsset) {
+		if (myAsset.id) {
+			console.log(myAsset.id, "myAsset");
 			fetch("/api/stateCourse/registerInit", {
 				method: "POST",
 				body: JSON.stringify({ myAsset, courseId: course.id }),
-			}).then(res => res.json()).then(data => {
-				if (data.ok) {
-					if (data.items && data.items.pendiente && data.items.assetPendiente) {
-						// Buscar el asset pendiente y volver a él
-						const assetPendiente = course.assets.find(asset => asset.id === data.items.assetPendiente);
-						if (assetPendiente) {
-							
-							toast.error(data.items.message,{
-								position: "top-right",
-							});
-							setTimeout(() => {
-								const pendienteIndex = course.assets.findIndex(asset => asset.id === assetPendiente.id);
-								// Solo cambiar si el asset pendiente está "detrás" o igual al actual
-								if (pendienteIndex < assetIndex) {
-									setMyAsset(assetPendiente);
-									setAssetIndex(pendienteIndex);
-									setActiveTab(1);
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.ok) {
+						if (data.items && data.items.pendiente && data.items.assetPendiente) {
+							// Solo redirigir si no hemos redirigido antes
+							if (myAsset.id !== data.items.assetPendiente && !hasRedirectedToPending) {
+								const assetPendiente = course.assets.find(asset => asset.id === data.items.assetPendiente);
+								if (assetPendiente) {
+									toast.error(data.items.message, {
+										position: "top-right",
+									});
+									setTimeout(() => {
+										const pendienteIndex = course.assets.findIndex(asset => asset.id === assetPendiente.id);
+										setMyAsset(assetPendiente);
+										setAssetIndex(pendienteIndex);
+										setActiveTab(1);
+										setHasRedirectedToPending(true); // Marcamos que ya redirigimos
+									}, 1000);
 								}
-								// Si el usuario ya está más adelante, no hacer nada
-							}, 1000);
-							
+							}
+							// Si ya estamos en la lección pendiente o ya redirigimos, NO hacer nada
+						} else {
+							// Si NO hay lección pendiente, pasar a la siguiente lección si existe
+							const currentIndex = course.assets.findIndex(asset => asset.id === myAsset.id);
+							const nextIndex = currentIndex + 1;
+							if (nextIndex < course.assets.length && !hasRedirectedToPending) {
+								setTimeout(() => {
+									setMyAsset(course.assets[nextIndex]);
+									setAssetIndex(nextIndex);
+									setActiveTab(1);
+								}, 1000);
+							}
+							// Si ya redirigimos, no hacer nada
 						}
+					} else {
+						toast.error(data.error);
 					}
-				} else {
-					toast.error(data.error);
-				}
-			});
+				});
 		}
-	}, [myAsset]);
+	}, [myAsset.id]);
 	
 	//crear una funcion para buscar el asset
 	const findAssetConsult = async (assetId) => {
@@ -73,6 +87,24 @@ const MainContent = ({ course }) => {
 		*/
 	};
 
+	const handleContinueFromChild = (assetIdContinue) => {
+		console.log("Valor recibido desde el hijo:", assetIdContinue);
+
+		// Buscar el índice del asset actual
+		const currentIndex = course.assets.findIndex(asset => asset.id === assetIdContinue);
+
+		// Obtener el siguiente asset
+		const nextIndex = currentIndex + 1;
+		if (nextIndex < course.assets.length) {
+			const nextAsset = course.assets[nextIndex];
+			// Llamar a findAssetConsult con el id del siguiente asset
+			findAssetConsult(nextAsset);
+		} else {
+			// Si no hay siguiente asset, puedes mostrar un mensaje o finalizar el curso
+			toast.success("¡Has terminado todas las lecciones!");
+		}
+	};
+
 	return (
 		<div className="row">
 			<div className="col-lg-9 col-md-8">
@@ -86,6 +118,7 @@ const MainContent = ({ course }) => {
 						reviews={reviews}
 						activeTab={activeTab}
 						setActiveTab={setActiveTab}
+						onContinue={handleContinueFromChild}
 					/>
 				</div>
 			</div>

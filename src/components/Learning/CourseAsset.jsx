@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
-const CourseAsset = ({ assets }) => {
+const CourseAsset = ({ assets, onContinue }) => {
 	const [inputValues, setInputValues] = useState({});
 
 	const handleOptionChange = async (selectedOption, questionId) => {
 		// Mostrar confirmación antes de continuar
-		const result = await Swal.fire({
+		/*const result = await Swal.fire({
 			title: "¿Estás seguro?",
 			text: "¿Quieres enviar esta respuesta?",
 			icon: "question",
@@ -17,7 +18,7 @@ const CourseAsset = ({ assets }) => {
 			cancelButtonText: "Cancelar",
 		});
 
-		if (!result.isConfirmed) return;
+		if (!result.isConfirmed) return;*/
 
 		try {
 			const res = await fetch("/api/stateCourse/registerResponseAssignment", {
@@ -30,16 +31,17 @@ const CourseAsset = ({ assets }) => {
 			});
 			const data = await res.json();
 			if (data.ok) {
-				Swal.fire("¡Respuesta guardada!", "", "success");
+				//Swal.fire("¡Respuesta guardada!", "", "success");
+				toast.success("¡Respuesta guardada!", {
+					position: "bottom-center",
+				});
 				// Mantener la opción seleccionada en el estado
 				setInputValues(prev => ({
 					...prev,
 					[questionId]: selectedOption
 				}));
-			} else {
-				Swal.fire("Error", data.error || "No se pudo guardar la respuesta", "error");
-				// Si hay error, NO actualices el estado, así no se selecciona la opción
-			}
+			} 
+			
 		} catch (error) {
 			Swal.fire("Error", "Ocurrió un error al guardar la respuesta", "error");
 		}
@@ -65,6 +67,32 @@ const CourseAsset = ({ assets }) => {
 		}
 		console.log(assets, "CourseAsset:assets");
 	}, [assets]);
+
+	const allAnswered = assets?.assignments?.length > 0 &&
+		assets.assignments.every(asst => inputValues[asst.id] && inputValues[asst.id].toString().trim() !== "");
+
+	const handleContinue = async () => {
+		if(!allAnswered){
+			Swal.fire("¡No puedes continuar!", "Debes responder todas las preguntas.", "error");
+			return;
+		}
+		onContinue(assets.id); // Puedes enviar cualquier dato aquí
+		return;
+		/*const result = await Swal.fire({
+			title: "¿Quieres continuar?",
+			text: "Has respondido todas las preguntas. ¿Deseas continuar?",
+			icon: "question",
+			showCancelButton: true,
+			confirmButtonText: "Sí, continuar",
+			cancelButtonText: "Cancelar",
+		});
+		if (result.isConfirmed) {
+			Swal.fire("¡Continuando!", "Has confirmado continuar.", "success");
+			if (onContinue) {
+				onContinue(assets.id); // Puedes enviar cualquier dato aquí
+			}
+		}*/
+	};
 
 	return (
 		<>
@@ -99,10 +127,11 @@ const CourseAsset = ({ assets }) => {
 									<div className="card">
 										<div className="card-body align-items-center">
 											<h5 className="card-title d-flex justify-content-left">
-												<strong>{asst.title}</strong>
+												<strong>{assets.id} - 	{asst.id} - {asst.title}</strong>
 											</h5>
 											<span className="text-muted">{asst.description}</span>
 											<div>
+												
 												{asst.assignmentTypeId === 3 ? (
 													<div className="mt-2">
 														<textarea
@@ -159,6 +188,14 @@ const CourseAsset = ({ assets }) => {
 							);
 						})
 					)}
+				</div>
+				<div className="mt-4 d-flex justify-content-end">
+					<button
+						className={`btn btn-success ${!allAnswered ? "disabled" : ""}`}
+						onClick={handleContinue}
+					>
+						Continuar
+					</button>
 				</div>
 			</div>
 		</>

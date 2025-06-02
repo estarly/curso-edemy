@@ -18,6 +18,7 @@ const Content = ({
 	indexAsset,
 	activeTab,
 	setActiveTab,
+	onContinue,
 }) => {
 	const [activeTabLocal, setActiveTabLocal] = useState(activeTab || indexAsset);
 
@@ -64,7 +65,7 @@ const Content = ({
 						<CourseWhoIsThisCourseFor content={who_is_this_course_for} />
 					</>
 				)}
-				{activeTabLocal === 1 && <CourseAsset assets={assets} />}
+				{activeTabLocal === 1 && <CourseAsset assets={assets} onContinue={onContinue} />}
 				{activeTabLocal === 2 && <CourseRating reviews={reviews} />}
 			</div>
 		</>

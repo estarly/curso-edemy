@@ -39,7 +39,14 @@ export async function POST(req) {
 		
 		// Si ya existe y la respuesta es igual, no hacer nada y retornar mensaje
 		if (previousResult) {
-			const prevResponse = JSON.parse(previousResult.response || "{}");
+			let prevResponse = previousResult.response;
+			if (typeof prevResponse === "string") {
+				try {
+					prevResponse = JSON.parse(prevResponse);
+				} catch (e) {
+					prevResponse = {};
+				}
+			}
 			if (prevResponse.correct_answer === selectedOption) {
 				return new Response(JSON.stringify({
 					ok: false,
@@ -60,7 +67,7 @@ export async function POST(req) {
 		const assignmentResult = await prisma.assignmentResults.create({
 			data: {
 				stateCourseId: stateCourse.id,
-				response: mergedResponse,
+				response: JSON.parse(JSON.stringify(mergedResponse)),
 				complete: 1,
 			},
 		});
@@ -69,7 +76,7 @@ export async function POST(req) {
 		if (stateCourse) {
 			await prisma.stateCourse.update({
 				where: { id: stateCourse.id },
-				data: { state: 1 },
+				data: { state: 1,stateAsset: true, },
 			});
 		}
 
