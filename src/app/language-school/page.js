@@ -1,4 +1,4 @@
-import Banner from "@/components/LanguageSchool/Banner";
+/*import Banner from "@/components/LanguageSchool/Banner";
 import FeedbackSlider from "@/components/LanguageSchool/FeedbackSlider";
 import HowToApply from "@/components/LanguageSchool/HowToApply";
 import LanguageCourses from "@/components/LanguageSchool/LanguageCourses";
@@ -29,6 +29,12 @@ const page = async () => {
 			<Partner mainClsAtts="partner-area bg-fe4a55 ptb-70" />
 		</>
 	);
+};
+
+export default page;
+*/
+const page = () => {
+	return <div>Página en mantenimiento</div>;
 };
 
 export default page;

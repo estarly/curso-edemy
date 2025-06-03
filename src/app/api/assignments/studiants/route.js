@@ -1,4 +1,4 @@
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb"; 
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);

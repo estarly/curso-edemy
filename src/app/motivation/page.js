@@ -1,4 +1,4 @@
-import LatestBlogPost from "@/components/BusinessCoach/LatestBlogPost";
+/*import LatestBlogPost from "@/components/BusinessCoach/LatestBlogPost";
 import AboutMe from "@/components/Motivation/AboutMe";
 import Banner from "@/components/Motivation/Banner";
 import Features from "@/components/Motivation/Features";
@@ -23,6 +23,12 @@ const page = async () => {
 			<LatestBlogPost />
 		</>
 	);
+};
+
+export default page;
+*/
+const page = () => {
+	return <div>Página en mantenimiento</div>;
 };
 
 export default page;

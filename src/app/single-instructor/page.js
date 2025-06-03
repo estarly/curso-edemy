@@ -1,4 +1,4 @@
-import Banner from "@/components/SingleInstructor/Banner";
+/*import Banner from "@/components/SingleInstructor/Banner";
 import EducationForEveryone from "@/components/SingleInstructor/EducationForEveryone";
 import Features from "@/components/SingleInstructor/Features";
 import FeedbackSlider from "@/components/SingleInstructor/FeedbackSlider";
@@ -29,6 +29,12 @@ const page = async () => {
 			<NewsletterForm />
 		</>
 	);
+};
+
+export default page;
+*/
+const page = () => {
+	return <div>Página en mantenimiento</div>;
 };
 
 export default page;

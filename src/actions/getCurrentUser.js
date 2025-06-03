@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authHandler } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "../../libs/prismadb";
+import prisma from "@libs/prismadb";
+
 
 export async function getCurrentSession() {
 	return await getServerSession(authHandler);
@@ -44,7 +45,7 @@ export async function validateDataUser() {
 		// Obtenemos la sesión para identificar al usuario actual
 		const session = await getCurrentSession();
 		
-		if (!session?.user?.email) {
+		if (session && !session?.user?.email) {
 			return false; // No hay usuario autenticado, consideramos que falta información
 		}
 		
@@ -104,7 +105,19 @@ export async function validateDataUser() {
 		// Si llegamos aquí, todos los campos necesarios están completos
 		return false;
 	} catch (error) {
-		console.error('Error al validar datos del usuario:', error);
+		console.error('Error al validar datos del usuario:', error.message);
 		return false; // En caso de error, consideramos que falta información
+	}
+}
+
+export async function getCountries() {
+	try {
+		const response = await fetch('https://api.example.com/countries');
+		if (!response.ok) throw new Error('No se pudo obtener la lista de países');
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error('Error obteniendo países:', error.message);
+		return [];
 	}
 }

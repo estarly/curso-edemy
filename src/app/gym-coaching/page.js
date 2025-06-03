@@ -1,4 +1,4 @@
-import Banner from "@/components/GymCoaching/Banner";
+/*import Banner from "@/components/GymCoaching/Banner";
 import DigitalFitnessCoaching from "@/components/GymCoaching/DigitalFitnessCoaching";
 import DownloadTheApp from "@/components/GymCoaching/DownloadTheApp";
 import Features from "@/components/GymCoaching/Features";
@@ -27,6 +27,12 @@ const page = async () => {
 			<DigitalFitnessCoaching />
 		</>
 	);
+};
+
+export default page;
+*/
+const page = () => {
+	return <div>Página en mantenimiento</div>;
 };
 
 export default page;

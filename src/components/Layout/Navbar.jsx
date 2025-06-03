@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { menuNew,menus } from "../../../libs/menus";
+import { menuNew,menus } from "@libs/menus"; 
 import MenuItem from "./MenuItem";
 import MegaMenu from "./MegaMenu";
 import { usePathname } from "next/navigation";

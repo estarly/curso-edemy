@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/actions/getCurrentUser";
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb";	
 
 
 export async function myAssignmentsCourse() {

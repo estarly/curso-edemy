@@ -1,4 +1,4 @@
-import prisma from "../../libs/prismadb";
+import prisma from "@libs/prismadb";
 
 export async function getCourses(params,stack=10) {
 	const { q, sort, id } = params;

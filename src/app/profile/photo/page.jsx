@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Links from "../Links";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import ProfilePhotoForm from "./ProfilePhotoForm";
