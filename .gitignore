@@ -44,3 +44,6 @@ prisma/migrations/*
 note.txt
 
 .idea
+
+# env
+.env
