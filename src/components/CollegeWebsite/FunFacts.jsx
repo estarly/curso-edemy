@@ -40,8 +40,7 @@ const FunFacts = async () => {
 					</div>
 				</div>
 				<div className="boxes-info">
-					<p>
-						Si quieres más?{" "}<Link href="/courses">Ver más cursos</Link>
+					<p>{" "}<Link href="/courses">Ver todos los cursos</Link>
 					</p>
 				</div>
 
