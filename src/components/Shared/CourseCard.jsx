@@ -58,14 +58,17 @@ const CourseCard = ({
 
 				<div className="courses-content">
 					<div className="course-author d-flex align-items-center">
-						<Image
-							src={user.image || "/images/user1.jpg"}
-							width={350}
-							height={350}
-							className="rounded-circle"
-							alt="image"
-						/>
-						<span>{user.name}
+						<div className="d-flex align-items-center">
+							<Image
+								src={user.image || "/images/user1.jpg"}
+								width={350}
+								height={350}
+								className="rounded-circle"
+								alt="image"
+							/>
+							<span><strong>{user.name} </strong><br /> {user.designation}</span>
+						</div>
+						<div className="ms-auto">
 							{progress === 2 && (
 								<div>
 									<span className="badge bg-success text-white small">Completado</span>
@@ -76,7 +79,7 @@ const CourseCard = ({
 									<span className="badge bg-warning text-dark small">En progreso</span>
 								</div>
 							)}
-						</span>
+						</div>
 					</div>
 
 					<h3>

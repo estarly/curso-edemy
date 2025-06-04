@@ -397,7 +397,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
   return (
     <>
       <button
-			className="btn btn-info btn-sm" onClick={onOpenModal}>
+			className="btn btn-info btn-sm btn-outline-dark" onClick={onOpenModal}>
         <i className="bx bx-task"></i>
       </button>
 

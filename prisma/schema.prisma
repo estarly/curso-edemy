@@ -162,7 +162,8 @@ model Asset {
   assetType   AssetType     @relation(fields: [assetTypeId], references: [id])
   assignments Assignment[]
   statecourse StateCourse[]
-
+  files       FilesAsset[]
+  
   @@index([courseId])
   @@index([assetTypeId])
   @@index([courseId, assetTypeId])
@@ -305,6 +306,15 @@ model AssignmentResults {
   statecourse StateCourse @relation(fields: [stateCourseId], references: [id])
 
   @@index([stateCourseId])
+}
+
+model FilesAsset {
+  id      Int    @id @default(autoincrement())
+  url     String
+  assetId Int
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@index([assetId])
 }
 
 enum Role {

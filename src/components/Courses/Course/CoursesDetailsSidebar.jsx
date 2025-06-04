@@ -42,6 +42,24 @@ const CoursesDetailsSidebar = ({
 	};
 
 	const handleEnrolmentClick = async () => {
+		if (!currentUser || currentUser.role !== 'USER') {
+			let title = "¡Debe estar autenticado!";
+			let message = "Debes estar autenticado para inscribirte en un curso.";
+			if(currentUser && currentUser.role !== 'USER') {
+				title = "Disponible solo para estudiantes";
+				message = "En estos momentos solo los estudiantes pueden inscribirse en un curso.";
+			}
+
+			Swal.fire({
+				title: title,
+				text: message,
+				icon: "warning",
+				timer: 2000,
+				showConfirmButton: false,
+			});
+			return;
+		}
+
 		// Mostrar mensaje de confirmación
 		const result = await Swal.fire({
 			title: "¿Estás seguro de inscribirte?",
@@ -97,7 +115,7 @@ const CoursesDetailsSidebar = ({
 	};
 
 	// Verifica si el usuario actual ya está inscrito
-	const yaInscrito = enrolledUserIds?.some(e => e.userId === currentUser?.id);
+	const yaInscrito = currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false;
 
 	return (
 		<>
@@ -164,7 +182,7 @@ const CoursesDetailsSidebar = ({
 					image={image}
 				/>*/}
 			
-			{currentUser.role === 'USER' && (
+			
 				<button
 					className={` w-100 ${yaInscrito ? "btn btn-secondary" : "default-btn"}`}
 					onClick={handleEnrolmentClick}
@@ -174,8 +192,7 @@ const CoursesDetailsSidebar = ({
 					{" "}{yaInscrito ? " Continuar" : " Inscribirme"}
 					<span></span>
 				</button>
-			)}
-
+			
 				<div className="courses-share">
 					<div className="share-info">
 						<span onClick={handleShareClick} style={{ cursor: "pointer" }}>

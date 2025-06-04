@@ -4,12 +4,13 @@ import Header from "../../Header";
 import CourseLessons from "@/components/Instructor/CourseLessons";
 import DeleteButton from "./DeleteButton";
 import EditAssetButton from "./_components/EditAssetButton";
+import FileAssetButton from "./_components/FileAssetButton";
 import { getAssetsByCourseId, getAssignmentTypes } from "@/app/instructor/actions";
 import AssignmentComponent from "@/app/instructor/course/[courseId]/lessons/_components/AssignmentComponent";
 
 const Page = async ({ params }) => {
 	const { courseId } = params || {};
-	const { course, videos } = await getCourseById(params);
+	const { course } = await getCourseById(params);
 	const { items: assets } = await getAssetsByCourseId(courseId);
 	const { items: assignmentsTypes } = await getAssignmentTypes();
 
@@ -110,7 +111,7 @@ const Page = async ({ params }) => {
 											</div>
 										)}
 
-										<div className="card-body d-flex flex-column justify-content-between">
+										<div className="card-body d-flex flex-column justify-content-between ">
 											<div>
 												<h6 className="card-title text-truncate">
 													{asset.title}
@@ -127,13 +128,14 @@ const Page = async ({ params }) => {
 													/>
 												)}
 											</div>
-											<div className="mt-2">
+											<div className="mt-2 d-flex gap-2">
 												<EditAssetButton/>
-												<DeleteButton assetId={asset.id} />
 												<AssignmentComponent
 													idAsset={asset.id}
 													assignmentsTypes={assignmentsTypes}
 												/>
+												<FileAssetButton/>
+												<DeleteButton assetId={asset.id} />
 											</div>
 										</div>
 									</div>

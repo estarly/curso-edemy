@@ -207,6 +207,9 @@ const CourseLessons = ({ course, params }) => {
 					<div className="row">
 						<div className="col-md-4">
 							<AssetSelect
+								style={{
+									zIndex: 1,
+								}}
 								label="Tipo de asset"
 								value={asset?.value}
 								onChange={(value) => setCustomValue("asset", value)}
@@ -251,7 +254,7 @@ const CourseLessons = ({ course, params }) => {
 						</div>
 						
 					</div>
-
+<br /><br />
           {(asset?.value === 1 || asset?.value === 2 || asset?.value === 3) && (
             <div className="mt-3">
               <MediaUpload
@@ -360,7 +363,7 @@ const CourseLessons = ({ course, params }) => {
 						</div>
 					)}
 
-					<button type="submit" className="default-btn mt-4" disabled={isLoading}>
+					<button type="submit" className="default-btn mt-8" disabled={isLoading}>
 						{isLoading ? (
 							<>
 								<span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
@@ -380,6 +383,7 @@ const CourseLessons = ({ course, params }) => {
 							</>
 						)}
 					</button>
+					<br />
 				</div>
 			</div>
 		</form>

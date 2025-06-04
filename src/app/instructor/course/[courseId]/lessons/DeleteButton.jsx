@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 const DeleteButton = ({ assetId }) => {
 	const router = useRouter();
 	const handleDelete = (assetId) => {
+		console.log(assetId,'assetId');
 		Swal.fire({
 			title: '¿Estás seguro?',
 			text: "¡No podrás revertir esta acción!",
@@ -21,7 +22,7 @@ const DeleteButton = ({ assetId }) => {
 		}).then((result) => {
 			if (result.isConfirmed) {
 				axios
-					.delete(`/api/courses/${assetId}/delete`)
+					.delete(`/api/asset/${assetId}/delete`)
 					.then((response) => {
 						toast.success(response.data.message);
 						router.refresh();
@@ -34,7 +35,7 @@ const DeleteButton = ({ assetId }) => {
 	};
 	return (
 		<button
-			className="btn btn-danger btn-sm"
+			className="btn btn-danger btn-sm "
 			onClick={() => handleDelete(assetId)}
 		>
 			<i className="bx bx-trash"></i>

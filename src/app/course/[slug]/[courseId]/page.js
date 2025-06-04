@@ -3,6 +3,7 @@ import DetailsContent from "@/components/Courses/Course/DetailsContent";
 import PageBanner from "@/components/Shared/PageBanner";
 import React from "react";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({ params }) {
 	const { course } = await getSingleCourse(params);
