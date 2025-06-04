@@ -1,252 +1,357 @@
 import { NextResponse } from "next/server";
-import prisma from "@libs/prismadb";	
+import prisma from "@libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { fileUploadService } from "@/services/fileUpload";
+import {processFormDataWithFile} from "@/utils/fileProcessing";
 
 export async function POST(request, { params }) {
-	const { courseId } = params;
-	try {
-		const currentUser = await getCurrentUser();
-		if (!currentUser) {
-			return NextResponse.json(
-				{
-					message: "Usuario no autorizado.",
-				},
-				{ status: 401 }
-			);
-		}
+  const { courseId } = params;
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return NextResponse.json(
+        {
+          message: "Usuario no autorizado.",
+        },
+        { status: 401 }
+      );
+    }
 
-		// Verificar que el curso exista y pertenezca al usuario
-		const course = await prisma.course.findUnique({
-			where: { id: parseInt(courseId) },
-		});
+    // Verificar que el curso exista y pertenezca al usuario
+    const course = await prisma.course.findUnique({
+      where: { id: parseInt(courseId) },
+    });
 
-		if (!course) {
-			return NextResponse.json(
-				{
-					message: "Curso no encontrado.",
-				},
-				{ status: 404 }
-			);
-		}
+    if (!course) {
+      return NextResponse.json(
+        {
+          message: "Curso no encontrado.",
+        },
+        { status: 404 }
+      );
+    }
 
-		if (course.userId !== currentUser.id && currentUser.role !== "ADMIN") {
-			return NextResponse.json(
-				{
-					message: "No tienes permiso para agregar lecciones a este curso.",
-				},
-				{ status: 403 }
-			);
-		}
+    if (course.userId !== currentUser.id && currentUser.role !== "ADMIN") {
+      return NextResponse.json(
+        {
+          message: "No tienes permiso para agregar lecciones a este curso.",
+        },
+        { status: 403 }
+      );
+    }
 
-		const body = await request.json();
-		const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description } = body;
+    const { body, file: uploadedFile } = await processFormDataWithFile(request, 'file');
+    const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description } = body;
 
-		// Validar datos según el tipo de asset
-		if (!title) {
-			return NextResponse.json(
-				{
-					message: "El título de la lección es obligatorio.",
-				},
-				{ status: 400 }
-			);
-		}
+    // Validar datos según el tipo de asset
+    if (!title) {
+      return NextResponse.json(
+        {
+          message: "El título de la lección es obligatorio.",
+        },
+        { status: 400 }
+      );
+    }
 
-		if (!assetTypeId) {
-			return NextResponse.json(
-				{
-					message: "El tipo de asset es obligatorio.",
-				},
-				{ status: 400 }
-			);
-		}
+    if (!assetTypeId) {
+      return NextResponse.json(
+        {
+          message: "El tipo de asset es obligatorio.",
+        },
+        { status: 400 }
+      );
+    }
 
-		// Configurar config_asset según el tipo
-		let config_asset = null;
+    // Configurar config_asset según el tipo
+    let config_asset = null;
+    let finalFileUrl = "";
 
-		switch (parseInt(assetTypeId)) {
-			case 1: // Video
-				if (!video_url && !file_url) {
-					return NextResponse.json(
-						{
-							message: "La URL del video es obligatoria.",
-						},
-						{ status: 400 }
-					);
-				}
-				config_asset = {
-					val: video_url || file_url,
-					type: "video"
-				};
-				break;
+    switch (parseInt(assetTypeId)) {
+      case 1: // Video
+        console.log({ video_url, file_url, uploadedFile });
 
-			case 2: // Audio
-				if (!video_url && !file_url) {
-					return NextResponse.json(
-						{
-							message: "La URL del audio es obligatoria.",
-						},
-						{ status: 400 }
-					);
-				}
-				config_asset = {
-					val: video_url || file_url,
-					type: "audio"
-				};
-				break;
+        // Normalizar valores undefined a null o string vacío
+        const normalizedVideoUrlForVideo = video_url || null;
+        const normalizedFileUrlForVideo = file_url || null;
+        const hasUploadedFileForVideo = uploadedFile && uploadedFile.size > 0;
 
-			case 3: // Documento
-				if (!video_url && !file_url) {
-					return NextResponse.json(
-						{
-							message: "La URL del documento es obligatoria.",
-						},
-						{ status: 400 }
-					);
-				}
-				config_asset = {
-					val: video_url || file_url,
-					type: "document"
-				};
-				break;
+        if (!normalizedVideoUrlForVideo && !normalizedFileUrlForVideo && !hasUploadedFileForVideo) {
+          return NextResponse.json(
+            {
+              message: "La URL del video o un archivo es obligatorio.",
+            },
+            { status: 400 }
+          );
+        }
 
-			case 4: // Link Externo
-				if (!url) {
-					return NextResponse.json(
-						{
-							message: "La URL es obligatoria para links externos.",
-						},
-						{ status: 400 }
-					);
-				}
-				// Validar formato URL
-				try {
-					new URL(url);
-				} catch (e) {
-					return NextResponse.json(
-						{
-							message: "La URL proporcionada no es válida.",
-						},
-						{ status: 400 }
-					);
-				}
-				config_asset = {
-					val: url,
-					type: "link"
-				};
-				break;
+        let videoUrl = normalizedVideoUrlForVideo || normalizedFileUrlForVideo;
 
-			case 5: // YouTube
-				if (!url) {
-					return NextResponse.json(
-						{
-							message: "La URL de YouTube es obligatoria.",
-						},
-						{ status: 400 }
-					);
-				}
-				// Validar que sea URL de YouTube
-				if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
-					return NextResponse.json(
-						{
-							message: "La URL debe ser de YouTube.",
-						},
-						{ status: 400 }
-					);
-				}
-				config_asset = {
-					val: url,
-					type: "youtube"
-				};
-				break;
+        if (hasUploadedFileForVideo) {
+          try {
+            const timestamp = new Date().getTime();
+            const fileName = `video-${courseId}-${timestamp}`;
 
-			case 6: // Online
-				if (!url) {
-					return NextResponse.json(
-						{
-							message: "La URL es obligatoria para sesiones online.",
-						},
-						{ status: 400 }
-					);
-				}
-				if (!platform) {
-					return NextResponse.json(
-						{
-							message: "La plataforma es obligatoria para sesiones online.",
-						},
-						{ status: 400 }
-					);
-				}
-				// Validar formato URL
-				try {
-					new URL(url);
-				} catch (e) {
-					return NextResponse.json(
-						{
-							message: "La URL proporcionada no es válida.",
-						},
-						{ status: 400 }
-					);
-				}
-				config_asset = {
-					val: url,
-					type: "online",
-					platform: platform,
-					meeting_id: meeting_id || "",
-					password: password || "",
-					credits: {
-						host: host || "",
-						duration: duration || "",
-						participants: participants || ""
-					}
-				};
-				break;
+            const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
+              fileName: fileName
+            });
 
-			default:
-				return NextResponse.json(
-					{
-						message: "Tipo de asset no válido.",
-					},
-					{ status: 400 }
-				);
-		}
+            if (!uploadResult.success) {
+              throw new Error(uploadResult.error || 'Error al subir el video');
+            }
 
-		// Crear la lección en la base de datos
-		const asset = await prisma.asset.create({
-			data: {
-				title,
-				description: description || "",
-				file_url: "", // Dejamos file_url vacío como solicitaste
-				courseId: parseInt(courseId),
-				assetTypeId: parseInt(assetTypeId),
-				config_asset: config_asset
-			},
-		});
+            videoUrl = uploadResult.url;
+            finalFileUrl = uploadResult.url;
+          } catch (uploadError) {
+            console.error('Error al subir el video:', uploadError);
+            return NextResponse.json(
+              { message: 'Error al subir el video: ' + uploadError.message },
+              { status: 500 }
+            );
+          }
+        }
 
-		// Incrementar el contador de lecciones del curso
-		/*await prisma.course.update({
-			where: { id: parseInt(courseId) },
-			data: {
-				lessons: {
-					increment: 1
-				}
-			}
-		});*/
+        config_asset = {
+          val: videoUrl,
+          type: "video"
+        };
+        break;
 
-		return NextResponse.json(
-			{ 
-				message: "Lección añadida correctamente.",
-				asset
-			},
-			{ status: 201 }
-		);
+      case 2: // Audio
+        console.log({ video_url, file_url, uploadedFile });
 
-	} catch (error) {
-		console.error("Error:", error);
-		return NextResponse.json(
-			{
-				message: "Ocurrió un error: " + error.message,
-			},
-			{ status: 500 }
-		);
-	}
+        // Normalizar valores undefined a null o string vacío
+        const normalizedVideoUrl = video_url || null;
+        const normalizedFileUrl = file_url || null;
+        const hasUploadedFile = uploadedFile && uploadedFile.size > 0;
+
+        if (!normalizedVideoUrl && !normalizedFileUrl && !hasUploadedFile) {
+          return NextResponse.json(
+            {
+              message: "La URL del audio o un archivo es obligatorio.",
+            },
+            { status: 400 }
+          );
+        }
+
+        let audioUrl = normalizedVideoUrl || normalizedFileUrl;
+
+        if (hasUploadedFile) {
+          try {
+            const timestamp = new Date().getTime();
+            const fileName = `audio-${courseId}-${timestamp}`;
+
+            const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
+              fileName: fileName
+            });
+
+            if (!uploadResult.success) {
+              throw new Error(uploadResult.error || 'Error al subir el audio');
+            }
+
+            audioUrl = uploadResult.url;
+            finalFileUrl = uploadResult.url;
+          } catch (uploadError) {
+            console.error('Error al subir el audio:', uploadError);
+            return NextResponse.json(
+              { message: 'Error al subir el audio: ' + uploadError.message },
+              { status: 500 }
+            );
+          }
+        }
+
+        config_asset = {
+          val: audioUrl,
+          type: "audio"
+        };
+        break;
+
+      case 3: // Documento
+        console.log({ video_url, file_url, uploadedFile });
+
+        // Normalizar valores undefined a null o string vacío
+        const normalizedVideoUrlForDocument = video_url || null;
+        const normalizedFileUrlForDocument = file_url || null;
+        const hasUploadedFileForDocument = uploadedFile && uploadedFile.size > 0;
+
+        if (!normalizedVideoUrlForDocument && !normalizedFileUrlForDocument && !hasUploadedFileForDocument) {
+          return NextResponse.json(
+            {
+              message: "La URL del documento o un archivo es obligatorio.",
+            },
+            { status: 400 }
+          );
+        }
+
+        let documentUrl = normalizedVideoUrlForDocument || normalizedFileUrlForDocument;
+
+        if (hasUploadedFileForDocument) {
+          try {
+            const timestamp = new Date().getTime();
+            const fileName = `document-${courseId}-${timestamp}`;
+
+            const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
+              fileName: fileName
+            });
+
+            if (!uploadResult.success) {
+              throw new Error(uploadResult.error || 'Error al subir el documento');
+            }
+
+            documentUrl = uploadResult.url;
+            finalFileUrl = uploadResult.url;
+          } catch (uploadError) {
+            console.error('Error al subir el documento:', uploadError);
+            return NextResponse.json(
+              { message: 'Error al subir el documento: ' + uploadError.message },
+              { status: 500 }
+            );
+          }
+        }
+
+        config_asset = {
+          val: documentUrl,
+          type: "document"
+        };
+        break;
+
+      case 4: // Link Externo
+        if (!url) {
+          return NextResponse.json(
+            {
+              message: "La URL es obligatoria para links externos.",
+            },
+            { status: 400 }
+          );
+        }
+        // Validar formato URL
+        try {
+          new URL(url);
+        } catch (e) {
+          return NextResponse.json(
+            {
+              message: "La URL proporcionada no es válida.",
+            },
+            { status: 400 }
+          );
+        }
+        config_asset = {
+          val: url,
+          type: "link"
+        };
+        break;
+
+      case 5: // YouTube
+        if (!url) {
+          return NextResponse.json(
+            {
+              message: "La URL de YouTube es obligatoria.",
+            },
+            { status: 400 }
+          );
+        }
+        // Validar que sea URL de YouTube
+        if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+          return NextResponse.json(
+            {
+              message: "La URL debe ser de YouTube.",
+            },
+            { status: 400 }
+          );
+        }
+        config_asset = {
+          val: url,
+          type: "youtube"
+        };
+        break;
+
+      case 6: // Online
+        if (!url) {
+          return NextResponse.json(
+            {
+              message: "La URL es obligatoria para sesiones online.",
+            },
+            { status: 400 }
+          );
+        }
+        if (!platform) {
+          return NextResponse.json(
+            {
+              message: "La plataforma es obligatoria para sesiones online.",
+            },
+            { status: 400 }
+          );
+        }
+        // Validar formato URL
+        try {
+          new URL(url);
+        } catch (e) {
+          return NextResponse.json(
+            {
+              message: "La URL proporcionada no es válida.",
+            },
+            { status: 400 }
+          );
+        }
+        config_asset = {
+          val: url,
+          type: "online",
+          platform: platform,
+          meeting_id: meeting_id || "",
+          password: password || "",
+          credits: {
+            host: host || "",
+            duration: duration || "",
+            participants: participants || ""
+          }
+        };
+        break;
+
+      default:
+        return NextResponse.json(
+          {
+            message: "Tipo de asset no válido.",
+          },
+          { status: 400 }
+        );
+    }
+
+    // Crear la lección en la base de datos
+    const asset = await prisma.asset.create({
+      data: {
+        title,
+        description: description || "",
+        file_url: finalFileUrl,
+        courseId: parseInt(courseId),
+        assetTypeId: parseInt(assetTypeId),
+        config_asset: config_asset
+      },
+    });
+
+    // Incrementar el contador de lecciones del curso
+    /*await prisma.course.update({
+      where: { id: parseInt(courseId) },
+      data: {
+        lessons: {
+          increment: 1
+        }
+      }
+    });*/
+
+    return NextResponse.json(
+      {
+        message: "Lección añadida correctamente.",
+        asset
+      },
+      { status: 201 }
+    );
+
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      {
+        message: "Ocurrió un error: " + error.message,
+      },
+      { status: 500 }
+    );
+  }
 }
