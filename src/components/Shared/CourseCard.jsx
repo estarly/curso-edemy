@@ -16,6 +16,7 @@ const CourseCard = ({
 	lessons,
 	user,
 	enrolments,
+	progress,
 	grid = "col-md-6 col-lg-4",
 	currentUser,
 	showHeartButton = true,
@@ -59,12 +60,23 @@ const CourseCard = ({
 					<div className="course-author d-flex align-items-center">
 						<Image
 							src={user.image || "/images/user1.jpg"}
-							width={300}
-							height={300}
+							width={350}
+							height={350}
 							className="rounded-circle"
 							alt="image"
 						/>
-						<span>{user.name}</span>
+						<span>{user.name}
+							{progress === 2 && (
+								<div>
+									<span className="badge bg-success text-white small">Completado</span>
+								</div>
+							)}
+							{progress === 1 && (
+								<div>
+									<span className="badge bg-warning text-dark small">En progreso</span>
+								</div>
+							)}
+						</span>
 					</div>
 
 					<h3>

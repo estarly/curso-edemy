@@ -5,8 +5,10 @@ import Player from "@/components/Learning/Player";
 import Content from "./Content";
 import MixedFiles from "@/components/Learning/MixedFiles";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const MainContent = ({ course }) => {
+	const router = useRouter();
 	const [myAsset, setMyAsset] = useState(course.assets[0]);
 	const [reviews, setReviews] = useState(course.reviews);
 	const [assetIndex, setAssetIndex] = useState(0);
@@ -87,8 +89,9 @@ const MainContent = ({ course }) => {
 		*/
 	};
 
-	const handleContinueFromChild = (assetIdContinue) => {
+	const handleContinueFromChild = (assetIdContinue, answer) => {
 		console.log("Valor recibido desde el hijo:", assetIdContinue);
+		console.log("Valor recibido desde el hijo:", answer);
 
 		// Buscar el índice del asset actual
 		const currentIndex = course.assets.findIndex(asset => asset.id === assetIdContinue);
@@ -101,7 +104,22 @@ const MainContent = ({ course }) => {
 			findAssetConsult(nextAsset);
 		} else {
 			// Si no hay siguiente asset, puedes mostrar un mensaje o finalizar el curso
-			toast.success("¡Has terminado todas las lecciones!");
+			if(answer === "no_assignments"){
+				
+				fetch("/api/stateCourse/completeAsset", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ assetId: assetIdContinue, courseId: course.id, answer: answer }),
+				}).then(res => res.json()).then(data => {
+					if(data.ok){
+						toast.success("¡Has terminado todas las lecciones!");
+						//redirigir a la pagina de cursos
+						router.push("/learning/my-courses");
+					}else{
+						toast.error("No se pudo completar la lección.");
+					}
+				});
+			}
 		}
 	};
 

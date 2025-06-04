@@ -72,12 +72,16 @@ const CourseAsset = ({ assets, onContinue }) => {
 		assets.assignments.every(asst => inputValues[asst.id] && inputValues[asst.id].toString().trim() !== "");
 
 	const handleContinue = async () => {
-		if(!allAnswered){
-			Swal.fire("¡No puedes continuar!", "Debes responder todas las preguntas.", "error");
+		if(assets?.assignments?.length > 0){
+			if(!allAnswered){
+				Swal.fire("¡No puedes continuar!", "Debes responder todas las preguntas.", "error");
+				return;
+			}
+		}else{
+			onContinue(assets.id, "no_assignments"); // Puedes enviar cualquier dato aquí
 			return;
 		}
-		onContinue(assets.id); // Puedes enviar cualquier dato aquí
-		return;
+		
 		/*const result = await Swal.fire({
 			title: "¿Quieres continuar?",
 			text: "Has respondido todas las preguntas. ¿Deseas continuar?",
@@ -191,7 +195,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 				</div>
 				<div className="mt-4 d-flex justify-content-end">
 					<button
-						className={`btn btn-success ${!allAnswered ? "disabled" : ""}`}
+						className={`btn btn-success ${(assets?.assignments?.length > 0 && !allAnswered) ? "disabled" : ""}`}
 						onClick={handleContinue}
 					>
 						Continuar

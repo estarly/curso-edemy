@@ -23,7 +23,31 @@ export async function myLearning() {
 			},
 		});
 
-		return { enrolments };
+		// Agregar progress a cada curso
+		const enrolmentsWithProgress = await Promise.all(enrolments.map(async (enrolment) => {
+			const courseId = enrolment.course.id;
+			// Buscar si hay algún stateCourse pendiente para este usuario y curso
+			const pendientes = await prisma.stateCourse.findMany({
+				where: {
+					userId: currentUser.id,
+					courseId: courseId,
+					OR: [
+						{ state: 0 },
+						{ stateAsset: false },
+					],
+				},
+			});
+			const progress = pendientes.length > 0 ? 1 : 2;
+			return {
+				...enrolment,
+				course: {
+					...enrolment.course,
+					progress,
+				},
+			};
+		}));
+
+		return { enrolments: enrolmentsWithProgress };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
 	}
