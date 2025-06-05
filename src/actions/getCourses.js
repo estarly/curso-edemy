@@ -57,6 +57,8 @@ export async function getCourses(params,stack=10) {
 			take: stack,
 			include: {
 				user: true,
+				assets: true,
+				category: true,
 				enrolments: {
 					select: {
 						id: true,

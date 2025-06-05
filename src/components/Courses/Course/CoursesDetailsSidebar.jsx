@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import AddToCartButton from "./AddToCartButton";
 import Swal from "sweetalert2";
 
@@ -18,6 +18,8 @@ const CoursesDetailsSidebar = ({
 	user,
 	currentUser
 }) => {
+	const [yaInscrito, setYaInscrito] = useState(false);
+
 	const handleShareClick = () => {
 		const courseUrl = `${window.location.origin}/courses/${slug}`; // Genera la URL del curso
 		navigator.clipboard.writeText(courseUrl) // Copia la URL al portapapeles
@@ -42,6 +44,18 @@ const CoursesDetailsSidebar = ({
 	};
 
 	const handleEnrolmentClick = async () => {
+		// Verifica si el usuario actual ya está inscrito
+		setYaInscrito(currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false);
+
+		if(yaInscrito) {
+			Swal.fire({
+				title: "¡Ya estás inscrito!",
+				text: "Ya estás inscrito en este curso.",
+				icon: "info",
+			});
+			return;
+		}
+
 		if (!currentUser || currentUser.role !== 'USER') {
 			let title = "¡Debe estar autenticado!";
 			let message = "Debes estar autenticado para inscribirte en un curso.";
@@ -115,7 +129,7 @@ const CoursesDetailsSidebar = ({
 	};
 
 	// Verifica si el usuario actual ya está inscrito
-	const yaInscrito = currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false;
+	//const yaInscrito = currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false;
 
 	return (
 		<>
@@ -186,7 +200,6 @@ const CoursesDetailsSidebar = ({
 				<button
 					className={` w-100 ${yaInscrito ? "btn btn-secondary" : "default-btn"}`}
 					onClick={handleEnrolmentClick}
-					disabled={yaInscrito}
 				>
 					<i className={`${yaInscrito ? "flaticon-play" : "flaticon-shopping-cart"}`}></i>
 					{" "}{yaInscrito ? " Continuar" : " Inscribirme"}

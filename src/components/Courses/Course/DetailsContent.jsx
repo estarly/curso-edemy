@@ -10,6 +10,7 @@ import Description from "./Description";
 import CoursesDetailsSidebar from "./CoursesDetailsSidebar";
 
 const DetailsContent = ({ currentUser, course }) => {
+	
 	return (
 		<div className="courses-details-area pb-100">	
 			<div
@@ -96,12 +97,12 @@ const DetailsContent = ({ currentUser, course }) => {
 								<TabPanel>
 									<Instructor {...course} />
 								</TabPanel>
-								<TabPanel>
+								{/*<TabPanel>
 									<Reviews
 										currentUser={currentUser}
 										{...course}
 									/>
-								</TabPanel>
+								</TabPanel>*/}
 							</Tabs>
 						</div>
 					</div>
