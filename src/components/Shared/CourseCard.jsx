@@ -15,6 +15,7 @@ const CourseCard = ({
 	regular_price,
 	lessons,
 	user,
+	assets,
 	enrolments,
 	progress,
 	grid = "col-md-6 col-lg-4",
@@ -90,11 +91,11 @@ const CourseCard = ({
 
 					<ul className="courses-box-footer d-flex justify-content-between align-items-center">
 						<li>
-							<i className="flaticon-agenda"></i> ??{" "}
-							Lessons
+							<i className="flaticon-agenda"></i> {" "}
+							{assets.length} Lecciones
 						</li>
 						<li>
-							<i className="flaticon-people"></i> ?? Students
+							<i className="flaticon-people"></i> {enrolments.length} Estudiantes
 						</li>
 					</ul>
 				</div>

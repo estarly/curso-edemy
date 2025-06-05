@@ -20,6 +20,8 @@ export async function byModule() {
 								course: {
 									include: {
 										user: true,
+										assets:true,
+										enrolments:true,
 									},
 								},
 							},
