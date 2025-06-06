@@ -8,7 +8,7 @@ const Page = async ({ params }) => {
 	
 	return (
 		<>
-			<div className="mt-5 pb-5 video-area">
+			<div className="mt-2 pb-5 video-area">
 				<div className="container-fluid">
 					<MainContent
 						course={course}

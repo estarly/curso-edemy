@@ -70,6 +70,7 @@ export async function myLearningPlay(params) {
 					},
 					include: {
 						assetType: true,
+						files: true,
 						assignments: {
 							include: {
 								statecourse: {

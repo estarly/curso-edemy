@@ -2,16 +2,23 @@ import React from "react";
 
 const StudentAssetViewer = ({ asset }) => {
   return (
-    <div className="col-md-3" key={asset.id}>
+    <div className="col-md-8" key={asset.id}>
       <div className="card h-100">
         {/* Video - Tipo 1 */}
         {asset.assetTypeId === 1 && asset.config_asset?.val && (
-          <div className="video-container" style={{ height: "160px", overflow: "hidden" }}>
-            <video width="100%" height="100%" style={{ objectFit: "cover" }} controls>
-              <source
-                src={asset.config_asset.val}
-                type="video/mp4"
-              />
+          <div className="video-container" style={{ position: "relative", width: "100%", paddingTop: "56.25%" }}>
+            <video
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover"
+              }}
+              controls
+            >
+              <source src={asset.config_asset.val} type="video/mp4" />
               Tu navegador no soporta videos HTML.
             </video>
           </div>
@@ -86,7 +93,7 @@ const StudentAssetViewer = ({ asset }) => {
           </div>
         )}
 
-        <div className="card-body">
+      {/*  <div className="card-body">
           <h6 className="card-title text-truncate">
             {asset.title}
           </h6>
@@ -101,7 +108,7 @@ const StudentAssetViewer = ({ asset }) => {
               dangerouslySetInnerHTML={{ __html: asset.description }}
             />
           )}
-        </div>
+        </div>*/}
       </div>
     </div>
   );
