@@ -32,6 +32,16 @@ export class FileUploadService {
     const fileOptions = { path, ...options };
     return this.storageService.upload(file, fileOptions);
   }
+
+  async deleteFile(url) {
+    try {
+      const result =   this.storageService.delete(url);
+
+      return { success: true, result };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
 }
 
 export const fileUploadService = new FileUploadService();

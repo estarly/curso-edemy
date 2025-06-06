@@ -28,7 +28,7 @@ const ASSET_TYPES = {
   ONLINE: 6
 };
 
-const CourseLessons = ({ course, params, currentAsset, onCancelEdit, onAssetUpdated }) => {
+const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);

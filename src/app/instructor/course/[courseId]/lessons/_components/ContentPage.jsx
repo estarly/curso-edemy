@@ -22,7 +22,6 @@ const ContentPage = ({ course, params, assets, assignmentsTypes }) => {
   return (
     <>
       <CourseLessons
-        course={course}
         params={params}
         currentAsset={currentAsset}
         onCancelEdit={onCancelEdit}
@@ -30,9 +29,10 @@ const ContentPage = ({ course, params, assets, assignmentsTypes }) => {
       />
       <hr />
       <div className="row row-gap-4">
-        {assets.map((asset, idx) => (
+        {assets.map((asset) => (
           <AssetItem
             key={asset.id}
+            courseId={params.courseId}
             asset={asset}
             assignmentsTypes={assignmentsTypes}
             onEdit={onEdit}

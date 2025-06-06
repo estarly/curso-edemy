@@ -3,7 +3,7 @@ import DeleteButton from "./../DeleteButton";
 import FileAssetButton from "./FileAssetButton";
 import AssignmentComponent from "@/app/instructor/course/[courseId]/lessons/_components/AssignmentComponent";
 
-const AssetItem = ({ asset, assignmentsTypes, onEdit }) => {
+const AssetItem = ({ courseId, asset, assignmentsTypes, onEdit }) => {
   return (
     <div className="col-md-3" key={asset.id}>
       <div className="card h-100">
@@ -117,7 +117,7 @@ const AssetItem = ({ asset, assignmentsTypes, onEdit }) => {
               idAsset={asset.id}
               assignmentsTypes={assignmentsTypes}
             />
-            <FileAssetButton/>
+            <FileAssetButton courseId={courseId} lessonId={asset.id} />
             <DeleteButton assetId={asset.id} />
           </div>
         </div>
