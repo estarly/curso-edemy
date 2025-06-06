@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Player from "@/components/Learning/Player";
 import Content from "./Content";
-import MixedFiles from "@/components/Learning/MixedFiles";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -127,8 +125,6 @@ const MainContent = ({ course }) => {
 		<div className="row">
 			<div className="col-lg-9 col-md-8">
 				<div className="video-content">
-					{<MixedFiles assetFile={myAsset} />}
-					<br />
 					<Content
 						{...course}
 						indexAsset={assetIndex}

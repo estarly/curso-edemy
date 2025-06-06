@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import StudentAssetViewer from "@/app/learning/course/[slug]/[courseId]/StudentAssetViewer";
+
+
 
 const CourseAsset = ({ assets, onContinue }) => {
 	const [inputValues, setInputValues] = useState({});
@@ -100,10 +103,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 
 	return (
 		<>
-			<div className="courses-details-desc-style-two">
-				<h3>{assets.title}</h3>
-				<div dangerouslySetInnerHTML={{ __html: assets.description }} />
-			</div>
+      <StudentAssetViewer asset={assets} />
 			<div className="courses-details-desc-style-two">
 				<div className="row justify-content-left">
 					{assets.assignments.length && (
