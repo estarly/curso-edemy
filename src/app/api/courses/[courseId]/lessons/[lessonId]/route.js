@@ -97,6 +97,7 @@ export async function PUT(request, { params }) {
 
     let config_asset = null;
     let finalFileUrl = "";
+    let shouldUpdateConfigAsset = false;
 
     switch (parseInt(assetTypeId)) {
       case ASSET_TYPES.VIDEO:
@@ -106,14 +107,14 @@ export async function PUT(request, { params }) {
         const normalizedFileUrlForVideo = file_url || null;
         const hasUploadedFileForVideo = uploadedFile && uploadedFile.size > 0;
 
-        if (!normalizedVideoUrlForVideo && !normalizedFileUrlForVideo && !hasUploadedFileForVideo) {
+        /* (!normalizedVideoUrlForVideo && !normalizedFileUrlForVideo && !hasUploadedFileForVideo) {
           return NextResponse.json(
             {
               message: "La URL del video o un archivo es obligatorio.",
             },
             { status: 400 }
           );
-        }
+        }*/
 
         let videoUrl = normalizedVideoUrlForVideo || normalizedFileUrlForVideo;
 
@@ -145,6 +146,9 @@ export async function PUT(request, { params }) {
           val: videoUrl,
           type: "video"
         };
+        if (hasUploadedFileForVideo || normalizedVideoUrlForVideo || normalizedFileUrlForVideo) {
+          shouldUpdateConfigAsset = true;
+        }
         break;
 
       case ASSET_TYPES.AUDIO:
@@ -154,14 +158,14 @@ export async function PUT(request, { params }) {
         const normalizedFileUrl = file_url || null;
         const hasUploadedFile = uploadedFile && uploadedFile.size > 0;
 
-        if (!normalizedVideoUrl && !normalizedFileUrl && !hasUploadedFile) {
+        /* (!normalizedVideoUrl && !normalizedFileUrl && !hasUploadedFile) {
           return NextResponse.json(
             {
               message: "La URL del audio o un archivo es obligatorio.",
             },
             { status: 400 }
           );
-        }
+        }*/
 
         let audioUrl = normalizedVideoUrl || normalizedFileUrl;
 
@@ -193,6 +197,9 @@ export async function PUT(request, { params }) {
           val: audioUrl,
           type: "audio"
         };
+        if (hasUploadedFile || normalizedVideoUrl || normalizedFileUrl) {
+          shouldUpdateConfigAsset = true;
+        }
         break;
 
       case ASSET_TYPES.DOCUMENT:
@@ -202,14 +209,14 @@ export async function PUT(request, { params }) {
         const normalizedFileUrlForDocument = file_url || null;
         const hasUploadedFileForDocument = uploadedFile && uploadedFile.size > 0;
 
-        if (!normalizedVideoUrlForDocument && !normalizedFileUrlForDocument && !hasUploadedFileForDocument) {
+        /*if (!normalizedVideoUrlForDocument && !normalizedFileUrlForDocument && !hasUploadedFileForDocument) {
           return NextResponse.json(
             {
               message: "La URL del documento o un archivo es obligatorio.",
             },
             { status: 400 }
           );
-        }
+        }*/
 
         let documentUrl = normalizedVideoUrlForDocument || normalizedFileUrlForDocument;
 
@@ -241,31 +248,38 @@ export async function PUT(request, { params }) {
           val: documentUrl,
           type: "document"
         };
+        if (hasUploadedFileForDocument || normalizedVideoUrlForDocument || normalizedFileUrlForDocument) {
+          shouldUpdateConfigAsset = true;
+        }
         break;
 
       case ASSET_TYPES.LINK:
-        if (!url) {
+        /* (!url) {
           return NextResponse.json(
             {
               message: "La URL es obligatoria para links externos.",
             },
             { status: 400 }
           );
-        }
+        }*/
         try {
           new URL(url);
         } catch (e) {
-          return NextResponse.json(
+          console.log(e);
+         /*eturn NextResponse.json(
             {
               message: "La URL proporcionada no es válida.",
             },
             { status: 400 }
-          );
+          );*/
         }
         config_asset = {
           val: url,
           type: "link"
         };
+        if (url) {
+          shouldUpdateConfigAsset = true;
+        }
         break;
 
       case ASSET_TYPES.YOUTUBE:
@@ -289,17 +303,20 @@ export async function PUT(request, { params }) {
           val: url,
           type: "youtube"
         };
+        if (url) {
+          shouldUpdateConfigAsset = true;
+        }
         break;
 
       case ASSET_TYPES.ONLINE:
-        if (!url) {
+        /*if (!url) {
           return NextResponse.json(
             {
               message: "La URL es obligatoria para sesiones online.",
             },
             { status: 400 }
           );
-        }
+        }*/
         if (!platform) {
           return NextResponse.json(
             {
@@ -330,6 +347,9 @@ export async function PUT(request, { params }) {
             participants: participants || ""
           }
         };
+        if (url && platform) {
+          shouldUpdateConfigAsset = true;
+        }
         break;
 
       default:
@@ -341,15 +361,19 @@ export async function PUT(request, { params }) {
         );
     }
 
+    const dataToUpdate = {
+      title,
+      description: description || "",
+      file_url: finalFileUrl,
+      assetTypeId: parseInt(assetTypeId),
+    };
+    if (shouldUpdateConfigAsset) {
+      dataToUpdate.config_asset = config_asset;
+    }
+
     const asset = await prisma.asset.update({
       where: { id: parseInt(lessonId) },
-      data: {
-        title,
-        description: description || "",
-        file_url: finalFileUrl,
-        assetTypeId: parseInt(assetTypeId),
-        config_asset: config_asset
-      },
+      data: dataToUpdate,
     });
 
     return NextResponse.json(

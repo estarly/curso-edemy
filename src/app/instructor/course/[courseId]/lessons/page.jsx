@@ -17,9 +17,9 @@ const Page = async ({ params }) => {
 					<h2 className="fw-bold mb-4">Curso: {course[0].title}</h2>
 
 					<Header />
-          <div className="create-course-form">
-            <ContentPage course={course} assets={assets} params={params} assignmentsTypes={assignmentsTypes} />
-          </div>
+					<div className="create-course-form">
+						<ContentPage course={course} assets={assets} params={params} assignmentsTypes={assignmentsTypes} />
+					</div>
 				</div>
 			</div>
 		

@@ -71,7 +71,6 @@ const MainContent = ({ course }) => {
 			body: JSON.stringify({ assetId: assetId.id }),
 		});
 		let asset = await response.json();
-		console.log(asset, "assetConsult");
 		setMyAsset(asset);
 		return asset;
 	};
@@ -79,7 +78,6 @@ const MainContent = ({ course }) => {
 	const setMyAssetFunction = async (asset) => {
 		//llamar a la funcion para buscar el asset
 		await findAssetConsult(asset);
-		console.log(assetConsult);
 		/*
 		setAssetIndex(1);
 		setMyAsset(assetConsult);

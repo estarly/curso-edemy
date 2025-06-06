@@ -155,6 +155,9 @@ export async function POST(request, { params }) {
       );
     }
 
+    const nombreOriginal = uploadedFile.originalname;
+    console.log('Nombre original:', nombreOriginal);
+
     try {
       const timestamp = new Date().getTime();
       const fileName = `asset-${lessonId}-file-${timestamp}`;

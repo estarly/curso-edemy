@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import StudentAssetViewer from "@/app/learning/course/[slug]/[courseId]/StudentAssetViewer";
+import { FaDownload } from "react-icons/fa";
 
 
 
@@ -135,25 +136,35 @@ const CourseAsset = ({ assets, onContinue }) => {
 					</button>
 				</li>
 			</ul>
-			<div className="tab-content" id="courseTabsContent">
+			<div className="tab-content bg-white border-bottom border-start border-end rounded-2" id="courseTabsContent">
 				<div className="tab-pane fade show active" id="descargables" role="tabpanel" aria-labelledby="descargables-tab">
 					<div className="p-3">
-						{/* Texto aleatorio para Descargables */}
-						<p>Este es un texto aleatorio para la sección de Descargables. Aquí puedes colocar información o enlaces a materiales descargables.</p>
-						{assets.files.length && (
-								assets.files.map((file) => {
-									return (
-										<div key={file.id}>
-											<h5>{file.title}</h5>
-										</div>
-									);
-								})
+						{assets.files.length ? (
+							assets.files.map((file, index) => {
+								// Extraer el nombre del archivo de la URL
+								const fileName = file.url.split("/").pop();
+								return (
+									<div key={file.id} className="d-flex align-items-center mb-2">
+										<a
+											href={file.url}
+											download={fileName}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="d-flex align-items-center text-decoration-none"
+										>
+											
+											<span>{(index + 1)} - {fileName}&nbsp;&nbsp;&nbsp;&nbsp;</span><FaDownload className="me-2 text-primary" />
+										</a>
+									</div>
+								);
+							})
+						) : (
+							<p>No hay archivos descargables</p>
 						)}
 					</div>
 				</div>
 				<div className="tab-pane fade" id="asignaciones" role="tabpanel" aria-labelledby="asignaciones-tab">
-					{/* Asignaciones existentes */}
-					<div className="courses-details-desc-style-two">
+					<div className="p-4">
 						<div className="row justify-content-left">
 							{assets.assignments.length && (
 								assets.assignments.map((asst) => {

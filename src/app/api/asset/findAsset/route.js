@@ -26,6 +26,7 @@ export async function POST(request) {
 			where: { id: parseInt(assetId) },
 			include: {
 				assetType: true,
+				files: true,
 				assignments: {
 					include: {
 						statecourse: {

@@ -17,7 +17,7 @@ export default function FileAssetButton({ courseId, lessonId }) {
   const fetchFiles = async () => {
     try {
       const response = await axios.get(`/api/courses/${courseId}/lessons/${lessonId}/files-asset`);
-      console.log("API Response:", response.data);
+      //nsole.log("API Response:", response.data);
 
       if (response.data.items) {
         setFiles(response.data.items);
@@ -114,7 +114,7 @@ export default function FileAssetButton({ courseId, lessonId }) {
                 <Nav.Link eventKey="subir">Subir archivo</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="existentes">Archivos existentes</Nav.Link>
+                <Nav.Link eventKey="existentes">Archivos existentes  ({files.length})</Nav.Link>
               </Nav.Item>
             </Nav>
             <Tab.Content>
