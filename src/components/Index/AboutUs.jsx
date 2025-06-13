@@ -24,10 +24,11 @@ const AboutUs = () => {
 						<div className="about-content">
 							<span className="sub-title">Sobre nosotros</span>
 							<h2>
-							Desarrolle sus habilidades, aprenda algo nuevo y mejore sus habilidades desde cualquier parte del mundo.
+							
 							</h2>
 							<p>
-							Entendemos mejor que el aprendizaje en línea puede hacer una significativa diferencia para llegar a estudiantes de todo el mundo. Ofrecer opciones de aprendizaje mejor siempre puede ofrecer los mejores resultados.
+							En Edemy creemos que la educación de calidad debe ser accesible para todos. Nuestra plataforma ofrece cursos completamente gratuitos diseñados por expertos en la industria, permitiendo que cualquier persona pueda desarrollar nuevas habilidades y avanzar en su carrera profesional.
+
 							</p>
 
 							<ul className="features-list">

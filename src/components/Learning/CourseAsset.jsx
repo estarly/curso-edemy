@@ -76,7 +76,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 		assets.assignments.every(asst => inputValues[asst.id] && inputValues[asst.id].toString().trim() !== "");
 
 	const handleContinue = async () => {
-		if (assets?.assignments?.length > 0) {
+		if (assets?.assignments?.length > 0 && !allAnswered) {
 			if (!allAnswered) {
 				Swal.fire("¡No puedes continuar!", "Debes responder todas las preguntas.", "error");
 				return;

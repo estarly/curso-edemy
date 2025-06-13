@@ -24,7 +24,7 @@ export async function POST(req) {
 			where: {
 				userId: currentUser.id,
 				courseId: assignment.asset.courseId,
-				assetId: assignment.assetId,
+				assetId: assignment.asset.id,
 				assignmentId: assignment.id,
 			},
 		});

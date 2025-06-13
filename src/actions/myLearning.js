@@ -18,6 +18,12 @@ export async function myLearning() {
 				course: {
 					include: {
 						user: true,
+						assets: true,
+						enrolments: {
+							select: {
+								id: true,
+							},
+						},
 					},
 				},
 			},
