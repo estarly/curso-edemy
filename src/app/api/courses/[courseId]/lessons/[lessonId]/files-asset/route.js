@@ -163,7 +163,7 @@ export async function POST(request, { params }) {
 
       const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
         fileName: fileName,
-        nextDirectory: 'course-'+courseId+'/asset-'+lessonId
+        nextDirectory: 'course/' + courseId + '/asset/' + lessonId
       });
 
       if (!uploadResult.success) {

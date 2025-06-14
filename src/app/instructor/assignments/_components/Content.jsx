@@ -11,7 +11,6 @@ export const Content = ({items}) => {
   // Cargar los cursos al montar el componente
  useEffect(() => {
     setCourses(items.courses);
-    console.log(courses, "courses");
   }, []);
 
   // Nueva función para consultar estudiantes desde la API

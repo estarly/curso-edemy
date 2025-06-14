@@ -23,6 +23,7 @@ export async function GET(request) {
         id: true,
         name: true,
         email: true,
+        image: true,
         StateCourse: {
           where: {
             courseId: courseId,
@@ -46,86 +47,7 @@ export async function GET(request) {
     });
 
     // Si no hay datos, puedes devolver una respuesta estática de ejemplo
-    const result = estudiantes.length
-      ? estudiantes
-      : [
-          {
-            id: 1,
-            name: "Juan Pérez",
-            email: "juan@email.com",
-            StateCourse: [
-              {
-                id: 10,
-                state: 1,
-                assignmentresults: [
-                  {
-                    id: 100,
-                    response: { respuesta: "Ejemplo de respuesta" },
-                    complete: 1,
-                    created_at: new Date(),
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 2,
-            name: "María García",
-            email: "maria@email.com",
-            StateCourse: [
-              {
-                id: 11,
-                state: 1,
-                assignmentresults: [
-                  {
-                    id: 101,
-                    response: { respuesta: "Respuesta de María" },
-                    complete: 1,
-                    created_at: new Date(),
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 3,
-            name: "Carlos López",
-            email: "carlos@email.com",
-            StateCourse: [
-              {
-                id: 12,
-                state: 0,
-                assignmentresults: [
-                  {
-                    id: 102,
-                    response: { respuesta: "Respuesta de Carlos" },
-                    complete: 0,
-                    created_at: new Date(),
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 4,
-            name: "Ana Torres",
-            email: "ana@email.com",
-            StateCourse: [
-              {
-                id: 13,
-                state: 1,
-                assignmentresults: [
-                  {
-                    id: 103,
-                    response: { respuesta: "Respuesta de Ana" },
-                    complete: 1,
-                    created_at: new Date(),
-                  },
-                ],
-              },
-            ],
-          },
-        ];
+    const result = estudiantes;
 
     return new Response(JSON.stringify({ ok: true, items: result }), { status: 200 });
   } catch (error) {
