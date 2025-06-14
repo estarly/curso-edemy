@@ -86,7 +86,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }));
   };
 
-  // Nuevo: Manejar cambios en las opciones de selección múltiple
+  // Nuevo: Manejar cambios en las opciones de selección simple
   const handleOptionChange = (idx, value) => {
     setFormData((prev) => {
       const newOptions = [...prev.options];
@@ -124,7 +124,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }
   };
 
-  // Nuevo: Manejar selección múltiple de respuestas correctas
+  // Nuevo: Manejar selección simple de respuestas correctas
   const handleCorrectOptionsChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
@@ -178,7 +178,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
             </Form.Group>
           </>
         );
-      case "Selección múltiple":
+      case "Selección simple":
         return (
           <>
             <Form.Group className="mb-2">
@@ -313,7 +313,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
       opciones: (selected.id === 1 || selected.id === 2) ? formData.options : [],
       respuesta: selected.name === "Verdadero o Falso"
         ? formData.correctOption
-        : selected.name === "Selección múltiple"
+        : selected.name === "Selección simple"
         ? formData.correctOptions
         : formData.correctAnswer,
     };
@@ -458,7 +458,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                             (["Verdadero o Falso"].includes(
                               assignmentsTypes.find((a) => a.id === selectedTypeId)?.name
                             ) && !formData.correctOption) ||
-                            (assignmentsTypes.find((a) => a.id === selectedTypeId)?.name === "Selección múltiple" &&
+                            (assignmentsTypes.find((a) => a.id === selectedTypeId)?.name === "Selección simple" &&
                               (formData.options.length < 3 ||
                                 formData.options.some(opt => !opt) ||
                                 formData.correctOptions.length === 0)
@@ -485,7 +485,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                               <span>
                                 <strong>
                                   {p.assignmentTypeId === 1 && "Verdadero o Falso"}
-                                  {p.assignmentTypeId === 2 && "Selección múltiple"}
+                                  {p.assignmentTypeId === 2 && "Selección simple"}
                                   {p.assignmentTypeId === 3 && "Completar"}
                                 </strong>
                                 : {p.title}{". "}
@@ -496,7 +496,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                                     ? " (" + p.config_assignment.correct_options.join(", ") + ")" // Verdadero o Falso
                                     : ""}
                                   {p.assignmentTypeId === 2 && Array.isArray(p.config_assignment?.correct_options)
-                                    ? " (" + p.config_assignment.correct_options.join(", ") + ")"  // Selección múltiple
+                                    ? " (" + p.config_assignment.correct_options.join(", ") + ")"  // Selección simple
                                     : ""}
                                   {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer} {/* Completar */}
                                   

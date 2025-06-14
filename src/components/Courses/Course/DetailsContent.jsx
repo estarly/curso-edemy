@@ -9,7 +9,15 @@ import Reviews from "./Reviews";
 import Description from "./Description";
 import CoursesDetailsSidebar from "./CoursesDetailsSidebar";
 
-const DetailsContent = ({ currentUser, course }) => {
+const DetailsContent = ({ currentUser, course, totalCourses = 55555 }) => {
+	
+	let banner = '/images/courses/10.webp';
+	if(totalCourses > 2 && totalCourses <= 3){
+		banner = '/images/courses/50.webp';
+	}
+	else if(totalCourses > 3 && totalCourses <= 5){
+		banner = '/images/courses/100.webp';
+	}
 	
 	return (
 		<div className="courses-details-area pb-100">	
@@ -19,7 +27,7 @@ const DetailsContent = ({ currentUser, course }) => {
 					position: "relative",
 					width: "100%",
 					minHeight: "320px",
-					backgroundImage: `url('/images/courses/course-details.jpg')`,
+					backgroundImage: `url(${banner})`,
 					backgroundSize: "cover",
 					backgroundPosition: "center",
 					borderRadius: "8px",
@@ -28,7 +36,7 @@ const DetailsContent = ({ currentUser, course }) => {
 					alignItems: "center",
 					justifyContent: "center"
 				}}
-			>
+			> {totalCourses}
 
 				<div
 					style={{

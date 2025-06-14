@@ -78,9 +78,9 @@ export async function getCategories() {
 	const categories = await prisma.category.findMany({
 		where: {
 			status: 1,
-			/*courses: {
+			courses: {
 				some: {},
-			},*/
+			},
 		},
 		orderBy: {
 			name: 'asc',
@@ -113,4 +113,11 @@ export async function getHomepageCourses() {
 		console.error("Error fetching counts:", error);
 		return { courses: [] };
 	}
+}
+
+export async function getTotalCourses() {
+	const totalCourses = await prisma.course.count({
+		where: { status: "Approved" },
+	});
+	return totalCourses;
 }

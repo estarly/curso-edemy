@@ -157,7 +157,7 @@ const CreateAssignment = ({ assignmentTypes, params }) => {
             <div className="row mt-3">
               <div className="col-12 mt-3">
                 <p className="text-info">
-                  Tipo de pregunta: Selección múltiple. Después de crear la tarea, podrás agregar las preguntas desde la sección de edición.
+                  Tipo de pregunta: Selección Simple. Después de crear la tarea, podrás agregar las preguntas desde la sección de edición.
                 </p>
               </div>
             </div>
@@ -176,7 +176,7 @@ const CreateAssignment = ({ assignmentTypes, params }) => {
           <button type="submit" className="default-btn mt-4">
             <i className="flaticon-right-arrow"></i>
             {assignmentType?.id === 1 && "Crear Pregunta de Verdadero/Falso"}
-            {assignmentType?.id === 2 && "Crear Pregunta de Selección Múltiple"}
+            {assignmentType?.id === 2 && "Crear Pregunta de Selección Simple"}
             {assignmentType?.id === 3 && "Crear Pregunta de Completar"}
             {!assignmentType && "Guardar"}
             <span></span>

@@ -19,12 +19,12 @@ const Curriculum = ({ assets }) => {
 									{asst.title}. <br />
 									<span className="text-muted">Asignaturas: {asst.assignments.length}</span>
 								</span>
-									<div className="courses-meta">
-										<span className="status locked">
-											{/*<i className="flaticon-password"></i>*/}
-											<FaEyeSlash />
-										</span>
-									</div>
+								<div className="courses-meta">
+									<span className="status locked">
+										{/*<i className="flaticon-password"></i>*/}
+										<FaEyeSlash />
+									</span>
+								</div>
 								
 							</a>
 						</li>

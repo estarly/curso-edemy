@@ -3,13 +3,16 @@ import prisma from "@libs/prismadb";
 export async function getTopCategories() {
 
 	try {
-		let arrayCategories = [1,2,3,4,5,6,7,15];
+		let arrayCategories = [1,2,3,4,5,6,7,8];
 		const categories = await prisma.category.findMany({
 			where: {
 				id: {
 					in: arrayCategories
 				},
-				status: 1
+				status: 1,
+				courses: {
+					some: {},
+				},
 			},
 			include: {
 				courses: {

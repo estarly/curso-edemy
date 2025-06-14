@@ -17,7 +17,7 @@ const CourseCard = ({
 	user,
 	assets = [],
 	enrolments = [],
-	progress,
+	progress = 1,
 	grid = "col-md-6 col-lg-4",
 	currentUser,
 	showHeartButton = true,
@@ -70,16 +70,21 @@ const CourseCard = ({
 							<span><strong>{user.name} </strong><br /> {user.designation}</span>
 						</div>
 						<div className="ms-auto">
-							{progress === 2 && (
-								<div>
-									<span className="badge bg-success text-white small">Completado</span>
-								</div>
+							{currentUser && (
+								<>
+									{progress === 2 && (
+										<div>
+											<span className="badge bg-success text-white small">Completado</span>
+										</div>
+									)}
+									{progress === 1 && (
+										<div>
+											<span className="badge bg-warning text-dark small">En progreso</span>
+										</div>
+									)}
+								</>
 							)}
-							{progress === 1 && (
-								<div>
-									<span className="badge bg-warning text-dark small">En progreso</span>
-								</div>
-							)}
+
 						</div>
 					</div>
 

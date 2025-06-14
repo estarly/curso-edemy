@@ -133,7 +133,7 @@ const CoursesDetailsSidebar = ({
 
 	return (
 		<>
-			<div className="courses-details-info" style={{ marginTop: "-150px" }}>
+			<div className="courses-details-info">
 				<div className="image">
 					<img src={image} alt="image" />
 				</div>
