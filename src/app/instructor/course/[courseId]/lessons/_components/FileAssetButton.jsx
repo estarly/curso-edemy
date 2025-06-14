@@ -11,6 +11,7 @@ export default function FileAssetButton({ courseId, lessonId }) {
   const [show, setShow] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [clearFileStatus, setClearFileStatus] = useState(false);
   const [activeTab, setActiveTab] = useState("subir");
   const [files, setFiles] = useState([]);
 
@@ -70,17 +71,18 @@ export default function FileAssetButton({ courseId, lessonId }) {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      toast.success(response.data.message || "Archivo subido exitosamente");
-      setSelectedFile(null);
+      
+      toast.success("Archivo subido exitosamente");
+      setClearFileStatus(true);
+      setIsLoading(false);
       await fetchFiles();
-      setActiveTab("existentes");
+      setClearFileStatus(false);
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || "¡Algo salió mal!");
-    } finally {
       setIsLoading(false);
-    }
+      toast.error(error.response?.data?.message || "¡Algo salió mal!");
+    } 
+    
   };
 
   const handleShow = async () => {
@@ -125,6 +127,7 @@ export default function FileAssetButton({ courseId, lessonId }) {
                       assetType={3}
                       onFileSelect={setSelectedFile}
                       isLoading={isLoading}
+                      clearFile={clearFileStatus}
                     />
                     <div className="mt-3 d-flex justify-content-end">
                       <Button
@@ -139,8 +142,7 @@ export default function FileAssetButton({ courseId, lessonId }) {
                           </>
                         ) : (
                           <>
-                            <i className="bx bx-upload"></i>
-                            Subir archivo
+                            <i className="bx bx-upload"></i>{" "}Subir archivo
                           </>
                         )}
                       </Button>
@@ -153,9 +155,9 @@ export default function FileAssetButton({ courseId, lessonId }) {
                   <div className="col-md-12">
                     {files.length > 0 ? (
                       <ul className="list-group">
-                        {files.map((file) => (
+                        {files.map((file, index) => (
                           <li key={file.id} className="list-group-item d-flex justify-content-between align-items-center">
-                            <span>Archivo {file.id}</span>
+                            <span>{index + 1}{ ') '} {file.url.split('/').pop().split('-').slice(0, -1).join('-')}</span>
                             <div className="d-flex gap-2">
                               <a
                                 href={file.url}

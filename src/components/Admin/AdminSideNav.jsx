@@ -61,7 +61,7 @@ const AdminSideNav = ({ isAdmin }) => {
 							</li>
 
 							<li>
-								<Link href="/admin/students" className={`${pathname === "/admin/students" ? "active" : ""}`}>Estudiantes</Link>
+								<Link href="/admin/students" className={`${pathname === "/admin/students" || pathname === "/admin/students/assign-module" ? "active" : ""}`}>Estudiantes</Link>
 							</li>
 							<li>
 								<Link href="/admin/banners" className={`${pathname === "/admin/banners" ? "active" : ""}`}>Banners</Link>

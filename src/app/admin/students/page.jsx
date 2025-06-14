@@ -21,7 +21,7 @@ const Page = async ({}) => {
 							<div className="main-content-box">
 								<ul className="nav-style1">
 									<li>
-										<Link href="/admin/students">
+										<Link href="/admin/students" className="active">
 											Estudiantes
 										</Link>
 									</li>

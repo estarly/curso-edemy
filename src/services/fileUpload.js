@@ -18,15 +18,18 @@ export class FileUploadService {
       throw new Error('El archivo debe ser una imagen, un audio, un video o un documento');
     }
 
-    let path;
+    let path = 'upload_course/';
+    if(options.nextDirectory){
+      path = path + options.nextDirectory + '/';
+    }
     if (file.mimetype.startsWith('image/')) {
-      path = 'images';
+      path = path + 'images';
     } else if (file.mimetype.startsWith('audio/')) {
-      path = 'audios';
+      path = path + 'audios';
     } else if (file.mimetype.startsWith('video/')) {
-      path = 'videos';
+      path = path + 'videos';
     } else if (file.mimetype.startsWith('application/') || file.mimetype.startsWith('text/')) {
-      path = 'documents';
+      path = path + 'documents';
     }
 
     const fileOptions = { path, ...options };

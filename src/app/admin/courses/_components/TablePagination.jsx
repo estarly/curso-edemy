@@ -109,14 +109,14 @@ export default function TablePagination({ categories }) {
                                 <tr key={course.id}>
                                     <td>{course.id}</td>
                                     <td>
-                                        <Link href={`/course/${course.slug}/${course.id}`}>
+                                        <Link href={`/course/${course.slug}/${course.id}`} target="_blank">
                                             <strong>{course.title}</strong>
                                         </Link>
                                         <br />
                                         <span className="text-muted" dangerouslySetInnerHTML={{ __html: course.description }}></span>
                                     </td>
                                     <td>
-                                        {course.category?.name}
+                                    {course.category?.id} - {course.category?.name}
                                     </td>
                                     <td>
                                         {course.user?.name}

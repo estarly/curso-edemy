@@ -16,7 +16,6 @@ const Page = async () => {
 	
 	const { items: categories } = await getCategoriesStatus();
 	
-	console.log(categories);
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
 	return (

@@ -8,6 +8,7 @@ import { BannerModal } from "./BannerModal";
 import { BannersTable } from "./BannersTable";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
+import Link from "next/link";
 
 export const ContentPage = ({ items, isAdmin }) => {
   const router = useRouter();
@@ -109,9 +110,17 @@ export const ContentPage = ({ items, isAdmin }) => {
 
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
-                
+
                 <div className="d-flex justify-content-between mb-3 nav-style1 p-1">
-                  <h4>Banners</h4>
+                  <li>
+                    <Link
+                      href="/admin/banners"
+                      className="active"
+                    >
+                      Banners
+                    </Link>
+                  </li>
+
                   <button
                     className="btn btn-success btn-sm"
                     onClick={handleAddClick}

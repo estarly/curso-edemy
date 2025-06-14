@@ -155,15 +155,15 @@ export async function POST(request, { params }) {
       );
     }
 
-    const nombreOriginal = uploadedFile.originalname;
-    console.log('Nombre original:', nombreOriginal);
+    const nombreOriginal = uploadedFile.originalname.replace(/\s+/g, "-").replace(/\.[^.]*$/, "");
 
     try {
       const timestamp = new Date().getTime();
-      const fileName = `asset-${lessonId}-file-${timestamp}`;
+      const fileName = `${nombreOriginal}-${timestamp}`;
 
       const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-        fileName: fileName
+        fileName: fileName,
+        nextDirectory: 'course-'+courseId+'/asset-'+lessonId
       });
 
       if (!uploadResult.success) {
@@ -176,7 +176,6 @@ export async function POST(request, { params }) {
           assetId: parseInt(lessonId)
         }
       });
-      console.log('filesAsset', filesAsset)
 
       return NextResponse.json(
         {

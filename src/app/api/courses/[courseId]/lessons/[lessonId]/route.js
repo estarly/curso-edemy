@@ -120,11 +120,12 @@ export async function PUT(request, { params }) {
 
         if (hasUploadedFileForVideo) {
           try {
+            const nombreOriginal = uploadedFile.originalname.replace(/\s+/g, "-").replace(/\.[^.]*$/, "");
             const timestamp = new Date().getTime();
-            const fileName = `video-${courseId}-${timestamp}`;
-
+            const fileName = `${nombreOriginal}-default-${timestamp}`;
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-              fileName: fileName
+              fileName: fileName,
+              nextDirectory: 'course-' + courseId + '/asset-' + lessonId
             });
 
             if (!uploadResult.success) {
@@ -171,11 +172,12 @@ export async function PUT(request, { params }) {
 
         if (hasUploadedFile) {
           try {
+            const nombreOriginal = uploadedFile.originalname.replace(/\s+/g, "-").replace(/\.[^.]*$/, "");
             const timestamp = new Date().getTime();
-            const fileName = `audio-${courseId}-${timestamp}`;
-
+            const fileName = `${nombreOriginal}-default-${timestamp}`;
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-              fileName: fileName
+              fileName: fileName,
+              nextDirectory: 'course-' + courseId + '/asset-' + lessonId
             });
 
             if (!uploadResult.success) {
@@ -222,11 +224,12 @@ export async function PUT(request, { params }) {
 
         if (hasUploadedFileForDocument) {
           try {
+            const nombreOriginal = uploadedFile.originalname.replace(/\s+/g, "-").replace(/\.[^.]*$/, "");
             const timestamp = new Date().getTime();
-            const fileName = `document-${courseId}-${timestamp}`;
-
+            const fileName = `${nombreOriginal}-default-${timestamp}`;
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-              fileName: fileName
+              fileName: fileName,
+              nextDirectory: 'course-' + courseId + '/asset-' + lessonId
             });
 
             if (!uploadResult.success) {

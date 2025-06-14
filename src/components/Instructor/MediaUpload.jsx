@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetType }) => {
+const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetType, clearFile=false }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const isLoading = externalLoading;
 
@@ -26,6 +26,13 @@ const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetTy
     toast.success("Archivo eliminado");
   };
 
+  useEffect(() => {
+    if (clearFile) {
+      setSelectedFile(null);
+      onFileSelect(null)
+    }
+  }, [clearFile]);
+    
   return (
     <div className="media-upload-container">
       <div className="row">
