@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authHandler } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "../../libs/prismadb";
+import prisma from "@libs/prismadb";
+
 
 export async function getCurrentSession() {
 	return await getServerSession(authHandler);
@@ -44,8 +45,8 @@ export async function validateDataUser() {
 		// Obtenemos la sesión para identificar al usuario actual
 		const session = await getCurrentSession();
 		
-		if (!session?.user?.email) {
-			return false; // No hay usuario autenticado, consideramos que falta información
+		if (!session || !session?.user?.email) {
+			return true; // No hay usuario autenticado, consideramos que falta información
 		}
 		
 		// Consultamos directamente las tablas de usuario y perfil
@@ -66,7 +67,7 @@ export async function validateDataUser() {
 		// Validar campos principales del usuario
 		const requiredUserFields = [
 			'name',          // Nombre del usuario
-			'image',          // Foto de perfil
+			//'image',          // Foto de perfil
 			'designation'
 		];
 		
@@ -75,13 +76,13 @@ export async function validateDataUser() {
 			'bio',            // Biografía
 			'countryId',      // País
 			'address',        // Dirección
-			'phone',          // Teléfono
+			//'phone',          // Teléfono
 			'whatsapp'        // WhatsApp
 		];
 		
 		// Verificar campos del usuario principal
 		for (const field of requiredUserFields) {
-			if (!userData[field] || userData[field].trim() === '') {
+			if (!userData[field] || userData[field].toString().trim() === '') {
 				console.log(`User incompleto: Falta campo ${field}`);
 				return true; // Falta este campo
 			}
@@ -104,7 +105,19 @@ export async function validateDataUser() {
 		// Si llegamos aquí, todos los campos necesarios están completos
 		return false;
 	} catch (error) {
-		console.error('Error al validar datos del usuario:', error);
-		return false; // En caso de error, consideramos que falta información
+		console.error('Error al validar datos del usuario:', error.message);
+		return true; // En caso de error, consideramos que falta información
+	}
+}
+
+export async function getCountries() {
+	try {
+		const response = await fetch('https://api.example.com/countries');
+		if (!response.ok) throw new Error('No se pudo obtener la lista de países');
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error('Error obteniendo países:', error.message);
+		return [];
 	}
 }

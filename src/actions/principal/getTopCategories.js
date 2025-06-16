@@ -1,18 +1,24 @@
-import prisma from "../../../libs/prismadb";
+import prisma from "@libs/prismadb";
 
 export async function getTopCategories() {
 
 	try {
+		let arrayCategories = [1,2,3,4,5,6,7,8];
 		const categories = await prisma.category.findMany({
-			where:{
-                status:1
-            },
-            orderBy: {
-				name: 'asc',
+			where: {
+				id: {
+					in: arrayCategories
+				},
+				status: 1,
+				courses: {
+					some: {},
+				},
 			},
-            take: 8,
 			include: {
 				courses: {
+					where: {
+						hide: false,
+					},
 					select: {
 						id: true,
 					}
@@ -25,7 +31,12 @@ export async function getTopCategories() {
 			courseCount: category.courses.length
 		}));
 
-		return categoriesWithCourseCount;
+		// Reordenar según arrayCategories
+		const orderedCategories = arrayCategories
+			.map(id => categoriesWithCourseCount.find(cat => cat.id === id))
+			.filter(Boolean); // Elimina posibles undefined si falta alguna categoría
+
+		return orderedCategories;
 	} catch (error) {
 		console.error("Error fetching categories:", error);
 		return [];

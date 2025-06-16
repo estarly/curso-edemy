@@ -14,7 +14,7 @@ const UserMenu = ({ currentUser }) => {
 	//console.log(currentUser,'UserMenu');
 	//console.log(currentUser.role, currentUser.is_instructor,'UserMenu');
 	const dummyImage =
-		"/images/landing/profile/profile.png";
+		"/images/landing/profile/profile01.png";
 
 	return (
 		<>
@@ -33,11 +33,11 @@ const UserMenu = ({ currentUser }) => {
 							<div className="img ptb-15">
 								<Image
 									src={
-										currentUser.image
-											? currentUser.image
+										currentUser?.image && currentUser.image !== "" 
+											? currentUser.image 
 											: dummyImage
 									}
-									alt="Admin"
+									alt={currentUser.role}
 									width={35}
 									height={35}
 								/>
@@ -53,11 +53,11 @@ const UserMenu = ({ currentUser }) => {
 											<div className="img">
 												<Image
 													src={
-														currentUser.image
-															? currentUser.image
+														currentUser?.image && currentUser.image !== "" 
+															? currentUser.image 
 															: dummyImage
 													}
-													alt="Admin"
+													alt={currentUser.role}
 													width={35}
 													height={35}
 												/>

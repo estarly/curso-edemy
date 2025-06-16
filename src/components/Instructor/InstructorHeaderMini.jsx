@@ -17,7 +17,7 @@ const InstructorHeaderMini = () => {
                     className="default-btn"
                     href="/instructor/course/create/"
                   >
-                    <i className="flaticon-user"></i> Crear Curso{" "}
+                    <i className="bx bx-video-plus me-2"></i> Crear Curso{" "}
                     <span></span>
                   </Link>
                 </div>

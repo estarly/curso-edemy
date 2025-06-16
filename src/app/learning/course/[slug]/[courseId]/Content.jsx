@@ -48,12 +48,12 @@ const Content = ({
 				>
 					Lecciones y Evaluación
 				</li>
-				<li
+				{/*<li
 					onClick={() => handleTabClick(2)}
 					className={`${activeTabLocal === 2 ? "active" : ""}`}
 				>
 					Reseñas
-				</li>
+				</li>*/}
 			</ul>
 
 			<div>
@@ -66,7 +66,7 @@ const Content = ({
 					</>
 				)}
 				{activeTabLocal === 1 && <CourseAsset assets={assets} onContinue={onContinue} />}
-				{activeTabLocal === 2 && <CourseRating reviews={reviews} />}
+				{/*{activeTabLocal === 2 && <CourseRating reviews={reviews} />}*/}
 			</div>
 		</>
 	);

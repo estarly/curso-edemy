@@ -40,7 +40,7 @@ const types = [
 
 ];
 
-const AssetSelect = ({ label, value, onChange }) => {
+const AssetSelect = ({ label, value, disabled, onChange }) => {
 	const [selectedOption, setSelectedOption] = useState(null);
 	useEffect(() => {
 		let selected = types.find(
@@ -58,6 +58,7 @@ const AssetSelect = ({ label, value, onChange }) => {
 				required
 				isClearable
 				isSearchable={true}
+        isDisabled={disabled}
 				options={types}
 				value={selectedOption}
 				onChange={(value) => onChange(value)}

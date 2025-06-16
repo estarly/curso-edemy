@@ -1,65 +1,112 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Player from "@/components/Learning/Player";
+import React, { useEffect, useState, useRef } from "react";
 import Content from "./Content";
-import MixedFiles from "@/components/Learning/MixedFiles";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const MainContent = ({ course }) => {
+	const router = useRouter();
 	const [myAsset, setMyAsset] = useState(course.assets[0]);
 	const [reviews, setReviews] = useState(course.reviews);
 	const [assetIndex, setAssetIndex] = useState(0);
 	const [activeTab, setActiveTab] = useState(1);
 	const [assetConsult, setAssetConsult] = useState(null);
 	const [hasRedirectedToPending, setHasRedirectedToPending] = useState(false);
+	const [isManualSelection, setIsManualSelection] = useState(false);
 	
+	const isFirstLoad = useRef(true);
+	const isFetching = useRef(false);
+
 	useEffect(() => {
-		if (myAsset.id) {
-			console.log(myAsset.id, "myAsset");
-			fetch("/api/stateCourse/registerInit", {
-				method: "POST",
-				body: JSON.stringify({ myAsset, courseId: course.id }),
-			})
-				.then(res => res.json())
-				.then(data => {
-					if (data.ok) {
-						if (data.items && data.items.pendiente && data.items.assetPendiente) {
-							// Solo redirigir si no hemos redirigido antes
-							if (myAsset.id !== data.items.assetPendiente && !hasRedirectedToPending) {
-								const assetPendiente = course.assets.find(asset => asset.id === data.items.assetPendiente);
-								if (assetPendiente) {
-									toast.error(data.items.message, {
-										position: "top-right",
-									});
+		const fetchWithDelay = () => {
+			if (isFetching.current) return; // No hacer nada si ya hay una petición en curso
+			isFetching.current = true;
+
+			const delay = isFirstLoad.current ? 2000 : 1000;
+
+			setTimeout(() => {
+				fetch("/api/stateCourse/registerInit", {
+					method: "POST",
+					body: JSON.stringify({ myAsset, courseId: course.id }),
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.ok) {
+							if (data.items && data.items.pendiente && data.items.assetPendiente) {
+								if (myAsset.id !== data.items.assetPendiente && !hasRedirectedToPending && !isManualSelection) {
+									const assetPendiente = course.assets.find(asset => asset.id === data.items.assetPendiente);
+									if (assetPendiente) {
+										toast.error(data.items.message, {
+											position: "top-right",
+										});
+										setTimeout(() => {
+											const pendienteIndex = course.assets.findIndex(asset => asset.id === assetPendiente.id);
+											setMyAsset(assetPendiente);
+											setAssetIndex(pendienteIndex);
+											setActiveTab(1);
+											setHasRedirectedToPending(true);
+										}, 1000);
+									}
+								}
+							} else {
+								// Buscar la primera lección pendiente
+								let firstPendingIndex = -1;
+								for (let i = 0; i < course.assets.length; i++) {
+									const asset = course.assets[i];
+									// Si no tiene asignaciones, revisa si tiene statecourse y si está completado
+									if (!asset.assignments || asset.assignments.length === 0) {
+										// Si no hay statecourse o su state !== 1, está pendiente
+										if (!asset.statecourse || asset.statecourse.length === 0 || asset.statecourse[0].state !== 1) {
+											firstPendingIndex = i;
+											break;
+										}
+									} else {
+										// Si tiene asignaciones, todas deben estar completadas
+										const allAssignmentsCompleted = asset.assignments.every(asst =>
+											asst.statecourse && asst.statecourse.length > 0 && asst.statecourse[0].state === 1
+										);
+										if (!allAssignmentsCompleted) {
+											firstPendingIndex = i;
+											break;
+										}
+									}
+								}
+								if (firstPendingIndex !== -1 && !hasRedirectedToPending && !isManualSelection) {
+									console.log("Redirigiendo a la primera lección pendiente:", course.assets[firstPendingIndex]);
 									setTimeout(() => {
-										const pendienteIndex = course.assets.findIndex(asset => asset.id === assetPendiente.id);
-										setMyAsset(assetPendiente);
-										setAssetIndex(pendienteIndex);
+										setMyAsset(course.assets[firstPendingIndex]);
+										setAssetIndex(firstPendingIndex);
 										setActiveTab(1);
-										setHasRedirectedToPending(true); // Marcamos que ya redirigimos
+										setHasRedirectedToPending(true);
 									}, 1000);
+								} else {
+									// Si todas están completas, dejar la última o mostrar mensaje
+									if (!hasRedirectedToPending && !isManualSelection) {
+										console.log("Todas las lecciones están completas. Mostrando la última.");
+										setTimeout(() => {
+											setMyAsset(course.assets[course.assets.length - 1]);
+											setAssetIndex(course.assets.length - 1);
+											setActiveTab(1);
+										}, 1000);
+									}
 								}
 							}
-							// Si ya estamos en la lección pendiente o ya redirigimos, NO hacer nada
 						} else {
-							// Si NO hay lección pendiente, pasar a la siguiente lección si existe
-							const currentIndex = course.assets.findIndex(asset => asset.id === myAsset.id);
-							const nextIndex = currentIndex + 1;
-							if (nextIndex < course.assets.length && !hasRedirectedToPending) {
-								setTimeout(() => {
-									setMyAsset(course.assets[nextIndex]);
-									setAssetIndex(nextIndex);
-									setActiveTab(1);
-								}, 1000);
-							}
-							// Si ya redirigimos, no hacer nada
+							toast.error(data.error);
 						}
-					} else {
-						toast.error(data.error);
-					}
-				});
+					})
+					.finally(() => {
+						isFetching.current = false;
+						isFirstLoad.current = false; // Ya no es la primera vez
+					});
+			}, delay);
+		};
+
+		if (myAsset.id) {
+			fetchWithDelay();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [myAsset.id]);
 	
 	//crear una funcion para buscar el asset
@@ -71,15 +118,16 @@ const MainContent = ({ course }) => {
 			body: JSON.stringify({ assetId: assetId.id }),
 		});
 		let asset = await response.json();
-		console.log(asset, "assetConsult");
 		setMyAsset(asset);
 		return asset;
 	};
 
 	const setMyAssetFunction = async (asset) => {
-		//llamar a la funcion para buscar el asset
+		setIsManualSelection(true); // Marcar como selección manual
 		await findAssetConsult(asset);
-		console.log(assetConsult);
+		setTimeout(() => {
+			setIsManualSelection(false); // Volver a automático después de un pequeño delay
+		}, 500);
 		/*
 		setAssetIndex(1);
 		setMyAsset(assetConsult);
@@ -87,8 +135,9 @@ const MainContent = ({ course }) => {
 		*/
 	};
 
-	const handleContinueFromChild = (assetIdContinue) => {
+	const handleContinueFromChild = (assetIdContinue, answer) => {
 		console.log("Valor recibido desde el hijo:", assetIdContinue);
+		console.log("Valor recibido desde el hijo:", answer);
 
 		// Buscar el índice del asset actual
 		const currentIndex = course.assets.findIndex(asset => asset.id === assetIdContinue);
@@ -101,7 +150,22 @@ const MainContent = ({ course }) => {
 			findAssetConsult(nextAsset);
 		} else {
 			// Si no hay siguiente asset, puedes mostrar un mensaje o finalizar el curso
-			toast.success("¡Has terminado todas las lecciones!");
+			if(answer === "no_assignments"){
+				
+				fetch("/api/stateCourse/completeAsset", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ assetId: assetIdContinue, courseId: course.id, answer: answer }),
+				}).then(res => res.json()).then(data => {
+					if(data.ok){
+						toast.success("¡Has terminado todas las lecciones!");
+						//redirigir a la pagina de cursos
+						router.push("/learning/my-courses");
+					}else{
+						toast.error("No se pudo completar la lección.");
+					}
+				});
+			}
 		}
 	};
 
@@ -109,8 +173,6 @@ const MainContent = ({ course }) => {
 		<div className="row">
 			<div className="col-lg-9 col-md-8">
 				<div className="video-content">
-					{<MixedFiles assetFile={myAsset} />}
-					<br />
 					<Content
 						{...course}
 						indexAsset={assetIndex}
@@ -138,16 +200,22 @@ const MainContent = ({ course }) => {
 									style={{ cursor: "pointer" }}
 								>
 									{(index+1)} - {asset.title} 
-									<span className="d-block text-muted fs-13 mt-1">
-										<i className={`bx ${asset.assetTypeId === 1 ? 'bx-play-circle' : asset.assetTypeId === 2 ? 'bx-file' : 'bx-link'}`}></i>{" "}
-										
-										{asset.assetType.name}
-									</span>
-									{asset.assignments.length > 0 && (
+									<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
 										<span className="d-block text-muted fs-13 mt-1">
-											<i className="bx bx-file"></i> Assignments
+											<i className={`bx ${asset.assetTypeId === 1 ? 'bx-play-circle' : asset.assetTypeId === 2 ? 'bx-play' : 'bx-link'}`}></i>{" "}
+											{asset.assetType.name}
 										</span>
-									)}
+										{asset.assignments.length > 0 && (
+											<span className="d-block text-muted fs-13 mt-1">
+												<i className="bx bx-list-check"></i> Asignaciones
+											</span>
+										)}
+										{asset.files.length > 0 && (
+											<span className="d-block text-muted fs-13 mt-1">
+												<i className="bx bx-file"></i> D. Documentos
+											</span>
+										)}
+									</div>
 								</li>
 							))}
 						</ul>

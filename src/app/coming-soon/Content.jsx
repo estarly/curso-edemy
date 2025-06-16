@@ -50,8 +50,8 @@ const Content = () => {
 						<Link href="/" className="logo">
 							<Image
 								src="/images/landing/logo/logo.png"
-								width={104}
-								height={29}
+								width={133}
+								height={36}
 								alt="image"
 							/>
 						</Link>

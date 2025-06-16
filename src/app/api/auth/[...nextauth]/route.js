@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb";
 
 export const authHandler = NextAuth({
 	adapter: PrismaAdapter(prisma),
@@ -25,7 +25,7 @@ export const authHandler = NextAuth({
 				password: { label: "password", type: "password" },
 			},
 			async authorize(credentials) {
-				console.log('credentials', credentials);
+				//console.log('credentials', credentials);
 				if (!credentials?.email || !credentials?.password) {
 					throw new Error("Invalid credentials");
 				}

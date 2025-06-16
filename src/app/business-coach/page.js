@@ -1,4 +1,4 @@
-import AboutMe from "@/components/BusinessCoach/AboutMe";
+/*import AboutMe from "@/components/BusinessCoach/AboutMe";
 import Banner from "@/components/BusinessCoach/Banner";
 import CoachingTypes from "@/components/BusinessCoach/CoachingTypes";
 import Features from "@/components/BusinessCoach/Features";
@@ -27,6 +27,12 @@ const page = async () => {
 			<NewsletterForm />
 		</>
 	);
+};
+
+export default page;
+*/
+const page = () => {
+	return <div>Página en mantenimiento</div>;
 };
 
 export default page;

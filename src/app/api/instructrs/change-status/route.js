@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb";  
 
 // Mapeo de status string a número
 const statusMap = {

@@ -5,7 +5,7 @@ import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-	title: "Cursos | eDemy",
+	title: "Cursos | Pilar - Fundamento de Fe y Conocimiento",
 };
 
 const page = async ({ searchParams }) => {

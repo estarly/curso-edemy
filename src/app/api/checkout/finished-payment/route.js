@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { NextResponse, NextRequest } from "next/server";
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb";	
 
 export async function DELETE(request) {
 	const { payment_id } = await request.json();

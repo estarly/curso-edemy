@@ -1,5 +1,5 @@
 import { getCurrentUser } from "./getCurrentUser";
-import prisma from "../../libs/prismadb";
+import prisma from "@libs/prismadb"; 
 
 export async function getOrCreateStateCourse({ courseId, assetId, assignmentId = null }) {
 	const currentUser = await getCurrentUser();

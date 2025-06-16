@@ -12,22 +12,27 @@ import Partner from "@/components/Shared/Partner";
 import SubscribeForm from "@/components/Shared/SubscribeForm";
 
 const page = () => {
-	return (
-		<>
-			<Banner />
-			<CoursesArea />
-			<Features />
-			<AboutArea />
-			<FeedbackSlider />
-			<TopCategories />
-			<FunFactsTwo />
-			<CourseAdvisor />
-			<PremiumAccess />
-			<LatestNews />
-			<SubscribeForm />
-			<Partner />
-		</>
-	);
+	try {
+		return (
+			<>	
+				<Banner />
+				<CoursesArea />
+				<Features />
+				<AboutArea />
+				<FeedbackSlider />
+				<TopCategories categories={[]}/>
+				<FunFactsTwo />
+				<CourseAdvisor />
+				<PremiumAccess />
+				<LatestNews />
+				<SubscribeForm />
+				<Partner />
+			</>
+		);
+	} catch (error) {
+		console.error("Error en /online-training-school/page:", error);
+		return <div>Ocurrió un error al cargar la página.</div>;
+	}
 };
 
 export default page;

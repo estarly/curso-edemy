@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { redirect } from "next/navigation";	
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb";	
 
 export async function POST(request) {
 	const currentUser = await getCurrentUser();
@@ -26,6 +26,7 @@ export async function POST(request) {
 			where: { id: parseInt(assetId) },
 			include: {
 				assetType: true,
+				files: true,
 				assignments: {
 					include: {
 						statecourse: {

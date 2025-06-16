@@ -11,21 +11,26 @@ import Partner from "@/components/Shared/Partner";
 import SubscribeForm from "@/components/Shared/SubscribeForm";
 
 const page = () => {
-	return (
-		<>
-			<Banner />
-			<FeaturedCourses />
-			<AboutUs />
-			<Courses />
-			<FeedbackSlider />
-			<TopCategories />
-			<FunFactsTwo />
-			<DistanceLearning />
-			<UpcomingEvents />
-			<SubscribeForm mainClsAtts="subscribe-area ptb-100" />
-			<Partner mainClsAtts="partner-area bg-fe4a55 ptb-70" />
-		</>
-	);
+	try {
+		return (
+			<>
+				<Banner />
+				<FeaturedCourses />
+				<AboutUs />
+				<Courses />
+				<FeedbackSlider />
+				<TopCategories categories={[]}/>
+				<FunFactsTwo />
+				<DistanceLearning />
+				<UpcomingEvents />
+				<SubscribeForm mainClsAtts="subscribe-area ptb-100" />
+				<Partner mainClsAtts="partner-area bg-fe4a55 ptb-70" />
+			</>
+		);
+	} catch (error) {
+		console.error("Error en /modern-schooling/page:", error);
+		return <div>Ocurrió un error al cargar la página.</div>;
+	}
 };
 
 export default page;

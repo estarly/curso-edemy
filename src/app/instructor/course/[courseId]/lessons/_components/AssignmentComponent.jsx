@@ -86,7 +86,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }));
   };
 
-  // Nuevo: Manejar cambios en las opciones de selección múltiple
+  // Nuevo: Manejar cambios en las opciones de selección simple
   const handleOptionChange = (idx, value) => {
     setFormData((prev) => {
       const newOptions = [...prev.options];
@@ -124,21 +124,13 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }
   };
 
-  // Nuevo: Manejar selección múltiple de respuestas correctas
+  // Nuevo: Manejar selección simple de respuestas correctas
   const handleCorrectOptionsChange = (e) => {
     const { value, checked } = e.target;
-    setFormData((prev) => {
-      let newCorrectOptions = [...prev.correctOptions];
-      if (checked) {
-        newCorrectOptions.push(value);
-      } else {
-        newCorrectOptions = newCorrectOptions.filter(opt => opt !== value);
-      }
-      return {
-        ...prev,
-        correctOptions: newCorrectOptions,
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      correctOptions: checked ? [value] : [],
+    }));
   };
 
   // Renderizar inputs según el tipo seleccionado
@@ -186,7 +178,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
             </Form.Group>
           </>
         );
-      case "Selección múltiple":
+      case "Selección simple":
         return (
           <>
             <Form.Group className="mb-2">
@@ -249,7 +241,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                 {formData.options.map((opt, idx) => (
                   <Form.Check
                     key={idx}
-                    type="checkbox"
+                    type="radio"
                     label={opt}
                     value={opt}
                     checked={formData.correctOptions.includes(opt)}
@@ -259,6 +251,11 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                 ))}
               </div>
             </Form.Group>
+            <div className="mb-1 text-danger" style={{ fontSize: '0.95em' }}>
+              <strong>Nota:</strong> Maneje 2 modo de uso.<br />
+              Opción 1: Seleccione la opción correcta.<br />
+              Opción 2: Seleccione todas las anteriores
+            </div>
           </>
         );
       case "Completar":
@@ -316,7 +313,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
       opciones: (selected.id === 1 || selected.id === 2) ? formData.options : [],
       respuesta: selected.name === "Verdadero o Falso"
         ? formData.correctOption
-        : selected.name === "Selección múltiple"
+        : selected.name === "Selección simple"
         ? formData.correctOptions
         : formData.correctAnswer,
     };
@@ -397,7 +394,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
   return (
     <>
       <button
-			className="btn btn-info btn-sm" onClick={onOpenModal}>
+			className="btn btn-info btn-sm btn-outline-dark" onClick={onOpenModal}>
         <i className="bx bx-task"></i>
       </button>
 
@@ -461,7 +458,7 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                             (["Verdadero o Falso"].includes(
                               assignmentsTypes.find((a) => a.id === selectedTypeId)?.name
                             ) && !formData.correctOption) ||
-                            (assignmentsTypes.find((a) => a.id === selectedTypeId)?.name === "Selección múltiple" &&
+                            (assignmentsTypes.find((a) => a.id === selectedTypeId)?.name === "Selección simple" &&
                               (formData.options.length < 3 ||
                                 formData.options.some(opt => !opt) ||
                                 formData.correctOptions.length === 0)
@@ -488,27 +485,27 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                               <span>
                                 <strong>
                                   {p.assignmentTypeId === 1 && "Verdadero o Falso"}
-                                  {p.assignmentTypeId === 2 && "Selección múltiple"}
+                                  {p.assignmentTypeId === 2 && "Selección simple"}
                                   {p.assignmentTypeId === 3 && "Completar"}
                                 </strong>
-                                : {p.title}{" "}
+                                : {p.title}{". "}
                                 {/* Respuesta correcta entre paréntesis */}
                                 <span className="text-success">
-                                  (
+                                  
                                   {p.assignmentTypeId === 1 && Array.isArray(p.config_assignment?.correct_options)
-                                    ? p.config_assignment.correct_options.join(", ") // Verdadero o Falso
+                                    ? " (" + p.config_assignment.correct_options.join(", ") + ")" // Verdadero o Falso
                                     : ""}
                                   {p.assignmentTypeId === 2 && Array.isArray(p.config_assignment?.correct_options)
-                                    ? p.config_assignment.correct_options.join(", ") // Selección múltiple
+                                    ? " (" + p.config_assignment.correct_options.join(", ") + ")"  // Selección simple
                                     : ""}
                                   {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer} {/* Completar */}
-                                  )
+                                  
                                 </span>
                                 {/* Mostrar las opciones debajo del título */}
                                 <div className="mt-1">
                                   {(p.assignmentTypeId === 1 || p.assignmentTypeId === 2) && p.config_assignment?.options ? (
                                     <small className="text-muted">
-                                      Opciones: {p.config_assignment.options.join(", ")}
+                                      <strong>Opciones</strong>: {p.config_assignment.options.join(", ")}
                                     </small>
                                   ) : (
                                     <small className="text-muted">(Por revisar)</small>

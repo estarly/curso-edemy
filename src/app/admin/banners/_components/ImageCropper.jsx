@@ -98,7 +98,7 @@ export default function ImageCropper({ imageType, imageSrc, onCropComplete, onCa
           onCropComplete(blob)
           setIsProcessing(false)
         },
-        "image/jpeg",
+        "image/png",
         0.95,
       )
     } catch (e) {

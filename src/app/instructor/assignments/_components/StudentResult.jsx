@@ -38,7 +38,11 @@ export const StudentResult = ({ students = [] }) => {
                       alt={student.name}
                       style={{ width: 40, height: 40, borderRadius: "50%", marginRight: 12 }}
                     />
-                    {student.name}
+                    <div>
+                      {student.name}
+                      <br />
+                      <span className="text-muted">{student.email}</span>
+                    </div>
                   </button>
                 </h2>
                 <div

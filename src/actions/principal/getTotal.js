@@ -1,24 +1,27 @@
-import prisma from "../../../libs/prismadb";
+ import prisma from "@libs/prismadb";
 
 export async function getTotal() {
 
 	try {
-		const [courses, instructors, students, progress] =
+		const [courses, instructors, students] =
 			await Promise.all([
-				prisma.course.count(),
-				prisma.user.count({
-					where: { role: "INSTRUCTOR" },
+				prisma.course.count({
+					where: {
+						status: "Approved"
+					}
 				}),
 				prisma.user.count({
-					where: { role: "USER" },
+					where: { role: "INSTRUCTOR", status: 1 },
 				}),
-				getUniqueEnrolmentsCount()
+				prisma.user.count({
+					where: { role: "USER", status: 1 },
+				}),
 			]);
 
-		return { courses, instructors, students, progress };
+		return { courses, instructors, students };
 	} catch (error) {
 		console.error("Error fetching counts:", error);
-		return { courses: 0, instructors: 0, students: 0, progress: 0 }; 
+		return { courses: 0, instructors: 0, students: 0, }; 
 
 	}
 }

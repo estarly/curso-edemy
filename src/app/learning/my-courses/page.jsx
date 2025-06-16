@@ -10,7 +10,6 @@ const Page = async () => {
 	const result = await myLearning();
 
 	const enrolments = result?.enrolments || [];
-		console.log(enrolments[0],'aaa');
 	const currentUser = await getCurrentUser();
 	const validateUser = await validateDataUser();
 
