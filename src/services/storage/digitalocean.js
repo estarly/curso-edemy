@@ -20,7 +20,7 @@ export class DigitalOceanStorageService extends StorageService {
       path = 'images',
       fileName = `${uuidv4()}-${file.originalname?.replace(/\s/g, '-')}`,
       acl = 'public-read',
-      contentType = file.mimetype
+      contentType = 'image/png'
     } = options;
 
     const fullPath = path ? `${path}/${fileName}` : fileName;

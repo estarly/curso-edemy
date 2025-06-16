@@ -28,7 +28,7 @@ const Footer = () => {
 							</Link>
 
 							<p>
-								Estamos trabajando para traer cambios significativos en el aprendizaje en línea, haciendo una extensa investigación para la preparación del currículo del curso, la participación de los estudiantes y buscando una educación flexible.	
+							Educacion Biblica de Calidad. Fórmate en la Verdad de Cristo, 100% Gratis.
 							</p>
 
 							{/*
@@ -74,38 +74,38 @@ const Footer = () => {
 						</div>
 					</div>
 					<div className="col-lg-4 col-md-6 col-sm-6">
-						<div className="single-footer-widget">
+						{/*<div className="single-footer-widget">
 							<h3>Contacto</h3>
 							<ul className="footer-contact-info" style={{textAlign: 'center'}}>
 								<li>
-									{/*<i className="bx bx-map"></i>*/}
+									<i className="bx bx-map"></i>
 									Av. 27 de Febrero 1234, Santiago, Chile
 								</li>
 								<li>
-									{/*<i className="bx bx-phone-call"></i>*/}
+									<i className="bx bx-phone-call"></i>
 									<a href="tel:+44587154756">
 										+1 (123) 456 7890
 									</a>
 								</li>
 								<li>
-									{/*<i className="bx bx-envelope"></i>*/}
+									<i className="bx bx-envelope"></i>
 									<a href="mailto:hello@edemy.com">
 										hello@edemy.com
 									</a>
 								</li>
-								
+
 							</ul>
-						</div>
+						</div>*/}
 					</div>
 					
 					<div className="col-lg-4 col-md-6 col-sm-6 justify-content-center">
 						<div className="single-footer-widget">
 							<h3>Explorar</h3>
 							<ul className="footer-links-list">
-								<li>
+								{/*<li>
 									<Link href="/">Inicio</Link>
 								</li>
-								{/*<li>
+								<li>
 									<Link href="/about">Acerca de</Link>
 								</li>*/}
 								<li>
@@ -165,7 +165,7 @@ const Footer = () => {
 						<div className="col-lg-6 col-md-6">
 							<ul>
 								<li>
-									<Link href="https://www.boomkend.com">
+									<Link href="https://www.boomkend.com" target="_blank">
 										Desarrollado por Boomkend
 									</Link>
 								</li>

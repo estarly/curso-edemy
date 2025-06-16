@@ -9,11 +9,9 @@ INSERT INTO `Module` (`id`, `title`, `description`, `logo`,`status`) VALUES
 (1, '1 Módulo', 'Descripción 1', 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/banners/banner-fgdfgdf-1747279294663', 1);
 
 INSERT INTO `Category` (`id`, `name`, `status`, `logo`, `created_at`, `updated_at`) VALUES
-(1, 'Development', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-asdasdas-1749133872426', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(2, 'Personalizada', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-asdasdas-1749133872426', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(3, 'Business', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-asdasdas-1749133872426', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(4, 'Finance', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-asdasdas-1749133872426', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
-(5, 'Software', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-asdasdas-1749133872426', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
+(1, 'Educacion y Formación', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-1-1750014646754', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(2, 'Recursos y Apoyo', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-2-1750014702326', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
+(3, 'Diseño y Multimedia', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/categories/category-3-1750014735725', '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652');
 
 INSERT INTO `AssetType` (`id`, `name`, `config`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Video', '{"val": "", "type": "video"}', 1, '2024-02-12 05:55:29.652', '2024-02-12 05:55:29.652'),
@@ -47,5 +45,9 @@ INSERT INTO `review` (`id`, `rating`, `comment`, `userId`, `courseId`, `created_
 (2, 4, 'Average :)', 2, 1, '2024-03-04 07:17:39.887', '2024-03-04 07:17:39.887');
 
 INSERT INTO `Banner` (`id`, `name`, `description`, `url`, `status`, `image`, `order`, `created_at`, `updated_at`) VALUES
-(1, 'Titulo de Banner', 'loren ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.', 'http://localhost:3000/', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/banners/banner-fgdfgdf-1747279294663', 0, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780'),
-(2, 'Otro Titulo de Banner', 'loren ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.', 'http://localhost:3000/', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_share/banners/banner-fgdfgdf-1747279294663', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');
+(1, 'Formación Bíblica con Propósito.',
+ 'Un espacio de enseñanza fiel a las Escrituras, con acceso gratuito y recursos prácticos pensados para tu crecimiento espiritual. Materiales de apoyo que conectan la Palabra con la vida diaria, en un entorno accesible, claro y lleno de propósito.', 
+ '', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-1-1750017640693', 0, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780'),
+(2, 'Creciendo Juntos en la Palabra.',
+ 'Una representación del crecimiento espiritual de estudiantes y líderes comprometidos con la verdad de las Escrituras. En comunidad y con propósito, descubren cómo la Palabra transforma vidas, guía decisiones y forma el carácter.', 
+ '', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-2-1750021585113', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');

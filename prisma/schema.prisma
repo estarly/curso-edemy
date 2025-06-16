@@ -172,7 +172,7 @@ model Asset {
 model Module {
   id          Int     @id @default(autoincrement())
   title       String
-  description String?
+  description String? @db.Text
   logo        String?
   status      Int     @default(1)
 
@@ -231,7 +231,7 @@ model Favourite {
 model Banner {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String? @db.Text
   url         String?
   status      Int      @default(1)
   image       String?
@@ -243,7 +243,7 @@ model Banner {
 model AssignmentType {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String? @db.Text
   config_type Json?
   status      Int      @default(1)
   created_at  DateTime @default(now())
@@ -257,7 +257,7 @@ model Assignment {
   assetId           Int
   assignmentTypeId  Int
   title             String
-  description       String?
+  description       String? @db.Text
   config_assignment Json?
   status            Int      @default(1)
   created_at        DateTime @default(now())

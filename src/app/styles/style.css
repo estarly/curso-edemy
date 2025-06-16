@@ -2256,7 +2256,7 @@ Main Banner Area CSS
 .hero-banner-area {
 	position: relative;
 	z-index: 1;
-	background-color: #fffaf3;
+	//background-color: #fffaf3;
 	padding-bottom: 200px;
 }
 .hero-banner-area .container-fluid {
@@ -15279,8 +15279,8 @@ Gym Banner Area CSS
 	padding-top: 10px;
 	position: relative;
 	z-index: 1;
-	background-color: #f1f1f1;
-	background-image: url(/images/gym/gym-banner-bg.jpg);
+	//background-color: #f1f1f1;
+	//background-image: url(/images/gym/gym-banner-bg.jpg);
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -20330,4 +20330,51 @@ Coaching Banner Area CSS
 .StripeElement {
 	border: 1px solid #eee;
 	padding: 20px;
+}
+
+
+/*Ajustes */
+.default-btn {
+	background-color: #071457!important;
+}
+
+.edemy-nav .navbar .navbar-nav .nav-item a:hover, .edemy-nav .navbar .navbar-nav .nav-item a:focus, .edemy-nav .navbar .navbar-nav .nav-item a.active{
+	color: #071457!important;
+}
+
+.single-funfacts-item h3{
+	color: #071457!important;
+}
+.boxes-info p a{
+	color: #071457!important;
+}
+
+.about-content .features-list li span i{
+	color: #071457!important;
+}
+.section-title .sub-title{
+	color: #071457!important;
+}
+.text-danger{
+	color: #071457!important;
+}
+.single-courses-item .courses-content .courses-content-footer li i{
+	color: #071457!important;
+}
+.courses-info p a{
+	color: #071457!important;
+}
+.single-courses-box .courses-content .course-author span{
+	color: #071457!important;
+}
+.single-courses-box .courses-content .courses-box-footer li i{
+	color: #071457!important;
+}
+
+.gym-home-area{
+	background-color: #adb2c9!important;
+}
+
+.hero-banner-area{
+	//background-color: #00000000!important;
 }

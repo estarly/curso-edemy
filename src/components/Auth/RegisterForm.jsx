@@ -20,6 +20,7 @@ const RegisterForm = () => {
 			name: "",
 			email: "",
 			password: "",
+			type_user: "",
 		},
 	});
 
@@ -72,11 +73,16 @@ const RegisterForm = () => {
 					errors={errors}
 					required
 				/>
+				<label>Tipo de usuario</label>
+				<Input name="type_user" id="type_user" type="select" disabled={isLoading} register={register} errors={errors} required>
+					<option value="student" selected>Estudiante</option>
+					<option value="instructor">Instructor</option>
+				</Input>	
 
 				<p className="description">
-					The password should be at least eight characters long. To
-					make it stronger, use upper and lower case letters, numbers,
-					and symbols like ! " ? $ % ^ & )
+					La contraseña debe tener al menos 8 caracteres. Para
+					hacerla más fuerte, use letras mayúsculas y minúsculas, números,
+					y símbolos como ! " ? $ % ^ & )
 				</p>
 
 				<button type="submit" disabled={isLoading}>
