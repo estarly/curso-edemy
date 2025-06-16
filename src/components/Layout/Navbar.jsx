@@ -53,8 +53,8 @@ const Navbar = ({ currentUser }) => {
 							<Link href="/" className="navbar-brand">
 								<Image
 									src="/images/landing/logo/logo.png"
-									width={104}
-									height={29}
+									width={133}
+									height={36}
 									alt="logo"
 								/>
 							</Link>
@@ -121,8 +121,8 @@ const Navbar = ({ currentUser }) => {
 							<div>
 								<Image
 									src="/images/landing/logo/logo.png"
-									width={104}
-									height={29}
+									width={133}
+									height={36}
 									alt="logo"
 								/>
 							</div>

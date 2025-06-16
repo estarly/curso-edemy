@@ -91,7 +91,7 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						errors={errors}
 					/>
 					<Input
-						label="Designación"
+						label="Frase presentación"
 						id="designation"
 						disabled={isLoading}
 						register={register}
@@ -101,7 +101,7 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 
 					<TextArea
 						id="bio"
-						placeholder="Biografía"
+						placeholder="Breve biografía"
 						disabled={isLoading}
 						register={register}
 						errors={errors}

@@ -50,8 +50,14 @@ const CoursesDetailsSidebar = ({
 		if(yaInscrito) {
 			Swal.fire({
 				title: "¡Ya estás inscrito!",
-				text: "Ya estás inscrito en este curso.",
+				text: "Vamos a ver el curso.",
 				icon: "info",
+				timer: 4000,
+				timerProgressBar: true,
+				confirmButtonText: "Ver curso",
+
+			}).then(() => {
+				window.location.href = `/learning/course/${slug}/${id}`;
 			});
 			return;
 		}
@@ -125,7 +131,18 @@ const CoursesDetailsSidebar = ({
 					showConfirmButton: false,
 				});
 			}
+		}else{
+			Swal.fire({
+				title: "Cancelado",
+				text: "No se ha inscribido en el curso.",
+				icon: "info",
+				timer: 1500,
+				showConfirmButton: false,
+			});
+			setYaInscrito(false);
+			return;
 		}
+
 	};
 
 	// Verifica si el usuario actual ya está inscrito

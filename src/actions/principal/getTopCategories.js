@@ -16,6 +16,9 @@ export async function getTopCategories() {
 			},
 			include: {
 				courses: {
+					where: {
+						hide: false,
+					},
 					select: {
 						id: true,
 					}

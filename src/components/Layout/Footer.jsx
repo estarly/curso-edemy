@@ -20,9 +20,9 @@ const Footer = () => {
 						<div className="single-footer-widget">
 							<Link href="/" className="logo">
 								<Image
-									src="/images/landing/logo/logo2.png"
-									width={87}
-									height={24}
+									src="/images/landing/logo/logo.png"
+									width={133}
+									height={36}
 									alt="logo"
 								/>
 							</Link>
@@ -158,7 +158,7 @@ const Footer = () => {
 						<div className="col-lg-6 col-md-6">
 							<p>
 								<i className="bx bx-copyright"></i>
-								{currentYear}  - eDemy es una plataforma de aprendizaje en línea.
+								{currentYear}  - Pilar es una plataforma de aprendizaje en línea.
 							</p>
 						</div>
 

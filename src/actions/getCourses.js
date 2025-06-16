@@ -28,6 +28,7 @@ export async function getCourses(params,stack=10) {
 		let where = {
 			status: "Approved",
 			is_module: false,
+			hide: false,
 			...getFilters() // Aplicamos los filtros de categoría
 		};
 		

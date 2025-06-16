@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Swal from "sweetalert2";
 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 const PAGE_SIZE = 50;
 
 export default function TablePagination({ categories }) {
@@ -58,6 +60,42 @@ export default function TablePagination({ categories }) {
                     );
                 } else {
                     Swal.fire("Error", data.error || "No se pudo actualizar el estatus.", "error");
+                }
+            } catch (err) {
+                Swal.fire("Error", "Ocurrió un error inesperado.", "error");
+            }
+        }
+    };
+
+    const toggleVisibility = async (courseId, isVisible) => {
+        const actionText = isVisible ? "ocultar" : "mostrar";
+        const confirmResult = await Swal.fire({
+            title: `¿Estás seguro?`,
+            text: `¿Quieres ${actionText} este curso?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, continuar",
+            cancelButtonText: "Cancelar",
+        });
+
+        if (confirmResult.isConfirmed) {
+            try {
+                const res = await fetch("/api/courses/toggle-visibility", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ courseId, isVisible: !isVisible }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    Swal.fire("¡Éxito!", `El curso ha sido ${actionText}do.`, "success");
+                    // Actualizar el estado localmente sin recargar toda la lista
+                    setCourses((prevCourses) =>
+                        prevCourses.map((course) =>
+                            course.id === courseId ? { ...course, isVisible: !isVisible } : course
+                        )
+                    );
+                } else {
+                    Swal.fire("Error", data.error || `No se pudo ${actionText} el curso.`, "error");
                 }
             } catch (err) {
                 Swal.fire("Error", "Ocurrió un error inesperado.", "error");
@@ -138,7 +176,7 @@ export default function TablePagination({ categories }) {
                                                 style={{ fontSize: "1em" }}
                                             >
                                                 {course.status === "Approved" && "Aprobado"}
-                                                {course.status === "Pending" && "En revisión..."}
+                                                {course.status === "Pending" && "Revisión"}
                                                 {course.status === "Deleted" && "Eliminado"}
                                             </span>
 
@@ -175,6 +213,17 @@ export default function TablePagination({ categories }) {
                                                     Eliminar
                                                 </button>
                                                 )}
+                                                <br />
+                                                {/* Botón ocultar siempre visible */}                                                
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-info btn-sm"
+                                                    onClick={() => toggleVisibility(course.id, !course.hide)}
+                                                    title={course.hide ? "Ocultar curso" : "Mostrando curso"}
+                                                >
+                                                    {course.hide ? <FaEyeSlash /> : <FaEye />}
+                                                </button>
+                                                
                                             </div>
                                         </div>
                                     </td>
