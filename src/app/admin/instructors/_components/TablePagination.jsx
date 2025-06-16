@@ -96,8 +96,8 @@ export default function TablePagination() {
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Fecha de registro</th>
+                            <th scope="col">Correo Electrónico</th>
+                            <th scope="col">Fecha de Registro</th>
                             <th scope="col">Cursos</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -105,7 +105,7 @@ export default function TablePagination() {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="6">
                                     <div className="text-center">Cargando...</div>
                                 </td>
                             </tr>
@@ -155,7 +155,7 @@ export default function TablePagination() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="6">
                                     <div className="text-center">No hay instructores</div>
                                 </td>
                             </tr>

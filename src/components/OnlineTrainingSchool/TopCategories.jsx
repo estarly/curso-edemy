@@ -16,7 +16,7 @@ const TopCategories = ({ categories }) => {
 			<div className="container">
 				<div className="section-title">
 					<span className="sub-title">Categorías</span>
-					<h2>Categorías principales</h2>
+					<h2>Categorías Principales</h2>
 					<p>
 						Estas son las categorías principales de los cursos que tenemos disponibles.
 					</p>
@@ -28,7 +28,7 @@ const TopCategories = ({ categories }) => {
 						<div className="col-lg-3 col-sm-6 col-md-6">
 							<div className="single-categories-box">
 								<Image
-									src="/images/landing/categories/categorie01.jpg"
+									src={category.logo || "/images/landing/categories/categorie01.jpg"}
 									width={650}
 									height={433}
 									alt="image"

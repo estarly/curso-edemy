@@ -165,7 +165,7 @@ const ProfilePhotoForm = ({ currentUser }) => {
 						<div className="mb-4">
 							<h5 className="mb-3">Imagen actual</h5>
 							<div className="current-image-container p-3 bg-light rounded text-center h-100 d-flex flex-column justify-content-center align-items-center">
-								{currentUser.image ? (
+								{currentUser && currentUser.image ? (
 									<img 
 										src={currentUser.image} 
 										alt="Imagen de perfil actual" 
@@ -184,7 +184,7 @@ const ProfilePhotoForm = ({ currentUser }) => {
 									</div>
 								)}
 								
-								{currentUser.image && (
+								{currentUser && currentUser.image && (
 									<div className="mt-3">
 										<p className="text-muted mb-0">Imagen de perfil actual</p>
 									</div>

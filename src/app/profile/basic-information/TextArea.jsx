@@ -12,7 +12,7 @@ const TextArea = ({
 }) => {
 	return (
 		<div className="form-group">
-			<label className="form-label fw-semibold">Biography</label>
+			<label className="form-label fw-semibold">Biografía</label>
 			<textarea
 				id={id}
 				{...register(id, { required })}

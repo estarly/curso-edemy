@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@libs/prismadb";  
 // Importa tu función de acceso a la base de datos aquí
 // import { updateStudentStatus } from "@/lib/db";
 

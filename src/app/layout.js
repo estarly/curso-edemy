@@ -31,14 +31,20 @@ export const metadata = {
 		canonical: "/",
 	},
 	title: {
-		template: "%s | eDemy ",
-		default: "eDemy",
+		template: "%s | Pilar - Fundamento de Fe y Conocimiento",
+		default: "Pilar - Tu Guía en el Camino de la Fe",
 	},
 	keywords: [
-		"Online coding courses",
+		"Estudios bíblicos",
+		"Formación espiritual",
+		"Cursos bíblicos online",
+		"Educación cristiana",
+		"Conocimiento bíblico",
+		"Guía espiritual",
+		"Fundamento de fe"
 	],
 	description:
-		"Explore a world of knowledge with our online tutorial platform. Master coding languages, delve into effective marketing strategies, and elevate your skills in diverse courses. Join expert-led sessions for practical learning. Enroll now for a brighter future!",
+		"Pilar: Tu fundamento en el camino de la fe y el conocimiento bíblico. Ofrecemos una plataforma educativa que sirve como soporte y guía en tu crecimiento espiritual. Únete a nuestra comunidad para fortalecer tu fe y expandir tu comprensión de las enseñanzas bíblicas.",
 	robots: {
 		index: true,
 		follow: true,
@@ -49,7 +55,7 @@ export const metadata = {
 		},
 	},
 	openGraph: {
-		title: "eDemy | Unlock Your Potential with Expert-Led Online Courses | Learn Coding, Marketing, and More!",
+		title: "Pilar | Tu Fundamento en el Camino de la Fe y el Conocimiento Bíblico",
 		url: "https://edemy-react.envytheme.com",
 		images: [
 			"https://res.cloudinary.com/dev-empty/image/upload/v1707717581/znronmo1rj2gexfrmnmy.jpg",

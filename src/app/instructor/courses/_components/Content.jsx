@@ -124,15 +124,17 @@ export const Content = ({ categories }) => {
 						{courses.length > 0 ? (
 							courses.map((course) => (
 								<div key={course.id} className="col-lg-4 col-md-6">
-									<div className="single-courses-box">
+									<div className="single-courses-box" style={{
+										border: course.status === "Pending" ? "4px solid #ffc107" : "none"
+									}}>
 										<div className="courses-image">
 											<Link
 												className="d-block image"
 												href={`/course/${course.slug}/${course.id}`}
 											>
 												<Image
-													src={course.image}
-													alt="image"
+													src={course.image || "/images/landing/course/default/courses8.jpg"}
+													alt={course.title || "Imagen del curso"}
 													width={750}
 													height={500}
 												/>
@@ -201,13 +203,13 @@ export const Content = ({ categories }) => {
 
 											<div className="course-author d-flex align-items-center">
 												<Image
-													src={course.user.image}
+													src={course.user?.image || "/images/landing/profile/profile01.png"}
 													className="rounded-circle"
-													alt="Instructor1"
+													alt={course.user?.name || "Instructor"}
 													width={45}
 													height={45}
 												/>
-												<span><strong>{course.user.name} </strong><br /> {course.user.designation}</span>
+												<span><strong>{course.user?.name || "Instructor"} </strong><br /> {course.user?.designation || "Sin designación"}</span>
 											</div>
 											<h3>
 												<Link
@@ -220,7 +222,7 @@ export const Content = ({ categories }) => {
 											<ul className="courses-box-footer d-flex pb-1 justify-content-between align-items-center">
 												<li>
 													<i className="flaticon-agenda"></i>{" "}
-													{course.assets.length} Partes
+													{course.assets.length} Lecciones
 												</li>
 												<li>
 													<i className="flaticon-people"></i>{" "}
@@ -241,7 +243,7 @@ export const Content = ({ categories }) => {
 										href="/instructor/course/create"
 										className="btn default-btn mt-3"
 									>
-										<i className="flaticon-add"></i> Crear Curso <span></span>
+										<i className="bx bx-video-plus me-2"></i> Crear Curso <span></span>
 									</Link>
 								</div>
 							</div>

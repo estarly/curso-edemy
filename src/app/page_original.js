@@ -14,8 +14,9 @@ import FunFactsFour from "@/components/Shared/FunFactsFour";
 import LatestNews from "@/components/Shared/LatestNews";
 
 export const metadata = {
-	title: "Home | eDemy - React Next.js Education LMS Template",
+	title: "Home | Pilar - Fundamento de Fe y Conocimiento",
 };
+
 
 export default async function Home() {
 	const currentUser = await getCurrentUser();

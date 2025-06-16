@@ -1,4 +1,4 @@
-import prisma from "../../../libs/prismadb";
+import prisma from "@libs/prismadb";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 

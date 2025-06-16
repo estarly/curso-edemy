@@ -9,7 +9,6 @@ const Page = async () => {
 	const currentUser = await getCurrentUser();
 	const countries = await getCountries();
 	const validateUser = await validateDataUser();
-	
 	if (!currentUser) {
 		redirect("/");
 	}

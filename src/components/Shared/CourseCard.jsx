@@ -15,11 +15,14 @@ const CourseCard = ({
 	regular_price,
 	lessons,
 	user,
-	enrolments,
+	assets = [],
+	enrolments = [],
+	progress = 1,
 	grid = "col-md-6 col-lg-4",
 	currentUser,
 	showHeartButton = true,
-	urlDefault = "/course"
+	urlDefault = "/course",
+	statusProgress = true
 }) => {
 	return (
 		<div className={grid}>
@@ -30,7 +33,7 @@ const CourseCard = ({
 						className="d-block image"
 					>
 						<Image
-							src={image}
+							src={image || "/images/landing/course/default/courses8.jpg"}
 							width={750}
 							height={500}
 							alt="image"
@@ -57,14 +60,33 @@ const CourseCard = ({
 
 				<div className="courses-content">
 					<div className="course-author d-flex align-items-center">
-						<Image
-							src={user.image || "/images/user1.jpg"}
-							width={300}
-							height={300}
-							className="rounded-circle"
-							alt="image"
-						/>
-						<span>{user.name}</span>
+						<div className="d-flex align-items-center">
+							<Image
+								src={user.image || "/images/user1.jpg"}
+								width={350}
+								height={350}
+								className="rounded-circle"
+								alt="image"
+							/>
+							<span><strong>{user.name} </strong><br /> {user.designation}</span>
+						</div>
+						<div className="ms-auto">
+							{(currentUser && statusProgress) && (
+								<>
+									{progress === 2 && (
+										<div>
+											<span className="badge bg-success text-white small">Completado</span>
+										</div>
+									)}
+									{progress === 1 && (
+										<div>
+											<span className="badge bg-warning text-dark small">En progreso</span>
+										</div>
+									)}
+								</>
+							)}
+
+						</div>
 					</div>
 
 					<h3>
@@ -75,11 +97,11 @@ const CourseCard = ({
 
 					<ul className="courses-box-footer d-flex justify-content-between align-items-center">
 						<li>
-							<i className="flaticon-agenda"></i> ??{" "}
-							Lessons
+							<i className="flaticon-agenda"></i> {" "}
+							{assets?.length} Lecciones
 						</li>
 						<li>
-							<i className="flaticon-people"></i> ?? Students
+							<i className="flaticon-people"></i> {enrolments?.length} Estudiantes
 						</li>
 					</ul>
 				</div>

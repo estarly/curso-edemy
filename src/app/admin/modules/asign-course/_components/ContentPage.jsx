@@ -143,7 +143,7 @@ export const ContentPage = ({
                       data={modules}
                       onChange={setSelectedModule}
                     />
-                    <div className="form-text mt-0">
+                    <div className="form-text mt-0 text-danger text-sm">
                       Los cursos que asignes se relacionarán con el módulo seleccionado.
                     </div>
                   </div>

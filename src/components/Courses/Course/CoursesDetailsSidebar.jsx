@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import AddToCartButton from "./AddToCartButton";
 import Swal from "sweetalert2";
 
@@ -18,6 +18,8 @@ const CoursesDetailsSidebar = ({
 	user,
 	currentUser
 }) => {
+	const [yaInscrito, setYaInscrito] = useState(false);
+
 	const handleShareClick = () => {
 		const courseUrl = `${window.location.origin}/courses/${slug}`; // Genera la URL del curso
 		navigator.clipboard.writeText(courseUrl) // Copia la URL al portapapeles
@@ -42,6 +44,42 @@ const CoursesDetailsSidebar = ({
 	};
 
 	const handleEnrolmentClick = async () => {
+		// Verifica si el usuario actual ya está inscrito
+		setYaInscrito(currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false);
+
+		if(yaInscrito) {
+			Swal.fire({
+				title: "¡Ya estás inscrito!",
+				text: "Vamos a ver el curso.",
+				icon: "info",
+				timer: 4000,
+				timerProgressBar: true,
+				confirmButtonText: "Ver curso",
+
+			}).then(() => {
+				window.location.href = `/learning/course/${slug}/${id}`;
+			});
+			return;
+		}
+
+		if (!currentUser || currentUser.role !== 'USER') {
+			let title = "¡Debe estar autenticado!";
+			let message = "Debes estar autenticado para inscribirte en un curso.";
+			if(currentUser && currentUser.role !== 'USER') {
+				title = "Disponible solo para estudiantes";
+				message = "En estos momentos solo los estudiantes pueden inscribirse en un curso.";
+			}
+
+			Swal.fire({
+				title: title,
+				text: message,
+				icon: "warning",
+				timer: 2000,
+				showConfirmButton: false,
+			});
+			return;
+		}
+
 		// Mostrar mensaje de confirmación
 		const result = await Swal.fire({
 			title: "¿Estás seguro de inscribirte?",
@@ -93,15 +131,26 @@ const CoursesDetailsSidebar = ({
 					showConfirmButton: false,
 				});
 			}
+		}else{
+			Swal.fire({
+				title: "Cancelado",
+				text: "No se ha inscribido en el curso.",
+				icon: "info",
+				timer: 1500,
+				showConfirmButton: false,
+			});
+			setYaInscrito(false);
+			return;
 		}
+
 	};
 
 	// Verifica si el usuario actual ya está inscrito
-	const yaInscrito = enrolledUserIds?.some(e => e.userId === currentUser?.id);
+	//const yaInscrito = currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false;
 
 	return (
 		<>
-			<div className="courses-details-info" style={{ marginTop: "-150px" }}>
+			<div className="courses-details-info">
 				<div className="image">
 					<img src={image} alt="image" />
 				</div>
@@ -117,9 +166,17 @@ const CoursesDetailsSidebar = ({
 					</li>*/}
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
-							<span>
-								<i className="flaticon-teacher"></i> {user.name}
-							</span>
+							<div className="row">
+								<div className="col-12">
+									<span>
+										<i className="flaticon-teacher"></i> {user.name}
+										<br />
+										<span className="text-muted small">{user.designation}</span>
+									</span>
+								</div>
+							</div>
+							
+							
 						</div>
 					</li>
 					{/*<li>
@@ -164,18 +221,16 @@ const CoursesDetailsSidebar = ({
 					image={image}
 				/>*/}
 			
-			{currentUser.role === 'USER' && (
+			
 				<button
 					className={` w-100 ${yaInscrito ? "btn btn-secondary" : "default-btn"}`}
 					onClick={handleEnrolmentClick}
-					disabled={yaInscrito}
 				>
 					<i className={`${yaInscrito ? "flaticon-play" : "flaticon-shopping-cart"}`}></i>
 					{" "}{yaInscrito ? " Continuar" : " Inscribirme"}
 					<span></span>
 				</button>
-			)}
-
+			
 				<div className="courses-share">
 					<div className="share-info">
 						<span onClick={handleShareClick} style={{ cursor: "pointer" }}>

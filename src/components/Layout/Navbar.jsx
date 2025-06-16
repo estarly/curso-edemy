@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { menuNew,menus } from "../../../libs/menus";
+import { menuNew,menus } from "@libs/menus"; 
 import MenuItem from "./MenuItem";
 import MegaMenu from "./MegaMenu";
 import { usePathname } from "next/navigation";
@@ -53,8 +53,8 @@ const Navbar = ({ currentUser }) => {
 							<Link href="/" className="navbar-brand">
 								<Image
 									src="/images/landing/logo/logo.png"
-									width={104}
-									height={29}
+									width={133}
+									height={36}
 									alt="logo"
 								/>
 							</Link>
@@ -121,8 +121,8 @@ const Navbar = ({ currentUser }) => {
 							<div>
 								<Image
 									src="/images/landing/logo/logo.png"
-									width={104}
-									height={29}
+									width={133}
+									height={36}
 									alt="logo"
 								/>
 							</div>

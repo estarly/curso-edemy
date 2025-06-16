@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
-		"start": "next start",
+		"start": "PORT=3020 next start",
+		"start2": "next start",
 		"lint": "next lint",
 		"seed": "node prisma/seed.ts"
 	},
@@ -43,6 +44,7 @@
 		"react-select": "^5.8.0",
 		"react-tabs": "^6.0.2",
 		"stripe": "^14.15.0",
+		"sweetalert2": "^11.22.0",
 		"sweetalert2-react-content": "^5.0.7",
 		"swiper": "^11.0.5",
 		"uuid": "^11.1.0",

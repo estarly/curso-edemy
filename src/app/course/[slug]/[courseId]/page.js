@@ -3,6 +3,8 @@ import DetailsContent from "@/components/Courses/Course/DetailsContent";
 import PageBanner from "@/components/Shared/PageBanner";
 import React from "react";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { getTotalCourses } from "@/actions/getCourses";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({ params }) {
 	const { course } = await getSingleCourse(params);
@@ -17,11 +19,8 @@ export async function generateMetadata({ params }) {
 
 const page = async ({ params }) => {
 	const { course } = await getSingleCourse(params);
-	
-	const currentUser = await getCurrentUser();
-	console.log(currentUser,'currentUser');
-
-	
+	const currentUser = await getCurrentUser();	
+	const totalCourses = await getTotalCourses();
 	return (
 		<>
 			{/*<PageBanner
@@ -30,7 +29,7 @@ const page = async ({ params }) => {
 				homePageText="Home"
 				activePageText={course.title}
 			/>*/}
-			<DetailsContent currentUser={currentUser} course={course} />
+			<DetailsContent currentUser={currentUser} course={course} totalCourses={totalCourses} />
 		</>
 	);
 };

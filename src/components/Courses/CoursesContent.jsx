@@ -27,6 +27,7 @@ const CoursesContent = ({ courses, currentUser, categories }) => {
 							key={course.id}
 							{...course}
 							currentUser={currentUser}
+							statusProgress={false}
 						/>
 					))}
 				</div>

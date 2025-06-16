@@ -57,9 +57,9 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 		setValue("youtube", currentUser.profile ? currentUser.profile.youtube : "");
 
 		if(validate){
-			toast.success("Por favor, complete su perfil básico para continuar")
+			toast.success("Complete su perfil básico para continuar")
 		}
-	}, [currentUser, setValue]);
+	}, [validate]);
 
 	const onSubmit = async (data) => {
 		console.log(data, "data");
@@ -91,7 +91,7 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						errors={errors}
 					/>
 					<Input
-						label="Designación"
+						label="Frase presentación"
 						id="designation"
 						disabled={isLoading}
 						register={register}
@@ -101,7 +101,7 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 
 					<TextArea
 						id="bio"
-						placeholder="Biografía"
+						placeholder="Breve biografía"
 						disabled={isLoading}
 						register={register}
 						errors={errors}

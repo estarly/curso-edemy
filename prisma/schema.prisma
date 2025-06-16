@@ -99,6 +99,7 @@ model Course {
   what_you_will_learn    String   @db.Text
   who_is_this_course_for String   @db.Text
   status                 Status   @default(Pending)
+  hide                   Boolean  @default(false)
   is_module              Boolean  @default(false)
   in_home_page           Boolean  @default(false)
   in_home_page_set_at    DateTime @default(now())
@@ -162,7 +163,8 @@ model Asset {
   assetType   AssetType     @relation(fields: [assetTypeId], references: [id])
   assignments Assignment[]
   statecourse StateCourse[]
-
+  files       FilesAsset[]
+  
   @@index([courseId])
   @@index([assetTypeId])
   @@index([courseId, assetTypeId])
@@ -171,7 +173,7 @@ model Asset {
 model Module {
   id          Int     @id @default(autoincrement())
   title       String
-  description String?
+  description String? @db.Text
   logo        String?
   status      Int     @default(1)
 
@@ -230,7 +232,7 @@ model Favourite {
 model Banner {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String? @db.Text
   url         String?
   status      Int      @default(1)
   image       String?
@@ -242,7 +244,7 @@ model Banner {
 model AssignmentType {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String? @db.Text
   config_type Json?
   status      Int      @default(1)
   created_at  DateTime @default(now())
@@ -256,7 +258,7 @@ model Assignment {
   assetId           Int
   assignmentTypeId  Int
   title             String
-  description       String?
+  description       String? @db.Text
   config_assignment Json?
   status            Int      @default(1)
   created_at        DateTime @default(now())
@@ -305,6 +307,15 @@ model AssignmentResults {
   statecourse StateCourse @relation(fields: [stateCourseId], references: [id])
 
   @@index([stateCourseId])
+}
+
+model FilesAsset {
+  id      Int    @id @default(autoincrement())
+  url     String
+  assetId Int
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@index([assetId])
 }
 
 enum Role {

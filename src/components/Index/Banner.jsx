@@ -22,6 +22,7 @@ const Banner = ({banners}) => {
 							type: "fraction",
 						}}
 						navigation={true}
+						loop={true}
 						modules={[Pagination, Navigation]}
 						className="gym-banner-slides"
 					>

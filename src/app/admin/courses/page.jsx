@@ -8,7 +8,7 @@ import { getCategoriesStatus } from "@/app/admin/categories/_actions";
 import TablePagination from "./_components/TablePagination";
 
 export const metadata = {
-	title: "Admin Cursos",
+	title: "Admin Cursos | Pilar - Fundamento de Fe y Conocimiento",
 	description: "Cursos de course",
 };
 
@@ -16,7 +16,6 @@ const Page = async () => {
 	
 	const { items: categories } = await getCategoriesStatus();
 	
-	console.log(categories);
 	const currentUser = await getCurrentUser();
 	const isAdmin = currentUser?.role === "ADMIN";
 	return (

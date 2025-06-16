@@ -17,9 +17,7 @@ const useFavourite = ({ courseId, currentUser }) => {
 		async (e) => {
 			e.stopPropagation();
 			if (!currentUser) {
-				toast.error("Debes iniciar sesión para agregar a tus favoritos");
-				console.log('no currentUser');
-				//router.push("/auth");
+				toast.error("Debes Iniciar Sesión");
 			}
 
 			try {

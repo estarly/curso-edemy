@@ -11,7 +11,6 @@ export const Content = ({items}) => {
   // Cargar los cursos al montar el componente
  useEffect(() => {
     setCourses(items.courses);
-    console.log(courses, "courses");
   }, []);
 
   // Nueva función para consultar estudiantes desde la API
@@ -53,7 +52,17 @@ export const Content = ({items}) => {
           <div className="row justify-content-center">
             <Selectors courses={courses} onConsult={handleConsult} />
 
-            <StudentResult students={students} />
+            {students && students.length > 0 ? (
+              <StudentResult students={students} />
+            ) : (
+              <div className="col-12 text-center py-5">
+                <div className="empty-courses">
+                  <i className="bx bx-user-x fs-1 text-muted mb-3"></i>
+                  <h4>No hay estudiantes</h4>
+                  <p className="text-muted">Selecciona un curso y una lección para ver los estudiantes</p>
+                </div>
+              </div>
+            )}
             
           </div>
         </div><br /><br /><br /><br />

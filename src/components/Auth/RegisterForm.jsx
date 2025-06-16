@@ -5,10 +5,11 @@ import { useForm } from "react-hook-form";
 import Input from "../FormHelpers/Input";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
-
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -20,16 +21,25 @@ const RegisterForm = () => {
 			name: "",
 			email: "",
 			password: "",
+			type_user: "USER",
 		},
 	});
 
 	const onSubmit = async (data) => {
 		setIsLoading(true);
+		// Validar el tipo de usuario
+		const typeUser = data.type_user === "INSTRUCTOR" ? "INSTRUCTOR" : "USER";
+		const formData = {
+			...data,
+			type_user: typeUser
+		};
+
 		await axios
-			.post("/api/register", data)
+			.post("/api/register", formData)
 			.then((response) => {
-				toast.success("Registration success! Please login.");
+				toast.success("Registro exitoso! Por favor, inicie sesión.");
 				reset();
+				router.push("/auth/login");
 			})
 			.catch((error) => {
 				toast.error(error.response.data.message);
@@ -45,7 +55,7 @@ const RegisterForm = () => {
 
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Input
-					label="Full Name"
+					label="Nombre completo"
 					id="name"
 					disabled={isLoading}
 					register={register}
@@ -54,8 +64,8 @@ const RegisterForm = () => {
 				/>
 
 				<Input
-					label="Email"
-					id="email"
+					label="Correo electrónico"
+					id="email"	
 					type="email"
 					disabled={isLoading}
 					register={register}
@@ -65,19 +75,31 @@ const RegisterForm = () => {
 
 				<Input
 					type="password"
-					label="Password"
+					label="Contraseña"
 					id="password"
 					disabled={isLoading}
 					register={register}
 					errors={errors}
 					required
 				/>
-
 				<p className="description">
-					The password should be at least eight characters long. To
-					make it stronger, use upper and lower case letters, numbers,
-					and symbols like ! " ? $ % ^ & )
+					La contraseña debe tener al menos 8 caracteres. Para
+					hacerla más fuerte, use letras mayúsculas y minúsculas, números,
+					y símbolos.
 				</p>
+				<div className="form-group">
+					<select 
+						{...register("type_user")}
+						className="form-control" 
+						disabled={isLoading}
+						required
+					>
+						<option value="USER" selected>Soy Estudiante</option>
+						<option value="INSTRUCTOR">Soy Instructor</option>
+					</select>	
+				</div>
+
+				
 
 				<button type="submit" disabled={isLoading}>
 					{isLoading ? "Please wait..." : "Register"}

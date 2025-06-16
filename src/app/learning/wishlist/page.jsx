@@ -1,11 +1,21 @@
+export const dynamic = "force-dynamic";
 import Links from "../Links";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { getMyFavorites } from "@/actions/getMyFavorites";
 import CourseCard from "@/components/Shared/CourseCard";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
-	const currentUser = await getCurrentUser();
-	const { favourites } = await getMyFavorites();
+	let currentUser = null;
+	let favourites = [];
+	try {
+		currentUser = await getCurrentUser();
+		const favs = await getMyFavorites();
+		favourites = favs.favourites;
+	} catch (error) {
+		console.error("Error cargando datos:", error);
+	}
+	
 	return (
 		<>
 			<div className="ptb-100">

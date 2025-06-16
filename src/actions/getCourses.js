@@ -1,4 +1,4 @@
-import prisma from "../../libs/prismadb";
+import prisma from "@libs/prismadb";
 
 export async function getCourses(params,stack=10) {
 	const { q, sort, id } = params;
@@ -28,6 +28,7 @@ export async function getCourses(params,stack=10) {
 		let where = {
 			status: "Approved",
 			is_module: false,
+			hide: false,
 			...getFilters() // Aplicamos los filtros de categoría
 		};
 		
@@ -57,6 +58,8 @@ export async function getCourses(params,stack=10) {
 			take: stack,
 			include: {
 				user: true,
+				assets: true,
+				category: true,
 				enrolments: {
 					select: {
 						id: true,
@@ -76,9 +79,9 @@ export async function getCategories() {
 	const categories = await prisma.category.findMany({
 		where: {
 			status: 1,
-			/*courses: {
+			courses: {
 				some: {},
-			},*/
+			},
 		},
 		orderBy: {
 			name: 'asc',
@@ -111,4 +114,11 @@ export async function getHomepageCourses() {
 		console.error("Error fetching counts:", error);
 		return { courses: [] };
 	}
+}
+
+export async function getTotalCourses() {
+	const totalCourses = await prisma.course.count({
+		where: { status: "Approved" },
+	});
+	return totalCourses;
 }

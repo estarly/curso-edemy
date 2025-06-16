@@ -18,7 +18,7 @@ const Courses = ({ courses, currentUser }) => {
 			<div className="container">
 				<div className="section-title">
 					<span className="sub-title">A tu ritmo</span>
-					<h2>Listado de cursos</h2>
+					<h2>Listado de Cursos</h2>
 					<p>
 						Estos son los cursos que tenemos disponibles para ti.
 					</p>
