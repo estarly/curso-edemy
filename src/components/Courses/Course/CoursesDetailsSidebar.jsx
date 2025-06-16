@@ -149,9 +149,17 @@ const CoursesDetailsSidebar = ({
 					</li>*/}
 					<li>
 						<div className="d-flex justify-content-between align-items-center">
-							<span>
-								<i className="flaticon-teacher"></i> {user.name}
-							</span>
+							<div className="row">
+								<div className="col-12">
+									<span>
+										<i className="flaticon-teacher"></i> {user.name}
+										<br />
+										<span className="text-muted small">{user.designation}</span>
+									</span>
+								</div>
+							</div>
+							
+							
 						</div>
 					</li>
 					{/*<li>

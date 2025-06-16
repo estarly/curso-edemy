@@ -21,7 +21,8 @@ const CourseCard = ({
 	grid = "col-md-6 col-lg-4",
 	currentUser,
 	showHeartButton = true,
-	urlDefault = "/course"
+	urlDefault = "/course",
+	statusProgress = true
 }) => {
 	return (
 		<div className={grid}>
@@ -32,7 +33,7 @@ const CourseCard = ({
 						className="d-block image"
 					>
 						<Image
-							src={image}
+							src={image || "/images/landing/course/default/courses8.jpg"}
 							width={750}
 							height={500}
 							alt="image"
@@ -70,7 +71,7 @@ const CourseCard = ({
 							<span><strong>{user.name} </strong><br /> {user.designation}</span>
 						</div>
 						<div className="ms-auto">
-							{currentUser && (
+							{(currentUser && statusProgress) && (
 								<>
 									{progress === 2 && (
 										<div>

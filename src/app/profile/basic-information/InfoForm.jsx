@@ -57,9 +57,9 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 		setValue("youtube", currentUser.profile ? currentUser.profile.youtube : "");
 
 		if(validate){
-			toast.success("Por favor, complete su perfil básico para continuar")
+			toast.success("Complete su perfil básico para continuar")
 		}
-	}, [currentUser, setValue]);
+	}, [validate]);
 
 	const onSubmit = async (data) => {
 		console.log(data, "data");

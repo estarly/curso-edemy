@@ -15,6 +15,7 @@ const Page = async () => {
 	} catch (error) {
 		console.error("Error cargando datos:", error);
 	}
+	
 	return (
 		<>
 			<div className="ptb-100">
