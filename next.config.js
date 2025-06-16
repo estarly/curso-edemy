@@ -8,6 +8,7 @@ const nextConfig = {
 			"lh3.googleusercontent.com",
 			"via.placeholder.com",
 			"developers.google.com",
+      "space-share.nyc3.digitaloceanspaces.com"
 		],
 	},
 	env: {
