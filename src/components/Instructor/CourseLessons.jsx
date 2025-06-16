@@ -68,7 +68,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
         { value: ASSET_TYPES.DOCUMENT, label: "Documento" },
         { value: ASSET_TYPES.LINK, label: "Link Externo" },
         { value: ASSET_TYPES.YOUTUBE, label: "YouTube" },
-        { value: ASSET_TYPES.ONLINE, label: "Online Session" }
+        //{ value: ASSET_TYPES.ONLINE, label: "Online Session" }
       ];
 
       const selectedAssetType = assetTypeOptions.find(option => option.value === currentAsset.assetTypeId);

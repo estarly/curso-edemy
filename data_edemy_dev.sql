@@ -27,18 +27,16 @@ INSERT INTO `AssignmentType` (`id`, `name`, `description`, `config_type`, `statu
 (3, 'Completar', 'Contiene una pregunta y una respuesta. El usuario debe completar la respuesta.', '{"correct_answer": "Respuesta correcta"}', 1, NOW(), NOW());
 
 INSERT INTO `Course` (`id`, `userId`, `categoryId`, `title`, `slug`, `description`, `regular_price`, `before_price`, `lessons`, `image`, `access_time`, `requirements`, `what_you_will_learn`, `who_is_this_course_for`, `status`, `is_module`, `in_home_page`, `in_home_page_set_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'Complete JavaScript Course 2024', 'complete-javascript-course-2024', '<p><em>Well-made course. Super in-depth, with great challenges and projects that will solidify your Javascript understanding.</em></p>', 99, 149, '21', 'https://res.cloudinary.com/dev-empty/image/upload/v1707203985/mwg8hiewqc1cfl7k3dvt.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780'),
-(2, 1, 2, 'The Complete Flutter Development Course', 'dart-flutter-the-complete-flutter-development-course', '<p>Welcome to <strong>The Complete Flutter 2.0 Development Course</strong>.</p>', 149, 199, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707204269/pmyhthvg0xixlirzpmbk.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:25:23.890', '2024-02-06 07:25:23.890'),
-(3, 1, 2, 'Build an E-commerce and Admin App', 'build-an-e-commerce-and-admin-app', '<p>Learn to design, build, and debug fully functional shopping applications with Flutter and Firebase.</p>', 99, 199, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707716814/ahooraqaikeoou3tqp7a.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:47:45.728', '2024-02-12 05:47:45.728'),
-(4, 1, 3, 'Introduction to Finance and Accounting', 'introduction-to-finance-and-accounting', '<p>By the end of this course, you will also know how to value companies using several different valuation methodologies.</p>', 199, 249, '15', 'https://res.cloudinary.com/dev-empty/image/upload/v1707717191/vwbqavr8tyzitktghuuo.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:54:14.226', '2024-02-12 05:54:14.226');
+(1, 2, 1, 'Complete JavaScript Course 2024', 'complete-javascript-course-2024', '<p><em>Well-made course. Super in-depth, with great challenges and projects that will solidify your Javascript understanding.</em></p>', 99, 149, '21', 'https://res.cloudinary.com/dev-empty/image/upload/v1707203985/mwg8hiewqc1cfl7k3dvt.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780', '2024-02-06 07:21:35.780'),
+(2, 2, 2, 'The Complete Flutter Development Course', 'dart-flutter-the-complete-flutter-development-course', '<p>Welcome to <strong>The Complete Flutter 2.0 Development Course</strong>.</p>', 149, 199, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707204269/pmyhthvg0xixlirzpmbk.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-06 07:25:23.890', '2024-02-06 07:25:23.890'),
+(3, 1, 2, 'Build an E-commerce and Admin App', 'build-an-e-commerce-and-admin-app', '<p>Learn to design, build, and debug fully functional shopping applications with Flutter and Firebase.</p>', 99, 199, '20', 'https://res.cloudinary.com/dev-empty/image/upload/v1707716814/ahooraqaikeoou3tqp7a.jpg', 'Lifetime', 'NULL', 'NULL', 'NULL', 'Approved', 0,0,'2024-02-06 07:21:35.780', '2024-02-12 05:47:45.728', '2024-02-12 05:47:45.728');
 
 INSERT INTO `Asset` (`id`, `courseId`, `assetTypeId`, `title`, `file_url`, `video_url`, `video_length`, `config_asset`, `is_preview`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'Introduction', NULL, 'https://res.cloudinary.com/dev-empty/video/upload/v1707204118/ysmbjh5xxrddowskbrb4.mp4', NULL, '{"val": "https://space-share.nyc3.digitaloceanspaces.com/videos/video-1-1749228547566", "type": "video"}', 0, '2024-02-06 07:22:03.383', '2024-02-06 07:22:03.383'),
 (2, 2, 1, 'Intro', NULL, 'https://res.cloudinary.com/dev-empty/video/upload/v1707204363/ljg3ntdjjguqxiku2xpe.mp4', NULL, '{"val": "https://space-share.nyc3.digitaloceanspaces.com/videos/video-1-1749228547566", "type": "video"}', 0, '2024-02-06 07:26:11.414', '2024-02-06 07:26:11.414');
 
 INSERT INTO `CourseModule` (`courseId`, `moduleId`) VALUES
-(1, 1),
-(2, 1);
+(1, 1);
 
 INSERT INTO `review` (`id`, `rating`, `comment`, `userId`, `courseId`, `created_at`, `updated_at`) VALUES
 (1, 5, 'I learned a lot!!!', 1, 1, '2024-03-04 07:16:57.966', '2024-03-04 07:16:57.966'),
@@ -50,4 +48,4 @@ INSERT INTO `Banner` (`id`, `name`, `description`, `url`, `status`, `image`, `or
  '', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-1-1750017640693', 0, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780'),
 (2, 'Creciendo Juntos en la Palabra.',
  'Una representación del crecimiento espiritual de estudiantes y líderes comprometidos con la verdad de las Escrituras. En comunidad y con propósito, descubren cómo la Palabra transforma vidas, guía decisiones y forma el carácter.', 
- '', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-2-1750021585113', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');
+ '', 1, 'https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-2-1750028231613', 1, '2024-03-27 07:21:35.780', '2024-03-27 07:21:35.780');
