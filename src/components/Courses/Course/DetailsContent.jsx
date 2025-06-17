@@ -11,12 +11,12 @@ import CoursesDetailsSidebar from "./CoursesDetailsSidebar";
 
 const DetailsContent = ({ currentUser, course, totalCourses = 55555 }) => {
 	
-	let banner = '/images/courses/10.webp';
-	if(totalCourses > 2 && totalCourses <= 3){
-		banner = '/images/courses/50.webp';
+	let banner = '/images/courses/02.png';
+	if(totalCourses > 50 || totalCourses < 200){
+		banner = '/images/courses/01.pmg';
 	}
-	else if(totalCourses > 3 && totalCourses <= 5){
-		banner = '/images/courses/100.webp';
+	else if(totalCourses > 200){
+		banner = '/images/courses/03.png';
 	}
 	
 	return (

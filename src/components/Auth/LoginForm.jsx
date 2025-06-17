@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Input from "../FormHelpers/Input";
 import styles from "./LoginForm.module.css";
+import Swal from "sweetalert2";
 
 const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +37,8 @@ const LoginForm = () => {
 			console.log(callback, 'callback');
 
 			if (callback?.error) {
-				toast.error(callback.error);
+				Swal.fire("Ups!", callback.error, "error");
+				//toast.error(callback.error);
 			}
 
 			if (!callback?.error) {
