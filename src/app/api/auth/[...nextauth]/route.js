@@ -27,7 +27,7 @@ export const authHandler = NextAuth({
 			async authorize(credentials) {
 				//console.log('credentials', credentials);
 				if (!credentials?.email || !credentials?.password) {
-					throw new Error("Invalid credentials");
+					throw new Error("Credenciales incorrectas");
 				}
 
 				const user = await prisma.user.findUnique({
@@ -37,7 +37,7 @@ export const authHandler = NextAuth({
 				});
 				//console.log("findUnique:user", user);
 				if (!user || !user?.hashedPassword) {
-					throw new Error("Invalid credentials");
+					throw new Error("Credenciales incorrectas");
 				}
 				//console.log("user", user);
 				const isCorrectPassword = await bcrypt.compare(
@@ -46,7 +46,7 @@ export const authHandler = NextAuth({
 				);
 
 				if (!isCorrectPassword) {
-					throw new Error("Invalid credentials");
+					throw new Error("Contraseña incorrectas");
 				}
 
 				return user;
