@@ -1,4 +1,5 @@
 import React from "react";
+import VideoPlayer from "@/components/Shared/VideoPlayer";
 
 const StudentAssetViewer = ({ asset }) => {
   return (
@@ -7,20 +8,15 @@ const StudentAssetViewer = ({ asset }) => {
         {/* Video - Tipo 1 */}
         {asset.assetTypeId === 1 && asset.config_asset?.val && (
           <div className="video-container" style={{ position: "relative", width: "100%", paddingTop: "56.25%" }}>
-            <video
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover"
-              }}
-              controls
-            >
-              <source src={asset.config_asset.val} type="video/mp4" />
-              Tu navegador no soporta videos HTML.
-            </video>
+            <VideoPlayer
+              src={asset.config_asset.val}
+              title={asset.title}
+              controls={true}
+              autoPlay={false}
+              muted={false}
+              className="position-absolute w-100 h-100"
+              style={{ top: 0, left: 0, objectFit: "cover" }}
+            />
           </div>
         )}
 
@@ -93,22 +89,15 @@ const StudentAssetViewer = ({ asset }) => {
           </div>
         )}
 
-      {/*  <div className="card-body">
-          <h6 className="card-title text-truncate">
-            {asset.title}
-          </h6>
+        <div className="card-body">
+          <h5 className="card-title">{asset.title}</h5>
           {asset.description && (
             <div
-              className="card-text small text-muted description-container"
-              style={{
-                maxHeight: "60px",
-                overflow: "hidden",
-                marginBottom: "10px"
-              }}
+              className="card-text"
               dangerouslySetInnerHTML={{ __html: asset.description }}
             />
           )}
-        </div>*/}
+        </div>
       </div>
     </div>
   );

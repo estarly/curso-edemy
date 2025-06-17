@@ -32,7 +32,13 @@ export class FileUploadService {
       path = path + 'documents';
     }
 
-    const fileOptions = { path, ...options };
+    const contentType = file.mimetype;
+
+    const fileOptions = { 
+      path, 
+      contentType,
+      ...options 
+    };
     return this.storageService.upload(file, fileOptions);
   }
 

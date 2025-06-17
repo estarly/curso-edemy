@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import ProgressBar from "../Shared/ProgressBar";
 
 const ASSET_TYPES = {
   VIDEO: 1,
@@ -25,7 +26,10 @@ const MESSAGES = {
   VIDEO_TYPE_ERROR: "Solo se permiten archivos de video MP4",
   VIDEO_DURATION_EXCEEDED: `El video no puede exceder los ${VIDEO_CONSTRAINTS.MAX_DURATION_MINUTES} minutos. Duración actual: {duration}`,
   VIDEO_DURATION_LIMIT: `Máximo ${VIDEO_CONSTRAINTS.MAX_DURATION_MINUTES} minutos de duración - Solo MP4`,
-  FILE_REMOVED: "Archivo eliminado"
+  FILE_REMOVED: "Archivo eliminado",
+  UPLOAD_PROGRESS: "Subiendo archivo...",
+  UPLOAD_COMPLETE: "Archivo subido exitosamente",
+  UPLOAD_ERROR: "Error al subir el archivo"
 };
 
 const FILE_TYPES = {
@@ -34,7 +38,7 @@ const FILE_TYPES = {
   DOCUMENT: 'Documento'
 };
 
-const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetType, clearFile=false }) => {
+const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetType, clearFile=false, uploadProgress = null, isUploading = false }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const isLoading = externalLoading;
 
@@ -119,6 +123,35 @@ const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetTy
     }
   }, [clearFile]);
 
+  const renderFileInfo = (file, iconClass, fileType) => (
+    <div className="p-3 border rounded bg-light">
+      <div className="d-flex justify-content-between align-items-center">
+        <div>
+          <i className={`${iconClass} me-2`}></i>
+          {file.name}
+        </div>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-danger"
+          onClick={removeFile}
+          disabled={isUploading}
+        >
+          Eliminar
+        </button>
+      </div>
+      
+      {/* Mostrar barra de progreso si está subiendo */}
+      {isUploading && uploadProgress !== null && (
+        <div className="mt-3">
+          <ProgressBar 
+            progress={uploadProgress} 
+            status={MESSAGES.UPLOAD_PROGRESS}
+          />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="media-upload-container">
       <div className="row">
@@ -133,28 +166,14 @@ const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetTy
                     accept="video/mp4"
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
-                    disabled={isLoading}
+                    disabled={isLoading || isUploading}
                   />
                   Seleccionar archivo de video
                 </label>
                 <small className="d-block text-muted mt-2">{MESSAGES.VIDEO_DURATION_LIMIT}</small>
               </div>
             ) : (
-              <div className="p-3 border rounded bg-light">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <i className="bi bi-file-earmark-play me-2"></i>
-                    {selectedFile.name}
-                  </div>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={removeFile}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </div>
+              renderFileInfo(selectedFile, "bi bi-file-earmark-play", FILE_TYPES.VIDEO)
             )}
           </div>
         )}
@@ -170,27 +189,13 @@ const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetTy
                     accept="audio/*"
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
-                    disabled={isLoading}
+                    disabled={isLoading || isUploading}
                   />
                   Seleccionar archivo de audio
                 </label>
               </div>
             ) : (
-              <div className="p-3 border rounded bg-light">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <i className="bi bi-file-earmark-music me-2"></i>
-                    {selectedFile.name}
-                  </div>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={removeFile}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </div>
+              renderFileInfo(selectedFile, "bi bi-file-earmark-music", FILE_TYPES.AUDIO)
             )}
           </div>
         )}
@@ -206,27 +211,13 @@ const MediaUpload = ({ onFileSelect, isLoading: externalLoading = false, assetTy
                     accept=".pdf,.doc,.docx,.txt,.rtf"
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
-                    disabled={isLoading}
+                    disabled={isLoading || isUploading}
                   />
                   Seleccionar documento
                 </label>
               </div>
             ) : (
-              <div className="p-3 border rounded bg-light">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <i className="bi bi-file-earmark-pdf me-2"></i>
-                    {selectedFile.name}
-                  </div>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={removeFile}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </div>
+              renderFileInfo(selectedFile, "bi bi-file-earmark-pdf", FILE_TYPES.DOCUMENT)
             )}
           </div>
         )}

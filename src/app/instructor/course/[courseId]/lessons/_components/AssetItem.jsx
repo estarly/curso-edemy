@@ -2,6 +2,7 @@ import React from "react";
 import DeleteButton from "./../DeleteButton";
 import FileAssetButton from "./FileAssetButton";
 import AssignmentComponent from "@/app/instructor/course/[courseId]/lessons/_components/AssignmentComponent";
+import VideoPlayer from "@/components/Shared/VideoPlayer";
 
 const AssetItem = ({ courseId, asset, assignmentsTypes, onEdit }) => {
   return (
@@ -10,13 +11,14 @@ const AssetItem = ({ courseId, asset, assignmentsTypes, onEdit }) => {
         {/* Video - Tipo 1 */}
         {asset.assetTypeId === 1 && asset.config_asset?.val && (
           <div className="video-container" style={{ height: "160px", overflow: "hidden" }}>
-            <video width="100%" height="100%" style={{ objectFit: "cover" }} controls>
-              <source
-                src={asset.config_asset.val}
-                type="video/mp4"
-              />
-              Tu navegador no soporta videos HTML.
-            </video>
+            <VideoPlayer
+              src={asset.config_asset.val}
+              title={asset.title}
+              controls={true}
+              autoPlay={false}
+              muted={true}
+              className="h-100"
+            />
           </div>
         )}
 
