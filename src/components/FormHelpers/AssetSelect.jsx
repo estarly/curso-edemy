@@ -16,15 +16,19 @@ const types = [
 		val: "",
 		type: "document",
 	 } },
-	{ value: 4, label: "Link Externo", config: {
-		val: "",
-		type: "link",
-	 } },
 	 { value: 5, label: "Youtube", config: {
 		val: "",
 		type: "youtube",
 	 } },
-	{ value: 6, label: "Online", config: {
+	
+
+];
+
+/*{ value: 4, label: "Link Externo", config: {
+		val: "",
+		type: "link",
+	 } },
+	  { value: 6, label: "Online", config: {
 		val: "",
 		type: "online",
 		platform: "",
@@ -37,8 +41,7 @@ const types = [
 			}
 		}
 	},
-
-];
+	*/
 
 const AssetSelect = ({ label, value, disabled, onChange }) => {
 	const [selectedOption, setSelectedOption] = useState(null);

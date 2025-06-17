@@ -127,7 +127,6 @@ const VideoPlayer = ({ src, title, className = "" }) => {
         className="video-player"
         controls
         preload="metadata"
-        crossOrigin="anonymous"
         style={{ width: '100%', maxWidth: '100%' }}
       >
         <source src={src} type="video/mp4" />
