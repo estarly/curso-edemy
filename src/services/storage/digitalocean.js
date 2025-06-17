@@ -5,17 +5,51 @@ import { v4 as uuidv4 } from 'uuid';
 export class DigitalOceanStorageService extends StorageService {
   constructor() {
     super();
-    const spacesEndpoint = new AWS.Endpoint(process.env.DO_SPACES_ENDPOINT);
-    this.s3 = new AWS.S3({
-      endpoint: spacesEndpoint,
-      accessKeyId: process.env.DO_SPACES_ACCESS_KEY,
-      secretAccessKey: process.env.DO_SPACES_SECRET_KEY,
-      region: process.env.DO_SPACES_REGION
-    });
-    this.bucket = process.env.DO_SPACES_BUCKET;
+    
+    // Validar que las variables de entorno estén configuradas
+    const requiredEnvVars = {
+      DO_SPACES_ENDPOINT: process.env.DO_SPACES_ENDPOINT,
+      DO_SPACES_ACCESS_KEY: process.env.DO_SPACES_ACCESS_KEY,
+      DO_SPACES_SECRET_KEY: process.env.DO_SPACES_SECRET_KEY,
+      DO_SPACES_REGION: process.env.DO_SPACES_REGION,
+      DO_SPACES_BUCKET: process.env.DO_SPACES_BUCKET
+    };
+
+    const missingVars = Object.entries(requiredEnvVars)
+      .filter(([key, value]) => !value)
+      .map(([key]) => key);
+
+    if (missingVars.length > 0) {
+      console.warn(`Variables de entorno faltantes para Digital Ocean: ${missingVars.join(', ')}`);
+      console.warn('El servicio de almacenamiento no estará disponible');
+      this.isConfigured = false;
+      return;
+    }
+
+    try {
+      const spacesEndpoint = new AWS.Endpoint(process.env.DO_SPACES_ENDPOINT);
+      this.s3 = new AWS.S3({
+        endpoint: spacesEndpoint,
+        accessKeyId: process.env.DO_SPACES_ACCESS_KEY,
+        secretAccessKey: process.env.DO_SPACES_SECRET_KEY,
+        region: process.env.DO_SPACES_REGION
+      });
+      this.bucket = process.env.DO_SPACES_BUCKET;
+      this.isConfigured = true;
+    } catch (error) {
+      console.error('Error al configurar Digital Ocean Storage:', error);
+      this.isConfigured = false;
+    }
   }
 
   async upload(file, options = {}) {
+    if (!this.isConfigured) {
+      return {
+        success: false,
+        error: 'Servicio de almacenamiento no configurado. Verifica las variables de entorno de Digital Ocean.'
+      };
+    }
+
     console.log('=== DIGITALOCEAN UPLOAD START ===');
     console.log('File info:', {
       originalname: file.originalname,
@@ -128,6 +162,13 @@ export class DigitalOceanStorageService extends StorageService {
   }
 
   async delete(fileUrl) {
+    if (!this.isConfigured) {
+      return {
+        success: false,
+        error: 'Servicio de almacenamiento no configurado. Verifica las variables de entorno de Digital Ocean.'
+      };
+    }
+
     const urlParts = fileUrl.split('/');
     const key = urlParts.slice(3).join('/');
 
@@ -151,6 +192,9 @@ export class DigitalOceanStorageService extends StorageService {
   }
 
   async getUrl(fileName) {
+    if (!this.isConfigured) {
+      throw new Error('Servicio de almacenamiento no configurado');
+    }
     return `https://${this.bucket}.${process.env.DO_SPACES_ENDPOINT}/${fileName}`;
   }
 }
