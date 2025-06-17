@@ -17,6 +17,13 @@ const nextConfig = {
 		NEXT_CLOUDINARY_PRESET: "vikings",
 		STRIPE_PUBLISHABLE_KEY: "pk_test_ZaZZWZGlvdIn12yFleIqyjSI00G4e18Kf7",
 		STRIPE_SECRET_KEY: "sk_test_2DqyjEwaU0Nq0PpEMVQ3qSAw00zgrbnfPk",
+		CUSTOM_PORT: process.env.PORT || 3000,
+	},
+	serverRuntimeConfig: {
+		port: process.env.PORT || 3000,
+	},
+	publicRuntimeConfig: {
+		port: process.env.PORT || 3000,
 	},
 };
 
