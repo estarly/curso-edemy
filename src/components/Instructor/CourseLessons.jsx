@@ -13,6 +13,7 @@ import AudioUpload from "../FormHelpers/AudioUpload";
 import DocumentUpload from "../FormHelpers/DocumentUpload";
 import AssetSelect from "../FormHelpers/AssetSelect";
 import {MediaUpload} from "@/components/Instructor/MediaUpload";
+import { useFileUpload } from "@/hooks/useFileUpload";
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
 	ssr: false,
 	loading: () => null,
@@ -30,10 +31,12 @@ const ASSET_TYPES = {
 
 const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const router = useRouter();
   const isEditMode = !!currentAsset;
+  
+  // Usar el hook personalizado para manejar la subida de archivos
+  const { isUploading, uploadProgress, uploadFile, updateFile } = useFileUpload();
 
   const {
     register,
@@ -211,12 +214,10 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
     setIsLoading(true);
 
     try {
-      let requestData;
-      let config = {};
-      let url;
+      let response;
 
       if (isEditMode) {
-        url = `/api/courses/${params.courseId}/lessons/${currentAsset.id}`;
+        const url = `/api/courses/${params.courseId}/lessons/${currentAsset.id}`;
 
         if (selectedFile && (asset.value === ASSET_TYPES.VIDEO || asset.value === ASSET_TYPES.AUDIO || asset.value === ASSET_TYPES.DOCUMENT)) {
           const formData = new FormData();
@@ -225,12 +226,9 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
           formData.append('description', data.description || '');
           formData.append('assetTypeId', asset.value);
 
-          requestData = formData;
-          config.headers = {
-            'Content-Type': 'multipart/form-data',
-          };
+          response = await updateFile(url, formData);
         } else {
-          requestData = {
+          const requestData = {
             title: data.title,
             description: data.description,
             assetTypeId: asset.value,
@@ -252,13 +250,15 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
               requestData.participants = data.participants;
               break;
           }
+
+          response = await axios.put(url, requestData);
+          response = response.data;
         }
 
-        const response = await axios.put(url, requestData, config);
-        toast.success(response.data.message || "Asset actualizado exitosamente");
+        toast.success(response.message || "Asset actualizado exitosamente");
         onAssetUpdated();
       } else {
-        url = `/api/courses/${params.courseId}/lessons`;
+        const url = `/api/courses/${params.courseId}/lessons`;
 
         if (selectedFile && (asset.value === ASSET_TYPES.VIDEO || asset.value === ASSET_TYPES.AUDIO || asset.value === ASSET_TYPES.DOCUMENT)) {
           const formData = new FormData();
@@ -267,12 +267,9 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
           formData.append('description', data.description || '');
           formData.append('assetTypeId', asset.value);
 
-          requestData = formData;
-          config.headers = {
-            'Content-Type': 'multipart/form-data',
-          };
+          response = await uploadFile(url, formData);
         } else {
-          requestData = {
+          const requestData = {
             title: data.title,
             description: data.description,
             assetTypeId: asset.value,
@@ -294,10 +291,12 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
               requestData.participants = data.participants;
               break;
           }
+
+          response = await axios.post(url, requestData);
+          response = response.data;
         }
 
-        const response = await axios.post(url, requestData, config);
-        toast.success(response.data.message || "Lección añadida exitosamente");
+        toast.success(response.message || "Lección añadida exitosamente");
         reset();
         setSelectedFile(null);
       }
@@ -416,6 +415,8 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
                   assetType={asset?.value}
                   onFileSelect={setSelectedFile}
                   isLoading={isLoading}
+                  isUploading={isUploading}
+                  uploadProgress={uploadProgress}
                 />
                 {isEditMode && (
                   <small className="text-muted">
@@ -524,11 +525,11 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
             )}
 
             <div className="mt-8 d-flex gap-2">
-              <button type="submit" className="default-btn" disabled={isLoading}>
-                {isLoading ? (
+              <button type="submit" className="default-btn" disabled={isLoading || isUploading}>
+                {isLoading || isUploading ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    {isEditMode ? "Actualizando..." : "Guardando..."}
+                    {isUploading ? "Subiendo archivo..." : (isEditMode ? "Actualizando..." : "Guardando...")}
                   </>
                 ) : (
                   <>
@@ -554,7 +555,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
                   type="button"
                   className="btn btn-secondary"
                   onClick={handleCancel}
-                  disabled={isLoading}
+                  disabled={isLoading || isUploading}
                 >
                   <i className="bx bx-x"></i>
                   Cancelar

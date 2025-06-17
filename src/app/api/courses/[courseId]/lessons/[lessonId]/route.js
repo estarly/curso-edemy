@@ -125,7 +125,11 @@ export async function PUT(request, { params }) {
             const fileName = `${nombreOriginal}-default-${timestamp}`;
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
               fileName: fileName,
-              nextDirectory: 'course/' + courseId + '/asset/' + lessonId
+              nextDirectory: 'course/' + courseId + '/asset/' + lessonId,
+              onProgress: (progress) => {
+                // El progreso se maneja en el cliente a través de axios
+                console.log('Progreso de subida:', progress);
+              }
             });
 
             if (!uploadResult.success) {
@@ -177,7 +181,11 @@ export async function PUT(request, { params }) {
             const fileName = `${nombreOriginal}-default-${timestamp}`;
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
               fileName: fileName,
-              nextDirectory: 'course/' + courseId + '/asset/' + lessonId
+              nextDirectory: 'course/' + courseId + '/asset/' + lessonId,
+              onProgress: (progress) => {
+                // El progreso se maneja en el cliente a través de axios
+                console.log('Progreso de subida:', progress);
+              }
             });
 
             if (!uploadResult.success) {
@@ -229,7 +237,11 @@ export async function PUT(request, { params }) {
             const fileName = `${nombreOriginal}-default-${timestamp}`;
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
               fileName: fileName,
-              nextDirectory: 'course/' + courseId + '/asset/' + lessonId
+              nextDirectory: 'course/' + courseId + '/asset/' + lessonId,
+              onProgress: (progress) => {
+                // El progreso se maneja en el cliente a través de axios
+                console.log('Progreso de subida:', progress);
+              }
             });
 
             if (!uploadResult.success) {

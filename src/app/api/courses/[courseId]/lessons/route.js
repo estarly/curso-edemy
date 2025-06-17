@@ -52,6 +52,17 @@ export async function POST(request, { params }) {
     const { body, file: uploadedFile } = await processFormDataWithFile(request, 'file');
     const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description } = body;
 
+    console.log('=== DEBUG INFO ===');
+    console.log('Course ID:', courseId);
+    console.log('Asset Type ID:', assetTypeId);
+    console.log('Title:', title);
+    console.log('Uploaded File:', uploadedFile ? {
+      originalname: uploadedFile.originalname,
+      mimetype: uploadedFile.mimetype,
+      size: uploadedFile.size
+    } : 'No file');
+    console.log('Body:', body);
+
     // Validar datos según el tipo de asset
     if (!title) {
       return NextResponse.json(
@@ -77,12 +88,19 @@ export async function POST(request, { params }) {
 
     switch (parseInt(assetTypeId)) {
       case ASSET_TYPES.VIDEO:
+        console.log('=== PROCESSING VIDEO ===');
         console.log({ video_url, file_url, uploadedFile });
 
         // Normalizar valores undefined a null o string vacío
         const normalizedVideoUrlForVideo = video_url || null;
         const normalizedFileUrlForVideo = file_url || null;
         const hasUploadedFileForVideo = uploadedFile && uploadedFile.size > 0;
+
+        console.log('Normalized values:', {
+          normalizedVideoUrlForVideo,
+          normalizedFileUrlForVideo,
+          hasUploadedFileForVideo
+        });
 
         if (!normalizedVideoUrlForVideo && !normalizedFileUrlForVideo && !hasUploadedFileForVideo) {
           return NextResponse.json(
@@ -96,13 +114,26 @@ export async function POST(request, { params }) {
         let videoUrl = normalizedVideoUrlForVideo || normalizedFileUrlForVideo;
 
         if (hasUploadedFileForVideo) {
+          console.log('=== UPLOADING VIDEO FILE ===');
           try {
             const timestamp = new Date().getTime();
             const fileName = `video-${courseId}-${timestamp}`;
 
-            const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-              fileName: fileName
+            console.log('Upload options:', {
+              fileName: fileName,
+              mimetype: uploadedFile.mimetype,
+              size: uploadedFile.size
             });
+
+            const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
+              fileName: fileName,
+              onProgress: (progress) => {
+                // El progreso se maneja en el cliente a través de axios
+                console.log('Progreso de subida:', progress);
+              }
+            });
+
+            console.log('Upload result:', uploadResult);
 
             if (!uploadResult.success) {
               throw new Error(uploadResult.error || 'Error al subir el video');
@@ -110,6 +141,8 @@ export async function POST(request, { params }) {
 
             videoUrl = uploadResult.url;
             finalFileUrl = uploadResult.url;
+            
+            console.log('Final video URL:', videoUrl);
           } catch (uploadError) {
             console.error('Error al subir el video:', uploadError);
             return NextResponse.json(
@@ -123,6 +156,8 @@ export async function POST(request, { params }) {
           val: videoUrl,
           type: "video"
         };
+        
+        console.log('Final config_asset:', config_asset);
         break;
 
       case ASSET_TYPES.AUDIO:
@@ -150,7 +185,11 @@ export async function POST(request, { params }) {
             const fileName = `audio-${courseId}-${timestamp}`;
 
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-              fileName: fileName
+              fileName: fileName,
+              onProgress: (progress) => {
+                // El progreso se maneja en el cliente a través de axios
+                console.log('Progreso de subida:', progress);
+              }
             });
 
             if (!uploadResult.success) {
@@ -199,7 +238,11 @@ export async function POST(request, { params }) {
             const fileName = `document-${courseId}-${timestamp}`;
 
             const uploadResult = await fileUploadService.uploadFile(uploadedFile, {
-              fileName: fileName
+              fileName: fileName,
+              onProgress: (progress) => {
+                // El progreso se maneja en el cliente a través de axios
+                console.log('Progreso de subida:', progress);
+              }
             });
 
             if (!uploadResult.success) {
@@ -324,6 +367,16 @@ export async function POST(request, { params }) {
         );
     }
 
+    console.log('=== CREATING ASSET IN DATABASE ===');
+    console.log('Data to create:', {
+      title,
+      description: description || "",
+      file_url: finalFileUrl,
+      courseId: parseInt(courseId),
+      assetTypeId: parseInt(assetTypeId),
+      config_asset: config_asset
+    });
+
     // Crear la lección en la base de datos
     const asset = await prisma.asset.create({
       data: {
@@ -335,6 +388,9 @@ export async function POST(request, { params }) {
         config_asset: config_asset
       },
     });
+
+    console.log('=== ASSET CREATED ===');
+    console.log('Created asset:', asset);
 
     // Incrementar el contador de lecciones del curso
     /*await prisma.course.update({
@@ -360,6 +416,40 @@ export async function POST(request, { params }) {
       {
         message: "Ocurrió un error: " + error.message,
       },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request, { params }) {
+  const { courseId } = params;
+  
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return NextResponse.json(
+        { message: "Usuario no autorizado." },
+        { status: 401 }
+      );
+    }
+
+    const assets = await prisma.asset.findMany({
+      where: {
+        courseId: parseInt(courseId)
+      },
+      orderBy: {
+        created_at: 'desc'
+      }
+    });
+
+    return NextResponse.json({
+      assets
+    });
+
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      { message: "Error: " + error.message },
       { status: 500 }
     );
   }
