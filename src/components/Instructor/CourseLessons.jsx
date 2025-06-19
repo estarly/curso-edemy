@@ -29,7 +29,7 @@ const ASSET_TYPES = {
   ONLINE: 6
 };
 
-const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) => {
+const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onAssetNew }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const router = useRouter();
@@ -299,6 +299,8 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated }) =
         toast.success(response.message || "Lección añadida exitosamente");
         reset();
         setSelectedFile(null);
+        onAssetNew();
+        
       }
 
       router.refresh();

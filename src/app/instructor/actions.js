@@ -11,6 +11,9 @@ export async function getAssetsByCourseId(courseId) {
   try {
     const items = await prisma.asset.findMany({
       where: { courseId: parseInt(courseId) },
+      orderBy: {
+        created_at: 'desc'
+      }
     });
 
     return { items };

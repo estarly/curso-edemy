@@ -7,14 +7,14 @@ const StudentAssetViewer = ({ asset }) => {
       <div className="card h-100">
         {/* Video - Tipo 1 */}
         {asset.assetTypeId === 1 && asset.config_asset?.val && (
-          <div className="video-container" style={{ position: "relative", width: "100%", paddingTop: "56.25%" }}>
+          <div className="video-container" style={{ alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
             <VideoPlayer
               src={asset.config_asset.val}
               title={asset.title}
               controls={true}
               autoPlay={false}
               muted={false}
-              className="position-absolute w-100 h-100"
+              className="w-100 h-100"
               style={{ top: 0, left: 0, objectFit: "cover" }}
             />
           </div>
@@ -89,7 +89,7 @@ const StudentAssetViewer = ({ asset }) => {
           </div>
         )}
 
-        <div className="card-body">
+        <div className="card-body d-none">
           <h5 className="card-title">{asset.title}</h5>
           {asset.description && (
             <div

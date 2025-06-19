@@ -24,6 +24,10 @@ const ContentPage = ({ course, params, assets: initialAssets, assignmentsTypes }
     // Recargar los assets después de una actualización
     reloadAssets();
   }
+  
+  const onAssetNew = () => {
+    reloadAssets();
+  }
 
   const reloadAssets = async () => {
     try {
@@ -84,11 +88,12 @@ const ContentPage = ({ course, params, assets: initialAssets, assignmentsTypes }
         currentAsset={currentAsset}
         onCancelEdit={onCancelEdit}
         onAssetUpdated={onAssetUpdated}
+        onAssetNew={onAssetNew}
       />
       <hr />
       
       {/* Botón temporal para corregir headers CORS */}
-      <div className="mb-3">
+      <div className="mb-3 d-none">
         <button
           className="btn btn-danger btn-sm"
           onClick={fixVideoHeaders}

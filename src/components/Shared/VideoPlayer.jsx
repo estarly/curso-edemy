@@ -134,7 +134,7 @@ const VideoPlayer = ({ src, title, className = "" }) => {
       </video>
       
 
-      {videoInfo && (
+      {/*{videoInfo && (
         <div className="video-info mt-2 p-2 bg-light rounded">
           <small className="text-muted">
             <strong>Duración:</strong> {Math.round(videoInfo.duration)}s | 
@@ -142,7 +142,7 @@ const VideoPlayer = ({ src, title, className = "" }) => {
             <strong> Red:</strong> {videoInfo.networkState === 2 ? 'Conectado' : 'Desconectado'}
           </small>
         </div>
-      )}
+      )}*/}
     </div>
   );
 };
