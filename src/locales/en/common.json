@@ -1,0 +1,91 @@
+{
+  "navigation": {
+    "home": "Home",
+    "courses": "Courses",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog",
+    "events": "Events",
+    "instructors": "Instructors",
+    "pricing": "Pricing",
+    "faq": "FAQ"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "profile": "Profile",
+    "accountSettings": "Account Settings"
+  },
+  "user": {
+    "dashboard": "Dashboard",
+    "myCourses": "My Courses",
+    "myLearning": "My Learning",
+    "byModule": "By Module",
+    "assignments": "Assignments",
+    "wishlist": "Wishlist",
+    "purchaseHistory": "Purchase History"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "courses": "Courses",
+    "students": "Students",
+    "instructors": "Instructors",
+    "categories": "Categories",
+    "modules": "Modules",
+    "banners": "Banners"
+  },
+  "common": {
+    "search": "Search",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "homepage": {
+    "hero": {
+      "title": "Your Guide in the Path of Faith",
+      "subtitle": "Foundation of Faith and Knowledge",
+      "description": "Pilar: Your foundation in the path of faith and biblical knowledge. We offer an educational platform that serves as support and guidance in your spiritual growth.",
+      "cta": "Join for Free"
+    },
+    "features": {
+      "title": "Why Choose Us?",
+      "skilledTeachers": "Skilled Teachers",
+      "affordableCourses": "Affordable Courses",
+      "efficientFlexible": "Efficient & Flexible",
+      "lifetimeAccess": "Lifetime Access"
+    },
+    "home": {
+      "courses": "Courses",
+      "instructors": "Instructors",
+      "students": "Students",
+      "viewMore": "View More"
+    }
+  },
+  "courses": {
+    "title": "Our Courses",
+    "subtitle": "Explore our catalog",
+    "viewMore": "View More",
+    "enroll": "Enroll",
+    "price": "Price",
+    "duration": "Duration",
+    "level": "Level",
+    "instructor": "Instructor"
+  },
+  "footer": {
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "newsletter": "Subscribe to our newsletter",
+    "subscribe": "Subscribe"
+  }
+} 

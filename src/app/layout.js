@@ -19,6 +19,7 @@ import "../app/styles/responsive.css";
 import "../app/styles/dashboard.css";
 
 import TosterProvider from "@/providers/TosterProvider";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Layout/Navbar";
 import Footer from "@/components/Layout/Footer";
 import { getCurrentUser } from "@/actions/getCurrentUser";
@@ -76,9 +77,11 @@ export default async function RootLayout({ children }) {
 			</head>
 			<body className={nunito.className} suppressHydrationWarning={true}>
 				<TosterProvider />
-				<Navbar currentUser={currentUser} />
-				{children}
-				<Footer />
+				<LanguageProvider>
+					<Navbar currentUser={currentUser} />
+					{children}
+					<Footer />
+				</LanguageProvider>
 			</body>
 		</html>
 	);

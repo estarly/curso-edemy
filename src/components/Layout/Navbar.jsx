@@ -8,6 +8,7 @@ import MenuItem from "./MenuItem";
 import MegaMenu from "./MegaMenu";
 import { usePathname } from "next/navigation";
 import UserMenu from "./UserMenu";
+import LanguageSelector from "./LanguageSelector";
 import { useCartStore } from "@/store/cart";
 import SearchForm from "./SearchForm";
 
@@ -102,6 +103,7 @@ const Navbar = ({ currentUser }) => {
 									</div>
 								</div>*/}
 
+								<LanguageSelector />
 								<UserMenu currentUser={currentUser} />
 							</div>
 						</div>

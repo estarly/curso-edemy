@@ -1,27 +1,70 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "@/hooks/useTranslations";
+
 const UserMenu = ({ currentUser }) => {
 	const pathname = usePathname();
+	const [isClient, setIsClient] = useState(false);
+	const { t } = useTranslations();
 	const isAdmin = currentUser?.role === "ADMIN";
 	const isInstructor = currentUser?.role === "INSTRUCTOR";//currentUser?.is_instructor;
 	const isStudent = currentUser?.role === "USER";
+
+	// Verificar que estamos en el cliente
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
 
 	//console.log(currentUser,'UserMenu');
 	//console.log(currentUser.role, currentUser.is_instructor,'UserMenu');
 	const dummyImage =
 		"/images/landing/profile/profile01.png";
 
+	// Renderizar placeholder mientras se carga en el cliente
+	if (!isClient) {
+		return (
+			<>
+				{!currentUser && (
+					<div className="option-item">
+						<Link href="/auth/login" className="default-btn">
+							<i className="flaticon-user"></i> {t('auth.login')}{" "}
+							<span></span>
+						</Link>
+					</div>
+				)}
+				{currentUser && (
+					<div className="option-item">
+						<div className="dropdown profile-dropdown">
+							<div className="img ptb-15">
+								<Image
+									src={
+										currentUser?.image && currentUser.image !== "" 
+											? currentUser.image 
+											: dummyImage
+									}
+									alt={currentUser.role}
+									width={35}
+									height={35}
+								/>
+							</div>
+						</div>
+					</div>
+				)}
+			</>
+		);
+	}
+
 	return (
 		<>
 			{!currentUser && (
 				<div className="option-item">
 					<Link href="/auth/login" className="default-btn">
-						<i className="flaticon-user"></i> Iniciar Sesion{" "}
+						<i className="flaticon-user"></i> {t('auth.login')}{" "}
 						<span></span>
 					</Link>
 				</div>
@@ -85,7 +128,7 @@ const UserMenu = ({ currentUser }) => {
 											href="/admin"
 										>
 											<i className="bx bxs-dashboard"></i>{" "}
-											Dashboard Admin
+											{t('admin.dashboard')}
 										</Link>
 									</li>
 									//asignar cursos a un modulo
@@ -101,8 +144,7 @@ const UserMenu = ({ currentUser }) => {
 												className="dropdown-item"
 												href="/instructor/courses"
 											>
-												<i className="bx bxs-dashboard"></i> Mis
-												Cursos
+												<i className="bx bxs-dashboard"></i> {t('user.myCourses')}
 											</Link>
 										</li>
 										<li>
@@ -111,7 +153,7 @@ const UserMenu = ({ currentUser }) => {
 												href="/instructor/assignments"
 											>
 												<i className="bx bxs-dashboard"></i>
-												Asignaciones
+												{t('user.assignments')}
 											</Link>
 										</li>
 									</>
@@ -124,7 +166,7 @@ const UserMenu = ({ currentUser }) => {
 												className={`dropdown-item ${pathname === "/learning/my-courses" ? "active" : ""}`}
 												href="/learning/my-courses"
 											>
-												<i className="bx bx-book"></i>Mi Aprendizaje
+												<i className="bx bx-book"></i>{t('user.myLearning')}
 											</Link>
 										</li>
 										<li>
@@ -132,7 +174,7 @@ const UserMenu = ({ currentUser }) => {
 												className={`dropdown-item ${pathname === "/learning/by-module" ? "active" : ""}`}
 												href="/learning/by-module"
 											>
-												<i className="bx bx-book"></i>Por Módulo
+												<i className="bx bx-book"></i>{t('user.byModule')}
 											</Link>
 										</li>
 										{/*Tareas de un curso*/}
@@ -186,7 +228,7 @@ const UserMenu = ({ currentUser }) => {
 										href="/profile/basic-information"
 									>
 										<i className="bx bx-user-circle"></i>{" "}
-										Configuración de cuenta
+										{t('auth.accountSettings')}
 									</Link>
 								</li>
 
@@ -200,7 +242,7 @@ const UserMenu = ({ currentUser }) => {
 										className="dropdown-item"
 										onClick={() => signOut()}
 									>
-										<i className="bx bx-log-out"></i> Cerrar Sesión
+										<i className="bx bx-log-out"></i> {t('auth.logout')}
 									</button>
 								</li>
 							</ul>

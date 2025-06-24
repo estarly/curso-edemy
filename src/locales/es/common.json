@@ -1,0 +1,92 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "courses": "Cursos",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "blog": "Blog",
+    "events": "Eventos",
+    "instructors": "Instructores",
+    "pricing": "Precios",
+    "faq": "Preguntas Frecuentes"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "profile": "Perfil",
+    "accountSettings": "Configuración de cuenta"
+  },
+  "user": {
+    "dashboard": "Panel de Control",
+    "myCourses": "Mis Cursos",
+    "myLearning": "Mi Aprendizaje",
+    "byModule": "Por Módulo",
+    "assignments": "Asignaciones",
+    "wishlist": "Lista de Deseos",
+    "purchaseHistory": "Historial de Compras"
+  },
+  "admin": {
+    "dashboard": "Dashboard Admin",
+    "courses": "Cursos",
+    "students": "Estudiantes",
+    "instructors": "Instructores",
+    "categories": "Categorías",
+    "modules": "Módulos",
+    "banners": "Banners"
+  },
+  "common": {
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "view": "Ver",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "close": "Cerrar"
+  },
+  "homepage": {
+    "hero": {
+      "title": "Tu Guía en el Camino de la Fe",
+      "subtitle": "Fundamento de Fe y Conocimiento",
+      "description": "Pilar: Tu fundamento en el camino de la fe y el conocimiento bíblico. Ofrecemos una plataforma educativa que sirve como soporte y guía en tu crecimiento espiritual.",
+      "cta": "Únete Gratis"
+    },
+    "features": {
+      "title": "¿Por qué elegirnos?",
+      "skilledTeachers": "Maestros Calificados",
+      "affordableCourses": "Cursos Asequibles",
+      "efficientFlexible": "Eficiente y Flexible",
+      "lifetimeAccess": "Acceso de por Vida"
+    },
+    "home": {
+      "home": "Inicio",
+      "courses": "Cursos",
+      "instructors": "Instructores",
+      "students": "Estudiantes",
+      "viewMore": "Ver Más"
+    }
+  },
+  "courses": {
+    "title": "Nuestros Cursos",
+    "subtitle": "Explora nuestro catálogo",
+    "viewMore": "Ver Más",
+    "enroll": "Inscribirse",
+    "price": "Precio",
+    "duration": "Duración",
+    "level": "Nivel",
+    "instructor": "Instructor"
+  },
+  "footer": {
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "newsletter": "Suscríbete a nuestro boletín",
+    "subscribe": "Suscribirse"
+  }
+} 
