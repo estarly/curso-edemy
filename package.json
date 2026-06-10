@@ -9,7 +9,14 @@
 		"start:dev": "PORT=3020 next start",
 		"start:prod": "PORT=3030 next start",
 		"lint": "next lint",
-		"seed": "node prisma/seed.ts"
+		"db:push": "prisma db push",
+		"db:migrate": "prisma migrate dev",
+		"db:seed": "prisma db seed",
+		"db:setup": "prisma migrate dev && prisma db seed",
+		"seed": "node prisma/seed.js"
+	},
+	"prisma": {
+		"seed": "node prisma/seed.js"
 	},
 	"dependencies": {
 		"@mantine/rte": "^5.10.5",
