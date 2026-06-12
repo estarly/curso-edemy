@@ -25,7 +25,7 @@ const Links = ({ currentUser }) => {
 						}
 						href="/profile/basic-information/"
 					>
-						Información Personal
+						Datos Básicos
 					</Link>
 				</li>
 				<li>

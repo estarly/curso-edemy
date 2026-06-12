@@ -163,18 +163,18 @@ const Footer = () => {
 						</div>
 
 						<div className="col-lg-6 col-md-6">
-							<ul>
+							{/*<ul>
 								<li>
 									<Link href="https://www.boomkend.com" target="_blank">
 										Desarrollado por Boomkend
 									</Link>
 								</li>
-								{/*<li>
+								<li>
 									<Link href="/terms-of-service">
 										Terms & Conditions
 									</Link>
-								</li>*/}
-							</ul>
+								</li>
+							</ul>*/}
 						</div>
 					</div>
 				</div>

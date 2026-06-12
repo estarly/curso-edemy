@@ -1,0 +1,47 @@
+{
+	"roleLabels": {
+		"ADMIN": "Administrador",
+		"INSTRUCTOR": "Instructor",
+		"USER": "Estudiante"
+	},
+	"menus": {
+		"ADMIN": [
+			{
+				"label": "Dashboard Admin",
+				"href": "/admin",
+				"icon": "bx bxs-dashboard"
+			}
+		],
+		"INSTRUCTOR": [
+			{
+				"label": "Mis Cursos",
+				"href": "/instructor/courses",
+				"icon": "bx bxs-dashboard"
+			},
+			{
+				"label": "Asignaciones",
+				"href": "/instructor/assignments",
+				"icon": "bx bx-task"
+			}
+		],
+		"USER": [
+			{
+				"label": "Mi Aprendizaje",
+				"href": "/learning/my-courses",
+				"icon": "bx bx-book"
+			},
+			{
+				"label": "Por Módulo",
+				"href": "/learning/by-module",
+				"icon": "bx bx-layer"
+			}
+		]
+	},
+	"common": [
+		{
+			"label": "Configuración de cuenta",
+			"href": "/profile/basic-information",
+			"icon": "bx bx-user-circle"
+		}
+	]
+}
