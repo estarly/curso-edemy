@@ -1,33 +1,44 @@
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { myCourses } from "@/actions/myCourses";
 import InstructorHeaderMini from "@/components/Instructor/InstructorHeaderMini";
-import ProgressBarCourse from "@/components/Instructor/ProgressBarCourse";
-import CategorySelect from "@/components/FormHelpers/CategorySelect";
+import InstructorSideNav from "@/components/Instructor/InstructorSideNav";
 import { getCategories } from "@/app/admin/categories/_actions";
 import { Content } from "./_components/Content";
 import { getCurrentUser, validateDataUser } from "@/actions/getCurrentUser";
 import { redirect } from "next/navigation";
 
-const Page = async ({ searchParams }) => {
+const Page = async () => {
 	const { items: categories } = await getCategories();
 	const currentUser = await getCurrentUser();
 	const validateUser = await validateDataUser();
-	
-	if(currentUser && validateUser){
+	const isInstructor = currentUser?.role === "INSTRUCTOR";
+
+	if (!currentUser || !isInstructor) {
+		redirect("/");
+	}
+
+	if (validateUser) {
 		redirect("/profile/basic-information");
 	}
 
 	return (
-		<>
-			<InstructorHeaderMini />
-			<div className="pb-1 pt-5">
-				<div className="container">
-					<Content categories={categories} />									
+		<div className="main-content">
+			<div className="container-fluid">
+				<div className="row">
+					<div className="col-lg-3 col-md-4">
+						<InstructorSideNav isInstructor={isInstructor} />
+					</div>
+
+					<div className="col-lg-9 col-md-8">
+						<InstructorHeaderMini />
+						<div className="pb-1 pt-5">
+							<div className="container">
+								<Content categories={categories} />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 };
 

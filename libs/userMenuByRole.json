@@ -7,9 +7,51 @@
 	"menus": {
 		"ADMIN": [
 			{
-				"label": "Dashboard Admin",
+				"label": "Dashboard",
 				"href": "/admin",
-				"icon": "bx bxs-dashboard"
+				"icon": "bx bxs-dashboard",
+				"match": "exact"
+			},
+			{
+				"label": "Instructores",
+				"href": "/admin/instructors",
+				"icon": "bx bx-user-voice"
+			},
+			{
+				"label": "Cursos",
+				"href": "/admin/courses",
+				"icon": "bx bx-book-open",
+				"activePaths": ["/admin/courses", "/admin/courses/new-arrival"]
+			},
+			{
+				"label": "Categorías",
+				"href": "/admin/categories",
+				"icon": "bx bx-category"
+			},
+			{
+				"label": "Módulos",
+				"href": "/admin/modules",
+				"icon": "bx bx-layer",
+				"activePaths": [
+					"/admin/modules",
+					"/admin/modules/asign-course",
+					"/admin/modules/by-course"
+				]
+			},
+			{
+				"label": "Estudiantes",
+				"href": "/admin/students",
+				"icon": "bx bx-user",
+				"activePaths": [
+					"/admin/students",
+					"/admin/students/assign-module",
+					"/admin/students/site-admins"
+				]
+			},
+			{
+				"label": "Banners",
+				"href": "/admin/banners",
+				"icon": "bx bx-image"
 			}
 		],
 		"INSTRUCTOR": [
@@ -22,6 +64,11 @@
 				"label": "Asignaciones",
 				"href": "/instructor/assignments",
 				"icon": "bx bx-task"
+			},
+			{
+				"label": "Crear Curso",
+				"href": "/instructor/course/create",
+				"icon": "bx bx-video-plus"
 			}
 		],
 		"USER": [
@@ -34,6 +81,11 @@
 				"label": "Por Módulo",
 				"href": "/learning/by-module",
 				"icon": "bx bx-layer"
+			},
+			{
+				"label": "Mis Favoritos",
+				"href": "/learning/wishlist",
+				"icon": "bx bxs-heart"
 			}
 		]
 	},

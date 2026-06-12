@@ -7,12 +7,7 @@ import { usePathname } from "next/navigation";
 import Swal from "sweetalert2";
 import UserAvatar from "./UserAvatar";
 import userMenuConfig from "@libs/userMenuByRole.json";
-
-const isActivePath = (pathname, href) => {
-	const normalizedPath = pathname.replace(/\/$/, "");
-	const normalizedHref = href.replace(/\/$/, "");
-	return normalizedPath === normalizedHref;
-};
+import { isMenuItemActive } from "@libs/userMenuUtils";
 
 const UserMenu = ({ currentUser }) => {
 	const pathname = usePathname();
@@ -41,7 +36,7 @@ const UserMenu = ({ currentUser }) => {
 	const renderMenuItem = (item) => (
 		<li key={item.href}>
 			<Link
-				className={`dropdown-item ${isActivePath(pathname, item.href) ? "active" : ""}`}
+				className={`dropdown-item ${isMenuItemActive(pathname, item) ? "active" : ""}`}
 				href={item.href}
 			>
 				<i className={item.icon}></i> {item.label}
