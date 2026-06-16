@@ -341,31 +341,55 @@ async function main() {
 		skipDuplicates: true,
 	});
 
+	await prisma.banner.deleteMany();
+
 	await prisma.banner.createMany({
 		data: [
 			{
 				id: 1,
-				name: "Formación Bíblica con Propósito.",
-				description:
-					"Un espacio de enseñanza fiel a las Escrituras, con acceso gratuito y recursos prácticos pensados para tu crecimiento espiritual. Materiales de apoyo que conectan la Palabra con la vida diaria, en un entorno accesible, claro y lleno de propósito.",
-				url: "",
+				url: "https://www.ganaencasa24.com",
 				status: 1,
 				image:
-					"https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-1-1750017640693",
+					"https://www.ganaencasa24.com/cms/img/banners/1084/416x228.mp4",
 				order: 0,
+				date_start: null,
+				date_end: null,
 				created_at: new Date("2024-03-27T07:21:35.780Z"),
 				updated_at: new Date("2024-03-27T07:21:35.780Z"),
 			},
 			{
 				id: 2,
-				name: "Creciendo Juntos en la Palabra.",
-				description:
-					"Una representación del crecimiento espiritual de estudiantes y líderes comprometidos con la verdad de las Escrituras. En comunidad y con propósito, descubren cómo la Palabra transforma vidas, guía decisiones y forma el carácter.",
 				url: "",
 				status: 1,
 				image:
-					"https://space-share.nyc3.digitaloceanspaces.com/upload_course/banners/banner-2-1750028231613",
+					"https://www.ganaencasa24.com/cms/img/banners/747/sliderweb-tiendarecomp-mobile-mar.webp",
 				order: 1,
+				date_start: null,
+				date_end: null,
+				created_at: new Date("2024-03-27T07:21:35.780Z"),
+				updated_at: new Date("2024-03-27T07:21:35.780Z"),
+			},
+			{
+				id: 3,
+				url: "https://www.ganaencasa24.com",
+				status: 1,
+				image:
+					"https://www.ganaencasa24.com/cms/img/banners/677/416x228-casino-envivo.webp",
+				order: 2,
+				date_start: null,
+				date_end: null,
+				created_at: new Date("2024-03-27T07:21:35.780Z"),
+				updated_at: new Date("2024-03-27T07:21:35.780Z"),
+			},
+			{
+				id: 4,
+				url: "",
+				status: 1,
+				image:
+					"https://www.ganaencasa24.com/cms/img/banners/695/sliderweb-eFutbol-mobile-mar.webp",
+				order: 3,
+				date_start: null,
+				date_end: null,
 				created_at: new Date("2024-03-27T07:21:35.780Z"),
 				updated_at: new Date("2024-03-27T07:21:35.780Z"),
 			},

@@ -53,11 +53,19 @@ export const authHandler = NextAuth({
 			},
 		}),
 	],
-	// callbacks: {
-	// 	async signIn(user, account, profile) {
-	// 		return Promise.resolve("/");
-	// 	},
-	// },
+	callbacks: {
+		async redirect({ url, baseUrl }) {
+			if (url.startsWith("/")) {
+				return `${baseUrl}${url}`;
+			}
+
+			if (url.startsWith(baseUrl)) {
+				return url;
+			}
+
+			return baseUrl;
+		},
+	},
 	pages: {
 		signIn: "/auth",
 		error: "/auth",

@@ -9,36 +9,34 @@ export async function getBanners() {
 	}
 
 	try {
-		
 		const banners = await prisma.banner.findMany({
 			orderBy: {
-				id: "desc",
+				order: "asc",
 			},
 		});
 
 		return { banners };
 	} catch (error) {
-		console.error("Error fetching counts:", error);
+		console.error("Error fetching banners:", error);
+		return { banners: [] };
 	}
 }
 
 export async function saveBanners(newBanner) {
-	
 	try {
-		
 		const banner = await prisma.banner.create({
 			data: {
-				name: newBanner.name,
-				description: newBanner.description,
 				url: newBanner.url,
 				status: 1,
 				image: newBanner.image,
-				order: 0,
+				order: newBanner.order || 0,
+				date_start: newBanner.date_start || null,
+				date_end: newBanner.date_end || null,
 			},
 		});
 
 		return { banner };
 	} catch (error) {
-		console.error("Error fetching counts:", error);
+		console.error("Error saving banner:", error);
 	}
 }

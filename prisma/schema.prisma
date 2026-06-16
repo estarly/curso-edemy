@@ -230,15 +230,15 @@ model Favourite {
 }
 
 model Banner {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String? @db.Text
-  url         String?
-  status      Int      @default(1)
-  image       String?
-  order       Int      @default(0)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  url        String?
+  status     Int       @default(1)
+  image      String?
+  order      Int       @default(0)
+  date_start DateTime?
+  date_end   DateTime?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
 }
 
 model AssignmentType {

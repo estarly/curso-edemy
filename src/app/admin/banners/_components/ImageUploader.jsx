@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import ImageCropper from "./ImageCropper"
 
 const IMAGE_DIMENSIONS = {
-  banner: { width: 843, height: 680, label: "Banner" },
+  banner: { width: 832, height: 456, label: "Banner", allowVideo: true },
   category: { width: 650, height: 433, label: "Categoría" },
   profile: { width: 200, height: 200, label: "Perfil" },
   course: { width: 750, height: 500, label: "Curso" },
@@ -19,6 +19,7 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
   const [error, setError] = useState(null)
   const fileInputRef = useRef(null)
   const [showCropper, setShowCropper] = useState(false)
+  const [selectedMediaType, setSelectedMediaType] = useState(null)
 
   const isInitialMount = useRef(true)
 
@@ -48,8 +49,10 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
     setOriginalImage(null)
     setSelectedImage(null)
     setCroppedImageBlob(null)
+    setSelectedMediaType(null)
     setError(null)
     setShowCropper(false)
+    setSelectedMediaType(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -63,11 +66,27 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
     setError(null)
     setSelectedImage(null)
     setCroppedImageBlob(null)
+    setSelectedMediaType(null)
 
-    if (!file.type.startsWith("image/")) {
-      setError("El archivo seleccionado no es una imagen.")
+    if (!file.type.startsWith("image/") && !(dimensions.allowVideo && file.type.startsWith("video/"))) {
+      setError("El archivo debe ser imagen (JPG, PNG, WEBP) o video MP4.")
       return
     }
+
+    if (file.type.startsWith("video/")) {
+      if (file.size > 15 * 1024 * 1024) {
+        setError("El video no debe superar los 15MB.")
+        return
+      }
+
+      const previewUrl = URL.createObjectURL(file)
+      setSelectedImage(previewUrl)
+      setSelectedMediaType("video")
+      onChange && onChange(file)
+      return
+    }
+
+    setSelectedMediaType("image")
 
     if (file.size > 5 * 1024 * 1024) {
       setError("La imagen no debe superar los 5MB.")
@@ -94,6 +113,7 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
     e.stopPropagation()
     setSelectedImage(null)
     setCroppedImageBlob(null)
+    setSelectedMediaType(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -143,14 +163,27 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
             >
               {selectedImage ? (
                 <div className="position-relative w-100 d-flex justify-content-center">
-                  <img
-                    src={selectedImage || "/placeholder.svg"}
-                    alt="Preview"
-                    width={dimensions.width}
-                    height={dimensions.height}
-                    className="img-fluid"
-                    style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
-                  />
+                  {selectedMediaType === "video" ? (
+                    <video
+                      src={selectedImage}
+                      width={dimensions.width}
+                      height={dimensions.height}
+                      className="img-fluid"
+                      style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                      muted
+                      playsInline
+                      controls
+                    />
+                  ) : (
+                    <img
+                      src={selectedImage || "/placeholder.svg"}
+                      alt="Preview"
+                      width={dimensions.width}
+                      height={dimensions.height}
+                      className="img-fluid"
+                      style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                    />
+                  )}
                   <button
                     className="position-absolute top-0 end-0 btn btn-danger"
                     style={{ margin: "8px" }}
@@ -164,7 +197,9 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
                   <i className="bi bi-upload fs-1 text-secondary mb-2"></i>
                   <p className="text-secondary mb-1">Haz clic para seleccionar o arrastra una imagen</p>
                   <p className="text-secondary small">
-                    {dimensions.label}: {dimensions.width} x {dimensions.height} px (Formato: JPG, PNG)
+                    {dimensions.label}: {dimensions.width} x {dimensions.height} px
+                    {dimensions.allowVideo ? " o video MP4" : ""} (Formato: JPG, PNG
+                    {dimensions.allowVideo ? ", WEBP, MP4" : ""})
                   </p>
                   <p className="text-secondary small mt-1">Podrás recortar la imagen después de seleccionarla</p>
                 </>
@@ -173,7 +208,11 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
                 type="file"
                 ref={fileInputRef}
                 className="d-none"
-                accept="image/png, image/jpeg"
+                accept={
+                  dimensions.allowVideo
+                    ? "image/png, image/jpeg, image/webp, video/mp4"
+                    : "image/png, image/jpeg"
+                }
                 onChange={handleImageChange}
               />
             </div>

@@ -6,10 +6,10 @@ import "react-image-crop/dist/ReactCrop.css"
 
 const IMAGE_DIMENSIONS = {
   banner: {
-    width: 843,
-    height: 680,
+    width: 832,
+    height: 456,
     label: "Banner",
-    aspectRatio: 843 / 680,
+    aspectRatio: 832 / 456,
   },
   category: {
     width: 650,

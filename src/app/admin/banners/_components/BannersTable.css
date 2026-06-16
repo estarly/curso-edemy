@@ -1,0 +1,36 @@
+.banner-table-hint {
+	margin-bottom: 0.5rem;
+}
+
+.banner-table__row {
+	cursor: grab;
+	transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.banner-table__row:active {
+	cursor: grabbing;
+}
+
+.banner-table__row--dragging {
+	opacity: 0.45;
+	background-color: #eef2ff;
+}
+
+.banner-table__row--over {
+	background-color: #f8fafc;
+	box-shadow: inset 0 3px 0 #4f46e5;
+}
+
+.banner-table__handle {
+	font-size: 1.1rem;
+	cursor: grab;
+}
+
+.banner-table__row button,
+.banner-table__row a {
+	cursor: pointer;
+}
+
+.banner-table__row--dragging .banner-table__handle {
+	cursor: grabbing;
+}

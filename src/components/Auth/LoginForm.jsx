@@ -9,6 +9,7 @@ import Link from "next/link";
 import Input from "../FormHelpers/Input";
 import styles from "./LoginForm.module.css";
 import Swal from "sweetalert2";
+import { getPostLoginRedirectPath } from "@/actions/auth/getPostLoginRedirect";
 
 const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -27,24 +28,28 @@ const LoginForm = () => {
 		},
 	});
 
+	const handleGoogleSignIn = () => {
+		setIsLoading(true);
+		signIn("google", { callbackUrl: "/auth/post-login" });
+	};
+
 	const onSubmit = (data) => {
 		setIsLoading(true);
 		signIn("credentials", {
 			...data,
 			redirect: false,
-		}).then((callback) => {
+		}).then(async (callback) => {
 			setIsLoading(false);
-			console.log(callback, 'callback');
 
 			if (callback?.error) {
 				Swal.fire("Ups!", callback.error, "error");
-				//toast.error(callback.error);
+				return;
 			}
 
-			if (!callback?.error) {
-				toast.success("Sesión iniciada");
-				router.refresh();
-			}
+			toast.success("Sesión iniciada");
+			const redirectPath = await getPostLoginRedirectPath();
+			router.push(redirectPath);
+			router.refresh();
 		});
 	};
 
@@ -100,6 +105,17 @@ const LoginForm = () => {
 					{isLoading ? "Por favor espere..." : "Iniciar Sesión"}
 				</button>
 			</form>
+
+			<div className="text-center my-3 text-muted">o</div>
+
+			<button
+				type="button"
+				className="btn btn-outline-dark w-100"
+				disabled={isLoading}
+				onClick={handleGoogleSignIn}
+			>
+				Continuar con Google
+			</button>
 		</div>
 	);
 };

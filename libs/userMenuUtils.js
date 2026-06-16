@@ -1,3 +1,15 @@
+import userMenuConfig from "./userMenuByRole.json";
+
+export function getDashboardPathByRole(role) {
+	const menuItems = userMenuConfig.menus[role];
+
+	if (menuItems?.length) {
+		return menuItems[0].href;
+	}
+
+	return "/";
+}
+
 export function normalizePath(path) {
 	return (path || "").replace(/\/$/, "") || "/";
 }

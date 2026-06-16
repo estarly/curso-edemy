@@ -9,6 +9,7 @@ import { BannersTable } from "./BannersTable";
 import AdminSideNav from "@/components/Admin/AdminSideNav";
 import DeleteConfirmationDialog from "@/components/Admin/DeleteConfirmationDialog";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export const ContentPage = ({ items, isAdmin }) => {
   const router = useRouter();
@@ -99,6 +100,20 @@ export const ContentPage = ({ items, isAdmin }) => {
     }
   };
 
+  const handleReorder = async (orders) => {
+    try {
+      await axios.patch("/api/banners/reorder", { orders });
+      toast.success("Orden de banners actualizado");
+      router.refresh();
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "No se pudo actualizar el orden"
+      );
+      router.refresh();
+      throw error;
+    }
+  };
+
   return (
     <>
       <div className="main-content">
@@ -133,6 +148,7 @@ export const ContentPage = ({ items, isAdmin }) => {
                   items={items}
                   onEditClick={handleEditClick}
                   onDeleteClick={handleDeleteClick}
+                  onReorder={handleReorder}
                 />
               </div>
             </div>
@@ -153,7 +169,7 @@ export const ContentPage = ({ items, isAdmin }) => {
         onClose={handleCloseDeleteDialog}
         onConfirm={handleConfirmDelete}
         title="Eliminar Banner"
-        message={`¿Está seguro de que desea eliminar el banner "${selectedBanner?.name}"?  Esta acción no se puede deshacer.`}
+        message={`¿Está seguro de que desea eliminar el banner #${selectedBanner?.id}? Esta acción no se puede deshacer.`}
       />
     </>
   );

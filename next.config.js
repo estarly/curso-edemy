@@ -8,7 +8,8 @@ const nextConfig = {
 			"lh3.googleusercontent.com",
 			"via.placeholder.com",
 			"developers.google.com",
-      "space-share.nyc3.digitaloceanspaces.com"
+      "space-share.nyc3.digitaloceanspaces.com",
+      "www.ganaencasa24.com"
 		],
 	},
 	env: {
