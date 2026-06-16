@@ -213,9 +213,14 @@ curso-edemy/
 ├── public/           # Archivos estáticos
 ├── env.example       # Plantilla de variables de entorno
 ├── package.json      # Dependencias y scripts
-└── documentacion/    # Esta documentación
+└── documentacion/    # Documentación del proyecto
+    ├── install.md              # Instalación y ejecución local
+    ├── panel_admin.md          # Panel admin: índice general
+    └── panel_admin_banners.md  # Panel admin: banners (detalle)
 ```
 
 ---
 
 ¿Algo no funciona? Revisa primero el `.env` y que MySQL esté activo. La mayoría de problemas en local vienen de ahí.
+
+Para el panel de administración (dashboard, banners, etc.), consulta [panel_admin.md](./panel_admin.md).

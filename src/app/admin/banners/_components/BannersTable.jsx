@@ -10,6 +10,7 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 	const [overIndex, setOverIndex] = useState(null);
 	const [isSaving, setIsSaving] = useState(false);
 	const dragIndexRef = useRef(null);
+	const touchRef = useRef({ fromIndex: null, overIndex: null });
 
 	useEffect(() => {
 		setRows(items || []);
@@ -46,12 +47,23 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 		}
 	};
 
-	const handleDragStart = (event, index) => {
-		if (event.target.closest("button, a, input, textarea, select")) {
-			event.preventDefault();
-			return;
-		}
+	const applyReorder = async (fromIndex, toIndex) => {
+		const reorderedRows = reorderRows(fromIndex, toIndex);
+		if (!reorderedRows) return;
 
+		setRows(reorderedRows);
+		await persistOrder(reorderedRows);
+	};
+
+	const clearDragState = () => {
+		setDraggingIndex(null);
+		setOverIndex(null);
+		dragIndexRef.current = null;
+		touchRef.current = { fromIndex: null, overIndex: null };
+	};
+
+	const handleDragStart = (event, index) => {
+		event.stopPropagation();
 		dragIndexRef.current = index;
 		setDraggingIndex(index);
 		event.dataTransfer.effectAllowed = "move";
@@ -68,29 +80,65 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 		event.preventDefault();
 
 		const fromIndex = dragIndexRef.current;
-		const reorderedRows = reorderRows(fromIndex, index);
+		clearDragState();
 
-		setDraggingIndex(null);
-		setOverIndex(null);
-		dragIndexRef.current = null;
-
-		if (!reorderedRows) return;
-
-		setRows(reorderedRows);
-		await persistOrder(reorderedRows);
+		await applyReorder(fromIndex, index);
 	};
 
 	const handleDragEnd = () => {
-		setDraggingIndex(null);
-		setOverIndex(null);
-		dragIndexRef.current = null;
+		clearDragState();
+	};
+
+	const findRowIndexFromPoint = (clientX, clientY) => {
+		const element = document.elementFromPoint(clientX, clientY);
+		const row = element?.closest("[data-row-index]");
+
+		if (!row) return null;
+
+		const index = parseInt(row.getAttribute("data-row-index"), 10);
+		return Number.isNaN(index) ? null : index;
+	};
+
+	const handleHandleTouchStart = (event, index) => {
+		if (isSaving) return;
+
+		event.stopPropagation();
+		touchRef.current = { fromIndex: index, overIndex: index };
+		setDraggingIndex(index);
+		setOverIndex(index);
+	};
+
+	const handleHandleTouchMove = (event) => {
+		if (touchRef.current.fromIndex === null) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		const touch = event.touches[0];
+		const targetIndex = findRowIndexFromPoint(touch.clientX, touch.clientY);
+
+		if (targetIndex !== null) {
+			touchRef.current.overIndex = targetIndex;
+			setOverIndex(targetIndex);
+		}
+	};
+
+	const handleHandleTouchEnd = async (event) => {
+		event.stopPropagation();
+
+		const { fromIndex, overIndex: toIndex } = touchRef.current;
+		clearDragState();
+
+		if (fromIndex === null || toIndex === null) return;
+
+		await applyReorder(fromIndex, toIndex);
 	};
 
 	return (
 		<div className="banner-table-wrapper">
 			<p className="banner-table-hint text-muted small mb-2">
-				<i className="bx bx-move me-1"></i>
-				Arrastra una fila para cambiar el orden de los banners
+				<i className="bx bx-menu me-1"></i>
+				Usa el icono de rayitas para arrastrar y cambiar el orden
 				{isSaving ? " · guardando..." : ""}
 			</p>
 
@@ -110,15 +158,13 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 							rows.map((item, index) => (
 								<tr
 									key={item.id}
-									draggable={!isSaving}
-									onDragStart={(event) => handleDragStart(event, index)}
+									data-row-index={index}
 									onDragOver={(event) => handleDragOver(event, index)}
 									onDrop={(event) => handleDrop(event, index)}
-									onDragEnd={handleDragEnd}
 									className={[
 										"banner-table__row",
 										draggingIndex === index ? "banner-table__row--dragging" : "",
-										overIndex === index && draggingIndex !== index
+										overIndex === index && draggingIndex !== null && draggingIndex !== index
 											? "banner-table__row--over"
 											: "",
 									]
@@ -127,11 +173,26 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 								>
 									<td>
 										<div className="d-flex align-items-center gap-2">
-											<i
-												className="bx bx-menu banner-table__handle text-muted"
-												title="Arrastrar para reordenar"
-												aria-hidden="true"
-											></i>
+											<span
+												className={[
+													"banner-table__handle",
+													draggingIndex === index ? "banner-table__handle--active" : "",
+												]
+													.filter(Boolean)
+													.join(" ")}
+												role="button"
+												tabIndex={0}
+												aria-label="Arrastrar para reordenar"
+												draggable={!isSaving}
+												onDragStart={(event) => handleDragStart(event, index)}
+												onDragEnd={handleDragEnd}
+												onTouchStart={(event) => handleHandleTouchStart(event, index)}
+												onTouchMove={handleHandleTouchMove}
+												onTouchEnd={handleHandleTouchEnd}
+												onTouchCancel={handleHandleTouchEnd}
+											>
+												<i className="bx bx-menu" aria-hidden="true"></i>
+											</span>
 											<span>{item.order}</span>
 										</div>
 									</td>
@@ -166,7 +227,6 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 															target="_blank"
 															rel="noopener noreferrer"
 															className="small text-primary text-decoration-underline"
-															draggable={false}
 														>
 															ver enlace
 														</a>

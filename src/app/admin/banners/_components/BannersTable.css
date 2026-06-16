@@ -3,16 +3,11 @@
 }
 
 .banner-table__row {
-	cursor: grab;
 	transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
-.banner-table__row:active {
-	cursor: grabbing;
-}
-
 .banner-table__row--dragging {
-	opacity: 0.45;
+	opacity: 0.55;
 	background-color: #eef2ff;
 }
 
@@ -22,15 +17,31 @@
 }
 
 .banner-table__handle {
-	font-size: 1.1rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	font-size: 1.2rem;
+	color: #64748b;
 	cursor: grab;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.banner-table__handle i {
+	pointer-events: none;
+}
+
+.banner-table__handle--active {
+	background-color: #e0e7ff;
+	color: #4f46e5;
+	cursor: grabbing;
 }
 
 .banner-table__row button,
 .banner-table__row a {
 	cursor: pointer;
-}
-
-.banner-table__row--dragging .banner-table__handle {
-	cursor: grabbing;
 }
