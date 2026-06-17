@@ -46,7 +46,39 @@ Puntos clave:
 
 ---
 
-## 2. Banners
+## 2. Instructores
+
+**Ruta admin:** `/admin/instructors`
+
+Gestión de usuarios con rol `INSTRUCTOR`: listado paginado, registro desde modal, activar, desactivar y eliminar (soft delete).
+
+Para el proceso completo — formulario, tabla, APIs y estados — consulta:
+
+**→ [panel_admin_instructor.md](./panel_admin_instructor.md)**
+
+---
+
+## 3. Categorías
+
+**Ruta admin:** `/admin/categories`
+
+Gestión de categorías de cursos: crear, editar, subir logo y eliminar (soft delete). Las categorías activas aparecen en la home y en los filtros de cursos.
+
+**→ [panel_admin_categorias.md](./panel_admin_categorias.md)**
+
+---
+
+## 4. Módulos
+
+**Ruta admin:** `/admin/modules`
+
+CRUD de módulos: título, descripción, estado activo/inactivo. No incluye la pantalla *Asignar curso*.
+
+**→ [panel_admin_modulo.md](./panel_admin_modulo.md)**
+
+---
+
+## 5. Banners
 
 **Ruta admin:** `/admin/banners`  
 **Dónde se ven:** carrusel superior de la home (`/`)
@@ -71,4 +103,7 @@ Tras `npm run db:seed`:
 ## Documentación relacionada
 
 - [Instalación y ejecución local](./install.md)
+- [Instructores — guía detallada](./panel_admin_instructor.md)
+- [Categorías — guía detallada](./panel_admin_categorias.md)
+- [Módulos — guía detallada](./panel_admin_modulo.md)
 - [Banners — guía detallada](./panel_admin_banners.md)

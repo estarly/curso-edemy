@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const PAGE_SIZE = 5;
 
-export default function TablePagination() {
+export default function TablePagination({ refreshKey = 0 }) {
     const [instructors, setInstructors] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -33,7 +33,7 @@ export default function TablePagination() {
                 setTotalPages(data.totalPages);
                 setLoading(false);
             });
-    }, [page, debouncedName]);
+    }, [page, debouncedName, refreshKey]);
 
     // Función para cambiar el estatus del instructor
     const changeStatus = async (instructorId, status) => {
@@ -96,7 +96,6 @@ export default function TablePagination() {
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Correo Electrónico</th>
                             <th scope="col">Fecha de Registro</th>
                             <th scope="col">Cursos</th>
                             <th scope="col">Acciones</th>
@@ -105,7 +104,7 @@ export default function TablePagination() {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan="6">
+                                <td colSpan="5">
                                     <div className="text-center">Cargando...</div>
                                 </td>
                             </tr>
@@ -113,8 +112,12 @@ export default function TablePagination() {
                             instructors.map((instructor) => (
                                 <tr key={instructor.id}>
                                     <td>{instructor.id}</td>
-                                    <td>{instructor.name}</td>
-                                    <td>{instructor.email}</td>
+                                    <td>
+                                        <div>{instructor.name}</div>
+                                        <div className="fw-bold" style={{ fontSize: "0.85em" }}>
+                                            {instructor.email}
+                                        </div>
+                                    </td>
                                     <td>{new Date(instructor.created_at).toLocaleDateString()}</td>
                                     <td>{instructor.courses ? instructor.courses.length : 0}</td>
                                     <td>
@@ -155,7 +158,7 @@ export default function TablePagination() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="6">
+                                <td colSpan="5">
                                     <div className="text-center">No hay instructores</div>
                                 </td>
                             </tr>

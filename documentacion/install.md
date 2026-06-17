@@ -215,8 +215,11 @@ curso-edemy/
 ├── package.json      # Dependencias y scripts
 └── documentacion/    # Documentación del proyecto
     ├── install.md              # Instalación y ejecución local
-    ├── panel_admin.md          # Panel admin: índice general
-    └── panel_admin_banners.md  # Panel admin: banners (detalle)
+    ├── panel_admin.md              # Panel admin: índice general
+    ├── panel_admin_instructor.md   # Panel admin: instructores (detalle)
+    ├── panel_admin_categorias.md   # Panel admin: categorías (detalle)
+    ├── panel_admin_modulo.md       # Panel admin: módulos (detalle)
+    └── panel_admin_banners.md      # Panel admin: banners (detalle)
 ```
 
 ---
