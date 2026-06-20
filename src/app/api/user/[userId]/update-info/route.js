@@ -37,9 +37,37 @@ export async function POST(request, { params }) {
 		if (!name || !designation) {
 			return NextResponse.json(
 				{
-					message: !name ? "Nombre es requerido!" : !designation ? "Designación es requerida!" : "Nombre y designación son requeridos!",
+					message: !name ? "Nombre es requerido!" : "Designación es requerida!",
 				},
 				{ status: 404 }
+			);
+		}
+
+		if (!bio?.trim()) {
+			return NextResponse.json(
+				{ message: "Biografía es requerida!" },
+				{ status: 400 }
+			);
+		}
+
+		if (!countryId) {
+			return NextResponse.json(
+				{ message: "País es requerido!" },
+				{ status: 400 }
+			);
+		}
+
+		if (!address?.trim()) {
+			return NextResponse.json(
+				{ message: "Dirección es requerida!" },
+				{ status: 400 }
+			);
+		}
+
+		if (!whatsapp?.trim()) {
+			return NextResponse.json(
+				{ message: "WhatsApp es requerido!" },
+				{ status: 400 }
 			);
 		}
 

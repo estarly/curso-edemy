@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const PAGE_SIZE = 5;
 
-export default function TablePagination({ refreshKey = 0 }) {
+export default function TablePagination({ refreshKey = 0, onEditClick }) {
     const [instructors, setInstructors] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -122,6 +122,14 @@ export default function TablePagination({ refreshKey = 0 }) {
                                     <td>{instructor.courses ? instructor.courses.length : 0}</td>
                                     <td>
                                         <div className="d-flex flex-row gap-2">
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary btn-sm"
+                                                onClick={() => onEditClick(instructor)}
+                                                title="Editar instructor"
+                                            >
+                                                <i className="bx bx-edit"></i>
+                                            </button>
                                             {(instructor.status === 0 || instructor.status === 2) && (
                                                 <button
                                                     type="button"

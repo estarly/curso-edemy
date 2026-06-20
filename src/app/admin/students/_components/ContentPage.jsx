@@ -6,7 +6,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 import AdminSideNav from "@/components/Admin/AdminSideNav";
-import { InstructorModal } from "./InstructorModal";
+import { StudentModal } from "./StudentModal";
 import TablePagination from "./TablePagination";
 
 export const ContentPage = ({ isAdmin }) => {
@@ -22,8 +22,8 @@ export const ContentPage = ({ isAdmin }) => {
     setShowModal(true);
   };
 
-  const handleEditClick = (instructor) => {
-    setSelectedItem(instructor);
+  const handleEditClick = (student) => {
+    setSelectedItem(student);
     setIsEditing(true);
     setShowModal(true);
   };
@@ -34,17 +34,14 @@ export const ContentPage = ({ isAdmin }) => {
     setIsEditing(false);
   };
 
-  const handleSaveInstructor = async (instructorData) => {
+  const handleSaveStudent = async (studentData) => {
     try {
       if (isEditing) {
-        await axios.put(
-          `/api/instructrs/${selectedItem.id}`,
-          instructorData
-        );
-        Swal.fire("¡Éxito!", "El instructor ha sido actualizado.", "success");
+        await axios.put(`/api/students/${selectedItem.id}`, studentData);
+        Swal.fire("¡Éxito!", "El estudiante ha sido actualizado.", "success");
       } else {
-        await axios.post("/api/instructrs", instructorData);
-        Swal.fire("¡Éxito!", "El instructor ha sido registrado.", "success");
+        await axios.post("/api/students", studentData);
+        Swal.fire("¡Éxito!", "El estudiante ha sido registrado.", "success");
       }
 
       setShowModal(false);
@@ -56,8 +53,8 @@ export const ContentPage = ({ isAdmin }) => {
       const message =
         error.response?.data?.message ||
         (isEditing
-          ? "No se pudo actualizar el instructor."
-          : "No se pudo registrar el instructor.");
+          ? "No se pudo actualizar el estudiante."
+          : "No se pudo registrar el estudiante.");
 
       Swal.fire("Error", message, "error");
     }
@@ -74,12 +71,19 @@ export const ContentPage = ({ isAdmin }) => {
 
             <div className="col-lg-9 col-md-8">
               <div className="main-content-box">
-                <div className="d-flex justify-content-between mb-3 nav-style1 p-1">
-                  <li>
-                    <Link href="/admin/instructors" className="active">
-                      Instructores
-                    </Link>
-                  </li>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <ul className="nav-style1 mb-0">
+                    <li>
+                      <Link href="/admin/students" className="active">
+                        Estudiantes
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/admin/students/assign-module">
+                        Asignar módulo
+                      </Link>
+                    </li>
+                  </ul>
 
                   <button
                     className="btn btn-success btn-sm"
@@ -99,10 +103,10 @@ export const ContentPage = ({ isAdmin }) => {
         </div>
       </div>
 
-      <InstructorModal
+      <StudentModal
         show={showModal}
         onClose={handleCloseModal}
-        onSave={handleSaveInstructor}
+        onSave={handleSaveStudent}
         item={selectedItem}
         isEditing={isEditing}
       />

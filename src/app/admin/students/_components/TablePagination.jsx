@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const PAGE_SIZE = 5;
 
-export default function TablePagination() {
+export default function TablePagination({ refreshKey = 0, onEditClick }) {
     const [students, setStudents] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -33,7 +33,7 @@ export default function TablePagination() {
                 setTotalPages(data.totalPages);
                 setLoading(false);
             });
-    }, [page, debouncedName]);
+    }, [page, debouncedName, refreshKey]);
 
     // Función para cambiar el estatus del estudiante
     const changeStatus = async (studentId, status) => {
@@ -117,6 +117,14 @@ export default function TablePagination() {
                                     <td>{new Date(student.created_at).toLocaleDateString()}</td>
                                     <td>
                                         <div className="d-flex flex-row gap-2">
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary btn-sm"
+                                                onClick={() => onEditClick(student)}
+                                                title="Editar estudiante"
+                                            >
+                                                <i className="bx bx-edit"></i>
+                                            </button>
                                             {(student.status === 0 || student.status === 2) && (
                                                 <button
                                                     type="button"

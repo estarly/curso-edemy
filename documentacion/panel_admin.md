@@ -78,7 +78,17 @@ CRUD de módulos: título, descripción, estado activo/inactivo. No incluye la p
 
 ---
 
-## 5. Banners
+## 5. Estudiantes
+
+**Ruta admin:** `/admin/students`
+
+Gestión de usuarios con rol `USER`: listado paginado, registro desde modal, activar, desactivar y eliminar (soft delete). No incluye *Asignar módulo*.
+
+**→ [panel_admin_estudiantes.md](./panel_admin_estudiantes.md)**
+
+---
+
+## 6. Banners
 
 **Ruta admin:** `/admin/banners`  
 **Dónde se ven:** carrusel superior de la home (`/`)
@@ -106,4 +116,5 @@ Tras `npm run db:seed`:
 - [Instructores — guía detallada](./panel_admin_instructor.md)
 - [Categorías — guía detallada](./panel_admin_categorias.md)
 - [Módulos — guía detallada](./panel_admin_modulo.md)
+- [Estudiantes — guía detallada](./panel_admin_estudiantes.md)
 - [Banners — guía detallada](./panel_admin_banners.md)

@@ -5,22 +5,18 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Input from "@/components/FormHelpers/Input";
+import { RequiredMark } from "@/components/FormHelpers/Input";
 import TextArea from "./TextArea";
 import { useRouter } from "next/navigation";
 
 const InfoForm = ({ currentUser, countries, validateUser }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const [validate, setValidate] = useState(validateUser);
 
 	const router = useRouter();
-	const [gender, setGender] = useState(currentUser.profile?.gender || "");
-	const [country, setCountry] = useState(parseInt(currentUser.profile?.countryId) || "");
 
 	const {
 		register,
 		handleSubmit,
-		setError,
-		reset,
 		setValue,
 		formState: { errors },
 	} = useForm({
@@ -56,13 +52,12 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 		setValue("linkedin", currentUser.profile ? currentUser.profile.linkedin : "");
 		setValue("youtube", currentUser.profile ? currentUser.profile.youtube : "");
 
-		if(validate){
-			toast.success("Complete su perfil básico para continuar")
+		if (validateUser) {
+			toast.success("Complete su perfil básico para continuar");
 		}
-	}, [validate]);
+	}, [validateUser, currentUser, setValue]);
 
 	const onSubmit = async (data) => {
-		console.log(data, "data");
 		setIsLoading(true);
 		await axios
 			.post(`/api/user/${currentUser.id}/update-info`, data)
@@ -73,12 +68,13 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 				}, 1500);
 			})
 			.catch((error) => {
-				toast.error(error.response.data.message);
+				toast.error(error.response?.data?.message || "Error al guardar el perfil");
 			})
 			.finally(() => {
 				setIsLoading(false);
 			});
 	};
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="row">
@@ -89,6 +85,7 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						disabled={isLoading}
 						register={register}
 						errors={errors}
+						required
 					/>
 					<Input
 						label="Frase presentación"
@@ -105,6 +102,7 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						disabled={isLoading}
 						register={register}
 						errors={errors}
+						required
 					/>
 
 					<label htmlFor="gender">Género</label>
@@ -119,17 +117,19 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						<option value="femenino">Femenino</option>
 					</select>
 					{errors.gender && (
-						<div className="invalid-feedback">{errors.gender.message}</div>
+						<div className="invalid-feedback d-block">{errors.gender.message}</div>
 					)}
-					
+
 					<br />
-					<label htmlFor="countryId">País</label>
+					<label htmlFor="countryId">
+						País
+						<RequiredMark />
+					</label>
 					<select
 						id="countryId"
 						disabled={isLoading}
-						{...register("countryId")}
+						{...register("countryId", { required: "País es requerido" })}
 						className={`form-control ${errors.countryId ? "is-invalid" : ""}`}
-						onChange={(e) => setCountry(parseInt(e.target.id))}
 					>
 						<option value="">Seleccione país</option>
 						{countries.map((country) => (
@@ -139,9 +139,9 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						))}
 					</select>
 					{errors.countryId && (
-						<div className="invalid-feedback">{errors.countryId.message}</div>
+						<div className="invalid-feedback d-block">{errors.countryId.message}</div>
 					)}
-					
+
 					<br />
 					<Input
 						label="Dirección"
@@ -149,16 +149,18 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 						disabled={isLoading}
 						register={register}
 						errors={errors}
+						required
 					/>
 				</div>
 
 				<div className="col-md-6">
-				<Input
+					<Input
 						label="WhatsApp"
 						id="whatsapp"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
+						required
 					/>
 					<Input
 						label="Teléfono"
@@ -204,14 +206,17 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 					/>
 				</div>
 
-				<div className="col-12">
+				<div className="col-12 d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+					<small className="text-muted">
+						Los campos requeridos tienen un
+						<span style={{ color: "#f97316" }}> *</span>
+					</small>
 					<button
 						type="submit"
-						className="btn default-btn"
+						className="btn btn-success"
 						disabled={isLoading}
 					>
-						<i className="flaticon-right-arrow"></i>
-						Guardar <span></span>
+						Guardar
 					</button>
 				</div>
 			</div>

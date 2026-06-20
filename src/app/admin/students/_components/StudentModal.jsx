@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const InstructorModal = ({
+export const StudentModal = ({
   show,
   onClose,
   onSave,
@@ -14,7 +14,6 @@ export const InstructorModal = ({
     email: "",
     password: "",
     confirmPassword: "",
-    designation: "",
     status: 1,
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +28,6 @@ export const InstructorModal = ({
           email: item.email || "",
           password: "",
           confirmPassword: "",
-          designation: item.designation || "",
           status: item.status ?? 1,
         });
       } else {
@@ -38,7 +36,6 @@ export const InstructorModal = ({
           email: "",
           password: "",
           confirmPassword: "",
-          designation: "",
           status: 1,
         });
       }
@@ -109,7 +106,6 @@ export const InstructorModal = ({
     const payload = {
       name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
-      designation: formData.designation.trim(),
       status: formData.status,
     };
 
@@ -134,7 +130,7 @@ export const InstructorModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                {isEditing ? "Editar Instructor" : "Registrar Instructor"}
+                {isEditing ? "Editar Estudiante" : "Registrar Estudiante"}
               </h5>
               <button
                 type="button"
@@ -254,19 +250,6 @@ export const InstructorModal = ({
                 {errors.confirmPassword && (
                   <div className="invalid-feedback d-block">{errors.confirmPassword}</div>
                 )}
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="designation" className="form-label">
-                  Cargo / Designación
-                </label>
-                <input
-                  type="text"
-                  className="form-control bg-light"
-                  id="designation"
-                  value={formData.designation}
-                  onChange={handleChange}
-                />
               </div>
 
               <div className="mb-3 form-check">

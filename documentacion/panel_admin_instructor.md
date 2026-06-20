@@ -41,6 +41,7 @@ Relaciones en el listado: `profile`, `courses`.
 |--------|--------|------|
 | Listar (paginado) | `GET` | `/api/instructrs/pagination` |
 | Registrar | `POST` | `/api/instructrs` |
+| Editar | `PUT` | `/api/instructrs/[instructorId]` |
 | Cambiar estado | `POST` | `/api/instructrs/change-status` |
 
 ---

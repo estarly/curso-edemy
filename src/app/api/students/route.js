@@ -17,13 +17,13 @@ export async function POST(request) {
 
     if (currentUser.role !== "ADMIN") {
       return NextResponse.json(
-        { message: "Solo los administradores pueden registrar instructores." },
+        { message: "Solo los administradores pueden registrar estudiantes." },
         { status: 403 }
       );
     }
 
     const body = await request.json();
-    const { name, password, designation, status } = body;
+    const { name, password, status } = body;
     const email = body.email?.trim().toLowerCase();
 
     if (!name?.trim()) {
@@ -67,28 +67,27 @@ export async function POST(request) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const instructor = await prisma.user.create({
+    const student = await prisma.user.create({
       data: {
         name: name.trim(),
         email,
         hashedPassword,
-        designation: designation?.trim() || null,
-        role: "INSTRUCTOR",
+        role: "USER",
         status: status === undefined ? 1 : parseInt(status),
       },
     });
 
     return NextResponse.json(
       {
-        message: "Instructor registrado exitosamente.",
-        instructor,
+        message: "Estudiante registrado exitosamente.",
+        student,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
-      { message: "Ocurrió un error al registrar el instructor." },
+      { message: "Ocurrió un error al registrar el estudiante." },
       { status: 500 }
     );
   }
