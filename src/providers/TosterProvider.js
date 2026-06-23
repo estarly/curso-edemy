@@ -3,7 +3,7 @@ import React from "react";
 import { Toaster } from "react-hot-toast";
 
 const TosterProvider = () => {
-	return <Toaster />;
+	return <Toaster position="top-right" />;
 };
 
 export default TosterProvider;

@@ -220,7 +220,11 @@ curso-edemy/
     ├── panel_admin_categorias.md   # Panel admin: categorías (detalle)
     ├── panel_admin_modulo.md       # Panel admin: módulos (detalle)
     ├── panel_admin_estudiantes.md  # Panel admin: estudiantes (detalle)
-    └── panel_admin_banners.md      # Panel admin: banners (detalle)
+    ├── panel_admin_banners.md      # Panel admin: banners (detalle)
+    ├── upload_archivos.md          # Subida de archivos (guía general)
+    ├── panel_instructor.md             # Panel instructor: índice general
+    ├── panel_instructor_curso.md       # Panel instructor: crear/editar curso
+    └── panel_instructor_lecciones.md   # Panel instructor: lecciones, tareas y documentos
 ```
 
 ---
@@ -228,3 +232,5 @@ curso-edemy/
 ¿Algo no funciona? Revisa primero el `.env` y que MySQL esté activo. La mayoría de problemas en local vienen de ahí.
 
 Para el panel de administración (dashboard, banners, etc.), consulta [panel_admin.md](./panel_admin.md).
+
+Para subida de imágenes, videos y documentos (DigitalOcean Spaces), consulta [upload_archivos.md](./upload_archivos.md).

@@ -356,23 +356,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
         <div className="row">
           <div className="col-12">
             <div className="row">
-              <div className="col-md-4">
-                <AssetSelect
-                  style={{
-                    zIndex: 1,
-                  }}
-                  label="Tipo de asset"
-                  value={asset?.value}
-                  onChange={(value) => setCustomValue("asset", value)}
-                  disabled={isEditMode}
-                />
-                {isEditMode && (
-                  <small className="text-muted">
-                    El tipo de asset no se puede modificar
-                  </small>
-                )}
-              </div>
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <Input
                   label="Título"
                   id="title"
@@ -382,7 +366,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
                   required
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="form-group">
                   <label className="form-label fw-semibold">
                     Descripción
@@ -410,7 +394,26 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
                 </div>
               </div>
             </div>
-            <br /><br />
+
+            <div className="row mt-3">
+              <div className="col-12">
+                <AssetSelect
+                  style={{
+                    zIndex: 1,
+                  }}
+                  label="Tipo de asset"
+                  value={asset?.value}
+                  onChange={(value) => setCustomValue("asset", value)}
+                  disabled={isEditMode}
+                />
+                {isEditMode && (
+                  <small className="text-muted">
+                    El tipo de asset no se puede modificar
+                  </small>
+                )}
+              </div>
+            </div>
+
             {(asset?.value === ASSET_TYPES.VIDEO || asset?.value === ASSET_TYPES.AUDIO || asset?.value === ASSET_TYPES.DOCUMENT) && (
               <div className="mt-3">
                 <MediaUpload
@@ -526,8 +529,26 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
               </div>
             )}
 
-            <div className="mt-8 d-flex gap-2">
-              <button type="submit" className="default-btn" disabled={isLoading || isUploading}>
+            <div className="col-12 d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+              {isEditMode ? (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleCancel}
+                  disabled={isLoading || isUploading}
+                >
+                  <i className="bx bx-x"></i>
+                  Cancelar
+                </button>
+              ) : (
+                <span />
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-success"
+                disabled={isLoading || isUploading}
+              >
                 {isLoading || isUploading ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
@@ -535,7 +556,6 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
                   </>
                 ) : (
                   <>
-                    <i className={isEditMode ? "bx bx-check" : "flaticon-right-arrow"}></i>
                     {isEditMode ? "Actualizar Asset" : (
                       <>
                         {asset?.value === ASSET_TYPES.VIDEO && "Subir Video"}
@@ -547,22 +567,9 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
                         {!asset?.value && "Guardar"}
                       </>
                     )}
-                    <span></span>
                   </>
                 )}
               </button>
-
-              {isEditMode && (
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleCancel}
-                  disabled={isLoading || isUploading}
-                >
-                  <i className="bx bx-x"></i>
-                  Cancelar
-                </button>
-              )}
             </div>
             <br />
           </div>

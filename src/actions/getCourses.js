@@ -1,4 +1,5 @@
 import prisma from "@libs/prismadb";
+import { publicCourseWhere } from "@/utils/publicCourseFilter";
 
 export async function getCourses(params,stack=10) {
 	const { q, sort, id } = params;
@@ -26,9 +27,7 @@ export async function getCourses(params,stack=10) {
 
 	try {
 		let where = {
-			status: "Approved",
-			is_module: false,
-			hide: false,
+			...publicCourseWhere,
 			...getFilters() // Aplicamos los filtros de categoría
 		};
 		
@@ -76,11 +75,11 @@ export async function getCourses(params,stack=10) {
 }
 
 export async function getCategories() {
-	const categories = await prisma.category.findMany({
+		const categories = await prisma.category.findMany({
 		where: {
 			status: 1,
 			courses: {
-				some: {},
+				some: publicCourseWhere,
 			},
 		},
 		orderBy: {
@@ -94,7 +93,7 @@ export async function getHomepageCourses() {
 	try {
 
 		const courses = await prisma.course.findMany({
-			where: { status: "Approved" },
+			where: { ...publicCourseWhere },
 			take: 3,
 			orderBy: {
 				id: "desc",
@@ -118,7 +117,7 @@ export async function getHomepageCourses() {
 
 export async function getTotalCourses() {
 	const totalCourses = await prisma.course.count({
-		where: { status: "Approved" },
+		where: publicCourseWhere,
 	});
 	return totalCourses;
 }

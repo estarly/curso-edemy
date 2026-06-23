@@ -9,7 +9,6 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
   const [selectedTypeId, setSelectedTypeId] = useState(null);
   const [assignments, setAssignments] = useState([]);
 
-  // Estado para los valores de los inputs de cada pregunta
   const [formData, setFormData] = useState({
     question: "",
     description: "",
@@ -19,8 +18,9 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     correctOptions: [],
   });
 
-  // Estado para la pestaña activa
   const [activeTab, setActiveTab] = useState("asignar");
+
+  const selectedType = assignmentsTypes.find((a) => a.id === selectedTypeId);
 
   const onOpenModal = async () => {
     setShow(true);
@@ -37,47 +37,42 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }
   };
 
-  const handleClose = () => {
-    setShow(false);
-    setSelectedTypeId(null);
-    setFormData({
-      question: "",
-      description: "",
-      options: [],
-      correctOption: "",
-      correctAnswer: "",
-      correctOptions: [],
-    });
-  };
-
-  // Cuando seleccionas un tipo de asignación
-  const handleTypeChange = (e) => {
-    const typeId = parseInt(e.target.value, 10);
-    setSelectedTypeId(typeId);
-
-    // Buscar el tipo seleccionado
-    const selected = assignmentsTypes.find((a) => a.id === typeId);
-
-    if (selected && selected.config_type.options) {
-      setFormData((prev) => ({
-        ...prev,
-        options: [...selected.config_type.options], // Copia las opciones por defecto
+  const resetFormData = (type) => {
+    if (type?.config_type?.options) {
+      setFormData({
+        question: "",
+        description: "",
+        options: [...type.config_type.options],
         correctOption: "",
         correctAnswer: "",
         correctOptions: [],
-      }));
+      });
     } else {
-      setFormData((prev) => ({
-        ...prev,
+      setFormData({
+        question: "",
+        description: "",
         options: [],
         correctOption: "",
         correctAnswer: "",
         correctOptions: [],
-      }));
+      });
     }
   };
 
-  // Manejar cambios en los inputs de pregunta
+  const handleClose = () => {
+    setShow(false);
+    setSelectedTypeId(null);
+    resetFormData(null);
+  };
+
+  const handleTypeChange = (e) => {
+    const typeId = parseInt(e.target.value, 10);
+    setSelectedTypeId(typeId || null);
+
+    const selected = assignmentsTypes.find((a) => a.id === typeId);
+    resetFormData(selected);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -86,19 +81,21 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }));
   };
 
-  // Nuevo: Manejar cambios en las opciones de selección simple
   const handleOptionChange = (idx, value) => {
     setFormData((prev) => {
+      const oldValue = prev.options[idx];
       const newOptions = [...prev.options];
       newOptions[idx] = value;
+
       return {
         ...prev,
         options: newOptions,
+        correctOption: prev.correctOption === oldValue ? value : prev.correctOption,
+        correctOptions: prev.correctOptions.map((opt) => (opt === oldValue ? value : opt)),
       };
     });
   };
 
-  // Nuevo: Agregar una opción (máximo 6)
   const handleAddOption = () => {
     if (formData.options.length < 6) {
       setFormData((prev) => ({
@@ -108,214 +105,195 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }
   };
 
-  // Nuevo: Eliminar una opción (mínimo 3)
   const handleRemoveOption = (idx) => {
     if (formData.options.length > 3) {
       setFormData((prev) => {
+        const removed = prev.options[idx];
         const newOptions = prev.options.filter((_, i) => i !== idx);
-        // También eliminamos la opción de correctOptions si estaba seleccionada
-        const newCorrectOptions = prev.correctOptions.filter(opt => opt !== prev.options[idx]);
         return {
           ...prev,
           options: newOptions,
-          correctOptions: newCorrectOptions,
+          correctOption: prev.correctOption === removed ? "" : prev.correctOption,
+          correctOptions: prev.correctOptions.filter((opt) => opt !== removed),
         };
       });
     }
   };
 
-  // Nuevo: Manejar selección simple de respuestas correctas
+  const handleCorrectOptionChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      correctOption: e.target.value,
+    }));
+  };
+
   const handleCorrectOptionsChange = (e) => {
     const { value, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      correctOptions: checked ? [value] : [],
+      correctOptions: checked
+        ? [...prev.correctOptions, value]
+        : prev.correctOptions.filter((opt) => opt !== value),
     }));
   };
 
-  // Renderizar inputs según el tipo seleccionado
-  const renderInputs = () => {
-    const selected = assignmentsTypes.find((a) => a.id === selectedTypeId);
-    if (!selected) return null;
+  const renderOptionsGrid = (allowMultipleCorrect) => (
+    <>
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <Form.Label className="mb-0">Opciones</Form.Label>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-success"
+          onClick={handleAddOption}
+          disabled={formData.options.length >= 6}
+          title="Agregar opción"
+        >
+          <i className="bx bx-plus"></i>
+        </button>
+      </div>
+      <div className="row">
+        {formData.options.map((opt, idx) => (
+          <div key={idx} className="col-md-6 mb-2">
+            <div className="d-flex align-items-center">
+              <Form.Control
+                type="text"
+                value={opt}
+                onChange={(e) => handleOptionChange(idx, e.target.value)}
+                placeholder={`Opción ${idx + 1}`}
+              />
+              {formData.options.length > 3 && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="ms-2 flex-shrink-0"
+                  onClick={() => handleRemoveOption(idx)}
+                  title="Eliminar opción"
+                >
+                  <i className="bx bx-minus"></i>
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <Form.Group className="mb-2 mt-2">
+        <Form.Label>
+          {allowMultipleCorrect
+            ? "Selecciona las respuestas correctas"
+            : "Selecciona la respuesta correcta"}
+        </Form.Label>
+        <div className="row">
+          {formData.options.map((opt, idx) => (
+            <div key={idx} className="col-md-6">
+              <Form.Check
+                type={allowMultipleCorrect ? "checkbox" : "radio"}
+                name={allowMultipleCorrect ? `correct-multi-${idx}` : "correct-single"}
+                label={opt || `Opción ${idx + 1}`}
+                value={opt}
+                checked={
+                  allowMultipleCorrect
+                    ? formData.correctOptions.includes(opt)
+                    : formData.correctOption === opt
+                }
+                onChange={allowMultipleCorrect ? handleCorrectOptionsChange : handleCorrectOptionChange}
+                disabled={!opt}
+              />
+            </div>
+          ))}
+        </div>
+      </Form.Group>
+    </>
+  );
 
-    switch (selected.name) {
+  const renderTypeSpecificInputs = () => {
+    if (!selectedType) return null;
+
+    switch (selectedType.name) {
       case "Verdadero o Falso":
         return (
-          <>
-            <Form.Group className="mb-2">
-              <Form.Label>Pregunta</Form.Label>
-              <Form.Control
-                type="text"
-                name="question"
-                value={formData.question}
-                onChange={handleInputChange}
-                placeholder="Escribe la pregunta"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Descripción (opcional)</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={2}
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Agrega una descripción para la pregunta (opcional)"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Selecciona la respuesta correcta</Form.Label>
-              <Form.Select
-                name="correctOption"
-                value={formData.correctOption}
-                onChange={handleInputChange}
-              >
-                <option value="">Selecciona una opción</option>
-                {selected.config_type.options.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </>
+          <Form.Group className="mb-2">
+            <Form.Label>Selecciona la respuesta correcta</Form.Label>
+            <Form.Select
+              name="correctOption"
+              value={formData.correctOption}
+              onChange={handleInputChange}
+            >
+              <option value="">Selecciona una opción</option>
+              {selectedType.config_type.options.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
         );
       case "Selección simple":
-        return (
-          <>
-            <Form.Group className="mb-2">
-              <Form.Label>Pregunta</Form.Label>
-              <Form.Control
-                type="text"
-                name="question"
-                value={formData.question}
-                onChange={handleInputChange}
-                placeholder="Escribe la pregunta"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Descripción (opcional)</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={2}
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Agrega una descripción para la pregunta (opcional)"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Opciones</Form.Label>
-              {formData.options.map((opt, idx) => (
-                <div key={idx} className="d-flex align-items-center mb-1">
-                  <Form.Control
-                    type="text"
-                    value={opt}
-                    onChange={(e) => handleOptionChange(idx, e.target.value)}
-                    placeholder={`Opción ${idx + 1}`}
-                  />
-                  {formData.options.length > 3 && (
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      className="ms-2"
-                      onClick={() => handleRemoveOption(idx)}
-                      title="Eliminar opción"
-                    >
-                      <i className="bx bx-minus"></i>
-                    </Button>
-                  )}
-                </div>
-              ))}
-              <Button
-                variant="success"
-                size="sm"
-                className="mt-2"
-                onClick={handleAddOption}
-                disabled={formData.options.length >= 6}
-              >
-                <i className="bx bx-plus"></i> Agregar opción
-              </Button>
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Selecciona las respuestas correctas</Form.Label>
-              <div>
-                {formData.options.map((opt, idx) => (
-                  <Form.Check
-                    key={idx}
-                    type="radio"
-                    label={opt}
-                    value={opt}
-                    checked={formData.correctOptions.includes(opt)}
-                    onChange={handleCorrectOptionsChange}
-                    disabled={!opt}
-                  />
-                ))}
-              </div>
-            </Form.Group>
-            <div className="mb-1 text-danger" style={{ fontSize: '0.95em' }}>
-              <strong>Nota:</strong> Maneje 2 modo de uso.<br />
-              Opción 1: Seleccione la opción correcta.<br />
-              Opción 2: Seleccione todas las anteriores
-            </div>
-          </>
-        );
+        return renderOptionsGrid(false);
+      case "Selección múltiple":
+        return renderOptionsGrid(true);
       case "Completar":
         return (
-          <>
-            <Form.Group className="mb-2">
-              <Form.Label>Pregunta</Form.Label>
-              <Form.Control
-                type="text"
-                name="question"
-                value={formData.question}
-                onChange={handleInputChange}
-                placeholder="Escribe la pregunta"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Descripción (opcional)</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={2}
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Agrega una descripción para la pregunta (opcional)"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Respuesta correcta</Form.Label>
-              <Form.Control
-                type="text"
-                name="correctAnswer"
-                value={formData.correctAnswer}
-                onChange={handleInputChange}
-                placeholder="Escribe la respuesta correcta"
-              />
-            </Form.Group>
-          </>
+          <Form.Group className="mb-2">
+            <Form.Label>Respuesta correcta</Form.Label>
+            <Form.Control
+              type="text"
+              name="correctAnswer"
+              value={formData.correctAnswer}
+              onChange={handleInputChange}
+              placeholder="Escribe la respuesta correcta"
+            />
+          </Form.Group>
         );
       default:
         return null;
     }
   };
 
-  // Función para agregar pregunta
-  const handleAgregarPregunta = async () => {
-    const selected = assignmentsTypes.find((a) => a.id === selectedTypeId);
-    if (!selected) return;
+  const isFormValid = () => {
+    if (!formData.question.trim() || !selectedType) return false;
 
-    let nuevaPregunta = {
+    switch (selectedType.name) {
+      case "Verdadero o Falso":
+        return !!formData.correctOption;
+      case "Selección simple":
+        return (
+          formData.options.length >= 3 &&
+          formData.options.every((opt) => opt.trim()) &&
+          !!formData.correctOption
+        );
+      case "Selección múltiple":
+        return (
+          formData.options.length >= 3 &&
+          formData.options.every((opt) => opt.trim()) &&
+          formData.correctOptions.length >= 2
+        );
+      case "Completar":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const handleAgregarPregunta = async () => {
+    if (!selectedType) return;
+
+    const usesOptions = selectedType.id === 1 || selectedType.id === 2 || selectedType.id === 3;
+
+    let respuesta;
+    if (selectedType.name === "Verdadero o Falso" || selectedType.name === "Selección simple") {
+      respuesta = formData.correctOption;
+    } else if (selectedType.name === "Selección múltiple") {
+      respuesta = formData.correctOptions;
+    } else {
+      respuesta = formData.correctAnswer;
+    }
+
+    const nuevaPregunta = {
       idAsset: idAsset,
-      tipo: selected.name,
-      tipoId: selected.id,
+      tipo: selectedType.name,
+      tipoId: selectedType.id,
       pregunta: formData.question,
       descripcion: formData.description,
-      opciones: (selected.id === 1 || selected.id === 2) ? formData.options : [],
-      respuesta: selected.name === "Verdadero o Falso"
-        ? formData.correctOption
-        : selected.name === "Selección simple"
-        ? formData.correctOptions
-        : formData.correctAnswer,
+      opciones: usesOptions ? formData.options : [],
+      respuesta,
     };
 
     try {
@@ -328,35 +306,12 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
 
       if (data.ok) {
         Swal.fire("Guardado", "La pregunta fue guardada.", "success");
+        resetFormData(selectedType);
 
-        // Limpiar el formulario pero restaurar las opciones por defecto si es tipo 1 o 2
-        if (selected && selected.config_type.options) {
-          setFormData({
-            question: "",
-            description: "",
-            options: [...selected.config_type.options],
-            correctOption: "",
-            correctAnswer: "",
-            correctOptions: [],
-          });
-        } else {
-          setFormData({
-            question: "",
-            description: "",
-            options: [],
-            correctOption: "",
-            correctAnswer: "",
-            correctOptions: [],
-          });
-        }
-
-        // Refrescar la lista de tareas asignadas
         const resAssignments = await fetch(`/api/assignments/all/${idAsset}`);
         const dataAssignments = await resAssignments.json();
         if (dataAssignments.ok) {
           setAssignments(dataAssignments.items);
-        } else {
-          console.error("Error al obtener las preguntas:", dataAssignments.error);
         }
       } else {
         Swal.fire("Error", "No se pudo guardar la pregunta.", "error");
@@ -367,7 +322,6 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }
   };
 
-  // Función para eliminar pregunta de la base de datos
   const handleEliminarPreguntaDB = async (id) => {
     const confirm = await Swal.fire({
       title: "¿Estás seguro?",
@@ -383,7 +337,6 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
       const data = await res.json();
       if (data.ok) {
         Swal.fire("Eliminado", "La pregunta fue eliminada.", "success");
-        // Eliminar la pregunta del estado assignments sin recargar la consulta
         setAssignments((prev) => prev.filter((item) => item.id !== id));
       } else {
         Swal.fire("Error", "No se pudo eliminar la pregunta.", "error");
@@ -391,14 +344,24 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
     }
   };
 
+  const getTypeLabel = (typeId) => {
+    const labels = {
+      1: "Verdadero o Falso",
+      2: "Selección Simple",
+      3: "Selección Múltiple",
+      4: "Completar",
+    };
+    return labels[typeId] || "Desconocido";
+  };
+
   return (
     <>
       <button
-			className="btn btn-info btn-sm btn-outline-dark" onClick={onOpenModal}>
+        className="btn btn-info btn-sm btn-outline-dark"
+        onClick={onOpenModal}
+      >
         <i className="bx bx-task"></i>
       </button>
-
-     
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
@@ -423,52 +386,69 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
               <Tab.Pane eventKey="asignar">
                 <div className="row">
                   <div className="col-md-12">
-                    <Form.Group className="mb-3">
-                      <Form.Label>Tipo de pregunta</Form.Label>
-                      <Form.Select
-                        value={selectedTypeId || ""}
-                        onChange={handleTypeChange}
-                      >
-                        <option value="">Selecciona un tipo</option>
-                        {assignmentsTypes.map((a) => (
-                          <option key={a.id} value={a.id}>{a.name}</option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                    {selectedTypeId && (
-                      <div className="mb-3">
-                        <span style={{ fontWeight: "bold" }}>Nota: </span>
-                        <span>
-                          {
-                            assignmentsTypes.find((a) => a.id === selectedTypeId)
-                              ?.description
-                          }
-                        </span>
+                    <div className="row mb-2">
+                      <div className="col-md-4">
+                        <Form.Group>
+                          <Form.Label>Tipo de pregunta</Form.Label>
+                          <Form.Select
+                            value={selectedTypeId || ""}
+                            onChange={handleTypeChange}
+                          >
+                            <option value="">Selecciona un tipo</option>
+                            {assignmentsTypes.map((a) => (
+                              <option key={a.id} value={a.id}>{a.name}</option>
+                            ))}
+                          </Form.Select>
+                        </Form.Group>
                       </div>
-                    )}
-                    {renderInputs()}
-                    {/* Botón para agregar pregunta */}
-                    {selectedTypeId && (
-                      <div className="mb-3 d-flex justify-content-end">
-                        <Button
-                          variant="primary"
-                          onClick={handleAgregarPregunta}
-                          disabled={
-                            !formData.question ||
-                            (["Verdadero o Falso"].includes(
-                              assignmentsTypes.find((a) => a.id === selectedTypeId)?.name
-                            ) && !formData.correctOption) ||
-                            (assignmentsTypes.find((a) => a.id === selectedTypeId)?.name === "Selección simple" &&
-                              (formData.options.length < 3 ||
-                                formData.options.some(opt => !opt) ||
-                                formData.correctOptions.length === 0)
-                            )
-                            // Para "Completar" la respuesta NO es requerida
-                          }
-                        >
-                          Agregar pregunta
-                        </Button>
+                      <div className="col-md-8">
+                        <Form.Group>
+                          <Form.Label>Pregunta</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="question"
+                            value={formData.question}
+                            onChange={handleInputChange}
+                            placeholder="Escribe la pregunta"
+                            disabled={!selectedTypeId}
+                          />
+                        </Form.Group>
                       </div>
+                    </div>
+
+                    {selectedTypeId && (
+                      <>
+                        <Form.Group className="mb-2">
+                          <Form.Label>Descripción (opcional)</Form.Label>
+                          <Form.Control
+                            as="textarea"
+                            rows={2}
+                            name="description"
+                            value={formData.description}
+                            onChange={handleInputChange}
+                            placeholder="Agrega una descripción para la pregunta (opcional)"
+                          />
+                        </Form.Group>
+
+                        {selectedType?.description && (
+                          <div className="mb-3">
+                            <span style={{ fontWeight: "bold" }}>Nota: </span>
+                            <span>{selectedType.description}</span>
+                          </div>
+                        )}
+
+                        {renderTypeSpecificInputs()}
+
+                        <div className="mb-3 d-flex justify-content-end">
+                          <Button
+                            variant="primary"
+                            onClick={handleAgregarPregunta}
+                            disabled={!isFormValid()}
+                          >
+                            Agregar pregunta
+                          </Button>
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -483,31 +463,21 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
                           {assignments.map((p) => (
                             <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
                               <span>
-                                <strong>
-                                  {p.assignmentTypeId === 1 && "Verdadero o Falso"}
-                                  {p.assignmentTypeId === 2 && "Selección simple"}
-                                  {p.assignmentTypeId === 3 && "Completar"}
-                                </strong>
+                                <strong>{getTypeLabel(p.assignmentTypeId)}</strong>
                                 : {p.title}{". "}
-                                {/* Respuesta correcta entre paréntesis */}
                                 <span className="text-success">
-                                  
-                                  {p.assignmentTypeId === 1 && Array.isArray(p.config_assignment?.correct_options)
-                                    ? " (" + p.config_assignment.correct_options.join(", ") + ")" // Verdadero o Falso
-                                    : ""}
-                                  {p.assignmentTypeId === 2 && Array.isArray(p.config_assignment?.correct_options)
-                                    ? " (" + p.config_assignment.correct_options.join(", ") + ")"  // Selección simple
-                                    : ""}
-                                  {p.assignmentTypeId === 3 && p.config_assignment?.correct_answer} {/* Completar */}
-                                  
+                                  {p.assignmentTypeId === 4 && p.config_assignment?.correct_answer}
+                                  {(p.assignmentTypeId === 1 || p.assignmentTypeId === 2 || p.assignmentTypeId === 3) &&
+                                    Array.isArray(p.config_assignment?.correct_options) &&
+                                    " (" + p.config_assignment.correct_options.join(", ") + ")"}
                                 </span>
-                                {/* Mostrar las opciones debajo del título */}
                                 <div className="mt-1">
-                                  {(p.assignmentTypeId === 1 || p.assignmentTypeId === 2) && p.config_assignment?.options ? (
+                                  {(p.assignmentTypeId === 1 || p.assignmentTypeId === 2 || p.assignmentTypeId === 3) &&
+                                  p.config_assignment?.options ? (
                                     <small className="text-muted">
                                       <strong>Opciones</strong>: {p.config_assignment.options.join(", ")}
                                     </small>
-                                  ) : (
+                                  ) : p.assignmentTypeId === 4 ? null : (
                                     <small className="text-muted">(Por revisar)</small>
                                   )}
                                 </div>

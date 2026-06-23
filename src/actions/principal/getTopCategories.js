@@ -1,4 +1,5 @@
 import prisma from "@libs/prismadb";
+import { publicCourseWhere } from "@/utils/publicCourseFilter";
 
 export async function getTopCategories() {
 
@@ -10,15 +11,13 @@ export async function getTopCategories() {
 					in: arrayCategories
 				},
 				status: 1,
-				courses: {
-					some: {},
-				},
+                courses: {
+                    some: publicCourseWhere,
+                },
 			},
 			include: {
 				courses: {
-					where: {
-						hide: false,
-					},
+					where: publicCourseWhere,
 					select: {
 						id: true,
 					}

@@ -20,8 +20,9 @@ model User {
   image          String?
   hashedPassword String?
   role           Role          @default(USER)
-  is_instructor  Boolean       @default(false)
-  status         Int           @default(1) //0: inactive, 1: active, 2: deleted
+  is_instructor          Boolean       @default(false)
+  requires_course_review Boolean       @default(true)
+  status                 Int           @default(1) //0: inactive, 1: active, 2: deleted
   created_at     DateTime      @default(now())
   updated_at     DateTime      @updatedAt
   accounts       Account[]
@@ -99,6 +100,7 @@ model Course {
   what_you_will_learn    String   @db.Text
   who_is_this_course_for String   @db.Text
   status                 Status   @default(Pending)
+  publish                Boolean  @default(false)
   hide                   Boolean  @default(false)
   is_module              Boolean  @default(false)
   in_home_page           Boolean  @default(false)

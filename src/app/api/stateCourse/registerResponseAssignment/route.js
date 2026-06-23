@@ -47,7 +47,13 @@ export async function POST(req) {
 					prevResponse = {};
 				}
 			}
-			if (prevResponse.correct_answer === selectedOption) {
+			const prevAnswer = prevResponse.correct_answer;
+			const isSameAnswer = Array.isArray(selectedOption) && Array.isArray(prevAnswer)
+				? selectedOption.length === prevAnswer.length &&
+					selectedOption.every((item) => prevAnswer.includes(item))
+				: prevAnswer === selectedOption;
+
+			if (isSameAnswer) {
 				return new Response(JSON.stringify({
 					ok: false,
 					error: "Ya has respondido esta pregunta con la misma opción.",

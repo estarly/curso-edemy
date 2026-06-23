@@ -118,3 +118,7 @@ Tras `npm run db:seed`:
 - [Módulos — guía detallada](./panel_admin_modulo.md)
 - [Estudiantes — guía detallada](./panel_admin_estudiantes.md)
 - [Banners — guía detallada](./panel_admin_banners.md)
+- [Subida de archivos — guía general](./upload_archivos.md)
+- [Panel instructor — índice](./panel_instructor.md)
+- [Panel instructor — crear/editar curso](./panel_instructor_curso.md)
+- [Panel instructor — lecciones, tareas y documentos](./panel_instructor_lecciones.md)

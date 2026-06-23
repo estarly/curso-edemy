@@ -6,24 +6,17 @@ import Swal from "sweetalert2";
 import StudentAssetViewer from "@/app/learning/course/[slug]/[courseId]/StudentAssetViewer";
 import { FaDownload } from "react-icons/fa";
 
-
+const isAnswerComplete = (assignmentTypeId, value) => {
+	if (assignmentTypeId === 3) {
+		return Array.isArray(value) && value.length > 0;
+	}
+	return value !== null && value !== undefined && value.toString().trim() !== "";
+};
 
 const CourseAsset = ({ assets, onContinue }) => {
 	const [inputValues, setInputValues] = useState({});
 
 	const handleOptionChange = async (selectedOption, questionId) => {
-		// Mostrar confirmación antes de continuar
-		/*const result = await Swal.fire({
-			title: "¿Estás seguro?",
-			text: "¿Quieres enviar esta respuesta?",
-			icon: "question",
-			showCancelButton: true,
-			confirmButtonText: "Sí, enviar",
-			cancelButtonText: "Cancelar",
-		});
-
-		if (!result.isConfirmed) return;*/
-
 		try {
 			const res = await fetch("/api/stateCourse/registerResponseAssignment", {
 				method: "POST",
@@ -35,24 +28,28 @@ const CourseAsset = ({ assets, onContinue }) => {
 			});
 			const data = await res.json();
 			if (data.ok) {
-				//Swal.fire("¡Respuesta guardada!", "", "success");
-				toast.success("¡Respuesta guardada!", {
-					position: "bottom-center",
-				});
-				// Mantener la opción seleccionada en el estado
+				toast.success("¡Respuesta guardada!");
 				setInputValues(prev => ({
 					...prev,
 					[questionId]: selectedOption
 				}));
 			}
-
 		} catch (error) {
 			Swal.fire("Error", "Ocurrió un error al guardar la respuesta", "error");
 		}
-		console.log(`Opción seleccionada para la pregunta ${questionId}: ${selectedOption}`);
 	};
+
+	const handleMultipleToggle = (option, questionId) => {
+		setInputValues((prev) => {
+			const current = Array.isArray(prev[questionId]) ? prev[questionId] : [];
+			const next = current.includes(option)
+				? current.filter((item) => item !== option)
+				: [...current, option];
+			return { ...prev, [questionId]: next };
+		});
+	};
+
 	useEffect(() => {
-		// Cuando cambian los assets, inicializa los valores de inputValues con las respuestas guardadas
 		if (assets && assets.assignments) {
 			const initialValues = {};
 			assets.assignments.forEach(asst => {
@@ -69,42 +66,21 @@ const CourseAsset = ({ assets, onContinue }) => {
 			});
 			setInputValues(initialValues);
 		}
-		console.log(assets, "CourseAsset:assets");
 	}, [assets]);
 
 	const allAnswered = assets?.assignments?.length > 0 &&
-		assets.assignments.every(asst => inputValues[asst.id] && inputValues[asst.id].toString().trim() !== "");
+		assets.assignments.every(asst => isAnswerComplete(asst.assignmentTypeId, inputValues[asst.id]));
 
 	const handleContinue = async () => {
 		if (assets?.assignments?.length > 0 && !allAnswered) {
-			if (!allAnswered) {
-				Swal.fire("¡No puedes continuar!", "Debes responder todas las preguntas.", "error");
-				return;
-			}
-		} else {
-			onContinue(assets.id, "no_assignments"); // Puedes enviar cualquier dato aquí
+			Swal.fire("¡No puedes continuar!", "Debes responder todas las preguntas.", "error");
 			return;
 		}
-
-		/*const result = await Swal.fire({
-			title: "¿Quieres continuar?",
-			text: "Has respondido todas las preguntas. ¿Deseas continuar?",
-			icon: "question",
-			showCancelButton: true,
-			confirmButtonText: "Sí, continuar",
-			cancelButtonText: "Cancelar",
-		});
-		if (result.isConfirmed) {
-			Swal.fire("¡Continuando!", "Has confirmado continuar.", "success");
-			if (onContinue) {
-				onContinue(assets.id); // Puedes enviar cualquier dato aquí
-			}
-		}*/
+		onContinue(assets.id, assets?.assignments?.length > 0 ? undefined : "no_assignments");
 	};
 
 	return (
 		<>
-			
 			<div className="card-body  p-4 rounded-3" style={{ backgroundColor: "#f4f4f4", border: "1px solid rgb(167 167 167)" }}>
 			<StudentAssetViewer asset={assets} />
 			<br />
@@ -141,7 +117,6 @@ const CourseAsset = ({ assets, onContinue }) => {
 					<div className="p-3">
 						{assets.files.length ? (
 							assets.files.map((file, index) => {
-								// Extraer el nombre del archivo de la URL
 								const fileName = file.url.split("/").pop();
 								return (
 									<div key={file.id} className="d-flex align-items-center mb-2">
@@ -152,7 +127,6 @@ const CourseAsset = ({ assets, onContinue }) => {
 											rel="noopener noreferrer"
 											className="d-flex align-items-center text-decoration-none"
 										>
-											
 											<span>{(index + 1)} - {fileName}&nbsp;&nbsp;&nbsp;&nbsp;</span><FaDownload className="me-2 text-primary" />
 										</a>
 									</div>
@@ -169,9 +143,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 							{assets.assignments.length && (
 								assets.assignments.map((asst) => {
 									const options = asst.config_assignment.options || asst.config_assignment.create?.options || [];
-									const correctOption = asst.config_assignment.correct_option || asst.config_assignment.create?.correct_option || null;
 
-									// Obtener la respuesta del usuario desde el primer statecourse con assignmentresults
 									let userAnswer = null;
 									if (asst.statecourse && asst.statecourse.length > 0) {
 										const assignmentResult = asst.statecourse[0].assignmentresults?.[0];
@@ -180,7 +152,6 @@ const CourseAsset = ({ assets, onContinue }) => {
 										}
 									}
 
-									// Agregar la respuesta del usuario al config_assignment para usarlo en el renderizado
 									const configWithUserAnswer = {
 										...asst.config_assignment,
 										correct_answer: userAnswer,
@@ -195,7 +166,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 													</h5>
 													<span className="text-muted">{asst.description}</span>
 													<div>
-														{asst.assignmentTypeId === 3 ? (
+														{asst.assignmentTypeId === 4 ? (
 															<div className="mt-2">
 																<textarea
 																	className="form-control form-control-sm mb-2"
@@ -220,11 +191,43 @@ const CourseAsset = ({ assets, onContinue }) => {
 																	Enviar respuesta
 																</button>
 															</div>
+														) : asst.assignmentTypeId === 3 ? (
+															<div className="mt-2">
+																{options.map((option, index) => {
+																	const inputId = `question-${asst.id}-option-${index}`;
+																	const selected = Array.isArray(inputValues?.[asst.id])
+																		? inputValues[asst.id]
+																		: (Array.isArray(configWithUserAnswer.correct_answer)
+																			? configWithUserAnswer.correct_answer
+																			: []);
+																	const isSelected = selected.includes(option);
+
+																	return (
+																		<div key={index}>
+																			<input
+																				type="checkbox"
+																				id={inputId}
+																				value={option}
+																				onChange={() => handleMultipleToggle(option, asst.id)}
+																				checked={isSelected}
+																			/>
+																			<label htmlFor={inputId} className="ms-2">
+																				{option}
+																			</label>
+																		</div>
+																	);
+																})}
+																<button
+																	className="btn btn-primary btn-sm w-100 mt-2"
+																	disabled={!Array.isArray(inputValues?.[asst.id]) || inputValues[asst.id].length === 0}
+																	onClick={() => handleOptionChange(inputValues[asst.id], asst.id)}
+																>
+																	Enviar respuesta
+																</button>
+															</div>
 														) : (
 															options.map((option, index) => {
 																const inputId = `question-${asst.id}-option-${index}`;
-																const isCorrect = option === correctOption;
-																// Usar inputValues para reflejar la selección en tiempo real
 																const isSelected = inputValues?.[asst.id] === option;
 
 																return (
@@ -237,7 +240,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 																			onChange={() => handleOptionChange(option, asst.id)}
 																			checked={isSelected}
 																		/>
-																		<label htmlFor={inputId} className={`ms-2 ${isCorrect ? "text-success" : ""}`}>
+																		<label htmlFor={inputId} className="ms-2">
 																			{option}
 																		</label>
 																	</div>

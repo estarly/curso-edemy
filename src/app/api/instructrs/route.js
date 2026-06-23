@@ -23,7 +23,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { name, password, designation, status } = body;
+    const { name, password, designation, status, requires_course_review } = body;
     const email = body.email?.trim().toLowerCase();
 
     if (!name?.trim()) {
@@ -75,6 +75,8 @@ export async function POST(request) {
         designation: designation?.trim() || null,
         role: "INSTRUCTOR",
         status: status === undefined ? 1 : parseInt(status),
+        requires_course_review:
+          requires_course_review === undefined ? false : Boolean(requires_course_review),
       },
     });
 

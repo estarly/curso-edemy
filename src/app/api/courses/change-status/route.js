@@ -21,9 +21,15 @@ export async function POST(req) {
             );
         }
 
+        const updateData = { status };
+
+        if (status === "Pending" || status === "Deleted") {
+            updateData.publish = false;
+        }
+
         const updatedCourse = await prisma.course.update({
             where: { id: courseId },
-            data: { status },
+            data: updateData,
         });
 
         return NextResponse.json({ success: true, course: updatedCourse });

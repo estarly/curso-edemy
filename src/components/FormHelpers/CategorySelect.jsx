@@ -3,8 +3,17 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
+import { RequiredMark } from "@/components/FormHelpers/Input";
 
-const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opción", data = [], onChange,required=true }) => {
+const CategorySelect = ({
+	label,
+	valueId = null,
+	placeholder = "Seleccione una opción",
+	data = [],
+	onChange,
+	required = true,
+	error,
+}) => {
 	const [selectedOption, setSelectedOption] = useState(null);
 	const router = useRouter();
 	
@@ -39,7 +48,10 @@ const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opc
 
 	return (
 		<div className="form-group">
-			<label>{label}</label>
+			<label>
+				{label}
+				{required && <RequiredMark />}
+			</label>
 			<Select
 				placeholder={placeholder}
 				required={required}
@@ -66,6 +78,9 @@ const CategorySelect = ({ label, valueId = null, placeholder="Seleccione una opc
 					},
 				})}
 			/>
+			{error && (
+				<div className="invalid-feedback d-block">{error}</div>
+			)}
 		</div>
 	);
 };

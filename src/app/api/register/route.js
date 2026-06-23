@@ -40,6 +40,7 @@ export async function POST(request) {
 
 		const hashedPassword = await bcrypt.hash(password, 12);
 		console.log(type_user,'type_user');
+		const isInstructor = type_user === "INSTRUCTOR";
 		const user = await prisma.user.create({
 			data: {
 				name,
@@ -47,6 +48,7 @@ export async function POST(request) {
 				hashedPassword,
 				role: type_user,
 				status: 1,
+				requires_course_review: isInstructor,
 			},
 		});
 

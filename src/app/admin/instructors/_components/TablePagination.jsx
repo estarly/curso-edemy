@@ -98,13 +98,14 @@ export default function TablePagination({ refreshKey = 0, onEditClick }) {
                             <th scope="col">Nombre</th>
                             <th scope="col">Fecha de Registro</th>
                             <th scope="col">Cursos</th>
+                            <th scope="col">Revisión</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="6">
                                     <div className="text-center">Cargando...</div>
                                 </td>
                             </tr>
@@ -120,6 +121,13 @@ export default function TablePagination({ refreshKey = 0, onEditClick }) {
                                     </td>
                                     <td>{new Date(instructor.created_at).toLocaleDateString()}</td>
                                     <td>{instructor.courses ? instructor.courses.length : 0}</td>
+                                    <td>
+                                        {instructor.requires_course_review ? (
+                                            <span className="badge bg-warning text-dark">Sí</span>
+                                        ) : (
+                                            <span className="badge bg-secondary">No</span>
+                                        )}
+                                    </td>
                                     <td>
                                         <div className="d-flex flex-row gap-2">
                                             <button
@@ -166,7 +174,7 @@ export default function TablePagination({ refreshKey = 0, onEditClick }) {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="6">
                                     <div className="text-center">No hay instructores</div>
                                 </td>
                             </tr>

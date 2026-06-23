@@ -1,4 +1,5 @@
  import prisma from "@libs/prismadb";
+import { publicCourseWhere } from "@/utils/publicCourseFilter";
 
 export async function getTotal() {
 
@@ -6,9 +7,7 @@ export async function getTotal() {
 		const [courses, instructors, students] =
 			await Promise.all([
 				prisma.course.count({
-					where: {
-						status: "Approved"
-					}
+					where: publicCourseWhere,
 				}),
 				prisma.user.count({
 					where: { role: "INSTRUCTOR", status: 1 },

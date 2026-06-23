@@ -40,12 +40,12 @@ export async function getAssignmentTypes() {
 export async function saveAssignment(assetId, data) {
   try {
     let config_assignment = {};
-    if (data.tipoId === 1 || data.tipoId === 2) {
+    if (data.tipoId === 1 || data.tipoId === 2 || data.tipoId === 3) {
       config_assignment = {
         options: data.opciones || [],
         correct_options: Array.isArray(data.respuesta) ? data.respuesta : [data.respuesta],
       };
-    } else if (data.tipoId === 3) {
+    } else if (data.tipoId === 4) {
       config_assignment = {
         correct_answer: "",
       };

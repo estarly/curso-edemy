@@ -54,6 +54,10 @@ const CreateAssignment = ({ assignmentTypes, params }) => {
       formData.total_points = data.total_points;
       formData.due_date = data.due_date;
     } else if (data.assignmentType.id === 3) {
+      formData.submission_type = "multipleselect";
+      formData.total_points = data.total_points;
+      formData.due_date = data.due_date;
+    } else if (data.assignmentType.id === 4) {
       formData.submission_type = "fillinblank";
       formData.total_points = data.total_points;
       formData.due_date = data.due_date;
@@ -167,6 +171,16 @@ const CreateAssignment = ({ assignmentTypes, params }) => {
             <div className="row mt-3">
               <div className="col-12 mt-3">
                 <p className="text-info">
+                  Tipo de pregunta: Selección Múltiple. Después de crear la tarea, podrás agregar las preguntas desde la sección de edición.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {assignmentType?.id === 4 && (
+            <div className="row mt-3">
+              <div className="col-12 mt-3">
+                <p className="text-info">
                   Tipo de pregunta: Completar. Después de crear la tarea, podrás agregar las preguntas desde la sección de edición.
                 </p>
               </div>
@@ -177,7 +191,8 @@ const CreateAssignment = ({ assignmentTypes, params }) => {
             <i className="flaticon-right-arrow"></i>
             {assignmentType?.id === 1 && "Crear Pregunta de Verdadero/Falso"}
             {assignmentType?.id === 2 && "Crear Pregunta de Selección Simple"}
-            {assignmentType?.id === 3 && "Crear Pregunta de Completar"}
+            {assignmentType?.id === 3 && "Crear Pregunta de Selección Múltiple"}
+            {assignmentType?.id === 4 && "Crear Pregunta de Completar"}
             {!assignmentType && "Guardar"}
             <span></span>
           </button>

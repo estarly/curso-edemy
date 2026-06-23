@@ -33,7 +33,7 @@ export async function PUT(request, { params }) {
     }
 
     const body = await request.json();
-    const { name, password, designation, status } = body;
+    const { name, password, designation, status, requires_course_review } = body;
     const email = body.email?.trim().toLowerCase();
 
     if (!name?.trim()) {
@@ -87,6 +87,10 @@ export async function PUT(request, { params }) {
       designation: designation?.trim() || null,
       status: status === undefined ? instructor.status : parseInt(status),
     };
+
+    if (requires_course_review !== undefined) {
+      updateData.requires_course_review = Boolean(requires_course_review);
+    }
 
     if (password?.trim()) {
       updateData.hashedPassword = await bcrypt.hash(password, 12);

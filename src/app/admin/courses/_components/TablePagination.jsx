@@ -179,6 +179,14 @@ export default function TablePagination({ categories }) {
                                                 {course.status === "Pending" && "Revisión"}
                                                 {course.status === "Deleted" && "Eliminado"}
                                             </span>
+                                            {course.status === "Approved" && (
+                                                <span
+                                                    className={`badge ${course.publish ? "bg-primary" : "bg-secondary"}`}
+                                                    style={{ fontSize: "0.9em" }}
+                                                >
+                                                    {course.publish ? "Publicado" : "No publicado"}
+                                                </span>
+                                            )}
 
                                             {/* Botones debajo */}
                                             <div className="d-flex flex-row gap-2">

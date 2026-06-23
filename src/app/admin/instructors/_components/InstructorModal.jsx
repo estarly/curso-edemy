@@ -16,6 +16,7 @@ export const InstructorModal = ({
     confirmPassword: "",
     designation: "",
     status: 1,
+    requires_course_review: false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -31,6 +32,7 @@ export const InstructorModal = ({
           confirmPassword: "",
           designation: item.designation || "",
           status: item.status ?? 1,
+          requires_course_review: item.requires_course_review ?? false,
         });
       } else {
         setFormData({
@@ -40,6 +42,7 @@ export const InstructorModal = ({
           confirmPassword: "",
           designation: "",
           status: 1,
+          requires_course_review: false,
         });
       }
       setShowPassword(false);
@@ -111,6 +114,7 @@ export const InstructorModal = ({
       email: formData.email.trim().toLowerCase(),
       designation: formData.designation.trim(),
       status: formData.status,
+      requires_course_review: formData.requires_course_review,
     };
 
     if (formData.password.trim()) {
@@ -285,6 +289,27 @@ export const InstructorModal = ({
                 <label className="form-check-label" htmlFor="status">
                   Activo
                 </label>
+              </div>
+
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="requires_course_review"
+                  checked={formData.requires_course_review}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      requires_course_review: e.target.checked,
+                    });
+                  }}
+                />
+                <label className="form-check-label" htmlFor="requires_course_review">
+                  Revisión de cursos
+                </label>
+                <small className="form-text text-muted d-block">
+                  Si está activo, los cursos de este instructor requieren aprobación del administrador.
+                </small>
               </div>
             </div>
             <div className="modal-footer">

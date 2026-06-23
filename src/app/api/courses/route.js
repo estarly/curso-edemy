@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@libs/prismadb";
+import { publicCourseWhere } from "@/utils/publicCourseFilter";
 
 export async function POST(req) {
   const body = await req.json();
@@ -14,7 +15,7 @@ export async function POST(req) {
     const items = await prisma.course.findMany({
       where: {
         categoryId: Number(categoryId),
-        status: "Approved",
+        ...publicCourseWhere,
       },
       orderBy: { title: "asc" },
     });

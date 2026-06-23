@@ -59,21 +59,40 @@ export const Content = ({ categories }) => {
 		}
 	};
 
-	// Nueva función para confirmar y cambiar el status del curso
-	const handleConfirmChangeStatus = (courseId, newStatus) => {
-		let texto = "";
-		let icono = "";
-		if (newStatus === "Approved") {
-			texto = "¿Estás seguro que deseas aprobar este curso?";
-			icono = "success";
-		} else if (newStatus === "Pending") {
-			texto = "¿Estás seguro que deseas deshabilitar este curso?";
-			icono = "warning";
+	// Cambiar publicación del curso (solo si está aprobado)
+	const handleTogglePublish = async (courseId, publish) => {
+		try {
+			const res = await fetch("/api/instructrs/courses/toggle-publish", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ courseId, publish }),
+			});
+			const data = await res.json();
+			if (res.ok && data.success) {
+				Swal.fire(
+					"¡Éxito!",
+					publish
+						? "El curso ya está visible en el catálogo."
+						: "El curso ya no se muestra en el catálogo.",
+					"success"
+				);
+				fetchCourses(categoryId, page);
+			} else {
+				Swal.fire("Error", data.error || "No se pudo actualizar el curso.", "error");
+			}
+		} catch (error) {
+			Swal.fire("Error", "Ocurrió un error inesperado.", "error");
 		}
+	};
+
+	const handleConfirmTogglePublish = (courseId, publish) => {
+		const texto = publish
+			? "¿Deseas publicar este curso en el catálogo para los estudiantes?"
+			: "¿Deseas ocultar este curso del catálogo público?";
 		Swal.fire({
 			title: "Confirmar acción",
 			text: texto,
-			icon: icono,
+			icon: publish ? "success" : "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",
 			cancelButtonColor: "#d33",
@@ -81,7 +100,7 @@ export const Content = ({ categories }) => {
 			cancelButtonText: "Cancelar",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				handleChangeStatus(courseId, newStatus);
+				handleTogglePublish(courseId, publish);
 			}
 		});
 	};
@@ -125,7 +144,11 @@ export const Content = ({ categories }) => {
 							courses.map((course) => (
 								<div key={course.id} className="col-lg-4 col-md-6">
 									<div className="single-courses-box" style={{
-										border: course.status === "Pending" ? "4px solid #ffc107" : "none"
+										border: course.status === "Pending"
+											? "4px solid #ffc107"
+											: course.status === "Approved" && !course.publish
+												? "4px solid #6c757d"
+												: "none"
 									}}>
 										<div className="courses-image">
 											<Link
@@ -155,32 +178,41 @@ export const Content = ({ categories }) => {
 															Editar Curso
 														</Link>
 													</li>
-													{/* Botón Aprobar/Deshabilitar */}
-													<li>
-														<div className="css-bbq5bh">
-															{course.status === "Approved" ? (
-																<button
-																	type="button"
-																	className="dropdown-item"
-																	style={{ color: "#856404", backgroundColor: "#fff3cd" }} // Amarillo
-																	onClick={() => handleConfirmChangeStatus(course.id, "Pending")}
-																>
-																	<i className="bx bxs-pause-circle"></i>{" "}
-																	Deshabilitar
-																</button>
-															) : course.status === "Pending" ? (
-																<button
-																	type="button"
-																	className="dropdown-item"
-																	style={{ color: "#155724", backgroundColor: "#d4edda" }} // Verde
-																	onClick={() => handleConfirmChangeStatus(course.id, "Approved")}
-																>
-																	<i className="bx bxs-check-circle"></i>{" "}
-																	Aprobar
-																</button>
-															) : null}
-														</div>
-													</li>
+													{/* Publicar / ocultar del catálogo */}
+													{course.status === "Approved" && (
+														<li>
+															<div className="css-bbq5bh">
+																{course.publish ? (
+																	<button
+																		type="button"
+																		className="dropdown-item"
+																		style={{ color: "#856404", backgroundColor: "#fff3cd" }}
+																		onClick={() => handleConfirmTogglePublish(course.id, false)}
+																	>
+																		<i className="bx bxs-hide"></i>{" "}
+																		Quitar del catálogo
+																	</button>
+																) : (
+																	<button
+																		type="button"
+																		className="dropdown-item"
+																		style={{ color: "#155724", backgroundColor: "#d4edda" }}
+																		onClick={() => handleConfirmTogglePublish(course.id, true)}
+																	>
+																		<i className="bx bxs-check-circle"></i>{" "}
+																		Publicar en catálogo
+																	</button>
+																)}
+															</div>
+														</li>
+													)}
+													{course.status === "Pending" && (
+														<li>
+															<span className="dropdown-item text-muted" style={{ cursor: "default" }}>
+																<i className="bx bx-time-five"></i> En revisión por el administrador
+															</span>
+														</li>
+													)}
 													{/* Botón Eliminar */}
 													<li>
 														<div className="css-bbq5bh">
@@ -218,6 +250,17 @@ export const Content = ({ categories }) => {
 													{course.title}
 												</Link>
 											</h3>
+											<p className="mb-2">
+												{course.status === "Pending" && (
+													<span className="badge bg-warning text-dark">En revisión</span>
+												)}
+												{course.status === "Approved" && course.publish && (
+													<span className="badge bg-success">Publicado</span>
+												)}
+												{course.status === "Approved" && !course.publish && (
+													<span className="badge bg-secondary">Aprobado · No publicado</span>
+												)}
+											</p>
 
 											<ul className="courses-box-footer d-flex pb-1 justify-content-between align-items-center">
 												<li>

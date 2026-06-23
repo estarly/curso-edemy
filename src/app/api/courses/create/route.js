@@ -5,6 +5,11 @@ import { slugify } from "@/utils/slugify";
 import { imageUploadService } from "@/services/imageUpload";
 import { processFormDataWithFile } from "@/utils/fileProcessing";
 
+const isRichTextEmpty = (value) => {
+	if (!value) return true;
+	return value.replace(/<[^>]*>/g, "").trim() === "";
+};
+
 export async function POST(request) {
 	try {
 		const currentUser = await getCurrentUser();
@@ -35,20 +40,38 @@ export async function POST(request) {
 			who_is_this_course_for,
 		} = body;
 
-		// Verificamos campos obligatorios
-		if (!title) {
-			return NextResponse.json(
-				{
-					message: "El título del curso es obligatorio.",
-				},
-				{ status: 400 }
-			);
+		const missing = [];
+
+		if (!title?.trim()) {
+			missing.push("El título del curso es obligatorio.");
+		}
+		if (!category) {
+			missing.push("La categoría es obligatoria.");
+		}
+		if (isRichTextEmpty(description)) {
+			missing.push("La descripción es obligatoria.");
+		}
+		if (isRichTextEmpty(requirements)) {
+			missing.push("Los requisitos son obligatorios.");
+		}
+		if (isRichTextEmpty(what_you_will_learn)) {
+			missing.push("Lo que aprenderás es obligatorio.");
+		}
+		if (isRichTextEmpty(who_is_this_course_for)) {
+			missing.push("Para quién es este curso es obligatorio.");
+		}
+		if (!imageFile) {
+			missing.push("La imagen del curso es obligatoria.");
 		}
 
-		if (!imageFile) {
+		if (missing.length > 0) {
 			return NextResponse.json(
 				{
-					message: "La imagen del curso es obligatoria.",
+					message:
+						missing.length > 2
+							? "Por favor complete su formulario"
+							: missing[0],
+					errors: missing,
 				},
 				{ status: 400 }
 			);
@@ -95,6 +118,14 @@ export async function POST(request) {
 		}
 
 		// Crear el curso en la base de datos con la URL de la imagen
+		const instructor = await prisma.user.findUnique({
+			where: { id: currentUser.id },
+			select: { requires_course_review: true },
+		});
+
+		const needsReview = instructor?.requires_course_review ?? true;
+		const initialStatus = needsReview ? "Pending" : "Approved";
+
 		const course = await prisma.course.create({
 			data: {
 				title,
@@ -111,12 +142,18 @@ export async function POST(request) {
 				what_you_will_learn,
 				who_is_this_course_for,
 				userId: currentUser.id,
+				status: initialStatus,
+				publish: false,
 			},
 		});
 
+		const successMessage = needsReview
+			? "Curso enviado. Será revisado por un administrador antes de poder publicarlo."
+			: "Curso creado y aprobado. Puedes publicarlo cuando esté listo desde Mis Cursos.";
+
 		return NextResponse.json(
 			{
-				message: "Curso enviado. Será aprobado próximamente.",
+				message: successMessage,
 				course,
 			},
 			{ status: 200 }
