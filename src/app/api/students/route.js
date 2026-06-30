@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import prisma from "@libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { normalizeEmail } from "@libs/normalizeEmail";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,7 +25,7 @@ export async function POST(request) {
 
     const body = await request.json();
     const { name, password, status } = body;
-    const email = body.email?.trim().toLowerCase();
+    const email = normalizeEmail(body.email);
 
     if (!name?.trim()) {
       return NextResponse.json(

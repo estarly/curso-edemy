@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import prisma from "@libs/prismadb";	
+import prisma from "@libs/prismadb";
+import { normalizeEmail } from "@libs/normalizeEmail";
 
 export async function POST(request) {
 	try {
 		const body = await request.json();
-		const { name, email, password,type_user } = body;
+		const { name, password, type_user } = body;
+		const email = normalizeEmail(body.email);
 
 		if (name == "") {
 			return NextResponse.json(
@@ -31,7 +33,7 @@ export async function POST(request) {
 		}
 
 		const existingUser = await prisma.user.findUnique({
-			where: { email: email },
+			where: { email },
 		});
 
 		if (existingUser && existingUser.length > 0) {

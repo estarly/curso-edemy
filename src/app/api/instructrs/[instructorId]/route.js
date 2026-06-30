@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import prisma from "@libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import { normalizeEmail } from "@libs/normalizeEmail";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -34,7 +35,7 @@ export async function PUT(request, { params }) {
 
     const body = await request.json();
     const { name, password, designation, status, requires_course_review } = body;
-    const email = body.email?.trim().toLowerCase();
+    const email = normalizeEmail(body.email);
 
     if (!name?.trim()) {
       return NextResponse.json(
@@ -68,9 +69,14 @@ export async function PUT(request, { params }) {
       );
     }
 
-    if (email !== instructor.email) {
-      const existingUser = await prisma.user.findUnique({
-        where: { email },
+    const currentEmail = normalizeEmail(instructor.email);
+
+    if (email !== currentEmail) {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          email,
+          NOT: { id },
+        },
       });
 
       if (existingUser) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@libs/prismadb";   
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import bcrypt from "bcrypt";
+import { normalizeEmail } from "@libs/normalizeEmail";
 
 export async function PUT(request, { params }) {
     const { userId } = params;
@@ -18,7 +19,8 @@ export async function PUT(request, { params }) {
         }
 
         const body = await request.json();
-        const { email, password } = body;
+        const { password } = body;
+        const email = normalizeEmail(body.email);
 
         // Validar que se proporcionen datos
         if (!email && !password) {
@@ -40,11 +42,15 @@ export async function PUT(request, { params }) {
                 );
             }
 
+            const currentEmail = normalizeEmail(currentUser.email);
+
             // Verificar si el email es diferente al actual
-            if (email !== currentUser.email) {
-                // Buscar si el email ya existe en la base de datos
-                const existingUser = await prisma.user.findUnique({
-                    where: { email }
+            if (email !== currentEmail) {
+                const existingUser = await prisma.user.findFirst({
+                    where: {
+                        email,
+                        NOT: { id: parseInt(userId) },
+                    },
                 });
 
                 if (existingUser) {
@@ -54,7 +60,6 @@ export async function PUT(request, { params }) {
                     );
                 }
 
-                // Si no existe, actualizar el email
                 updateData.email = email;
             }
         }

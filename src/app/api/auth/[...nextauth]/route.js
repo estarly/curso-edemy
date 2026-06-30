@@ -6,6 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
 import prisma from "@libs/prismadb";
+import { normalizeEmail } from "@libs/normalizeEmail";
 
 export const authHandler = NextAuth({
 	adapter: PrismaAdapter(prisma),
@@ -30,9 +31,11 @@ export const authHandler = NextAuth({
 					throw new Error("Credenciales incorrectas");
 				}
 
+				const email = normalizeEmail(credentials.email);
+
 				const user = await prisma.user.findUnique({
 					where: {
-						email: credentials.email,
+						email,
 					},
 				});
 				//console.log("findUnique:user", user);
@@ -47,6 +50,15 @@ export const authHandler = NextAuth({
 
 				if (!isCorrectPassword) {
 					throw new Error("Contraseña incorrectas");
+				}
+
+				const normalizedEmail = normalizeEmail(user.email);
+				if (user.email !== normalizedEmail) {
+					await prisma.user.update({
+						where: { id: user.id },
+						data: { email: normalizedEmail },
+					});
+					user.email = normalizedEmail;
 				}
 
 				return user;
@@ -71,6 +83,17 @@ export const authHandler = NextAuth({
 		error: "/auth",
 	},
 	debug: process.env.NODE_ENV === "development",
+	events: {
+		async createUser({ user }) {
+			const normalizedEmail = normalizeEmail(user.email);
+			if (normalizedEmail && normalizedEmail !== user.email) {
+				await prisma.user.update({
+					where: { id: user.id },
+					data: { email: normalizedEmail },
+				});
+			}
+		},
+	},
 	session: {
 		strategy: "jwt",
 	},
