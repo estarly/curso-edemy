@@ -73,6 +73,7 @@ export async function myLearningPlay(params) {
 				assets: {
 					where: {
 						assetTypeId: { in: [0, 1, 2, 3] },
+						status: 1,
 					},
 					include: {
 						assetType: true,
@@ -138,6 +139,7 @@ export async function courseReviewsAndAssets(params) {
 				assets: {
 					where: {
 						assetTypeId: { in: [0, 1, 2, 3] },
+						status: 1,
 					},
 				},
 				reviews: {

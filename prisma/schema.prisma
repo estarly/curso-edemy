@@ -158,6 +158,7 @@ model Asset {
   video_length String?
   config_asset Json?
   is_preview   Boolean  @default(false)
+  status       Int      @default(1) // 0: inactive, 1: active
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 

@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import React from "react";
+import UserAvatar from "@/components/Layout/UserAvatar";
 
 const Instructor = ({ user }) => {
 	return (
@@ -11,15 +11,11 @@ const Instructor = ({ user }) => {
 					<div className="row align-items-center">
 						<div className="col-lg-4 col-md-4">
 							<div className="advisor-image">
-								<Image
-									src={
-										user.image
-											? user.image
-											: "/images/advisor/advisor2.jpg"
-									}
-									alt="image"
-									width={200}
-									height={200}
+								<UserAvatar
+									user={user}
+									size={200}
+									shape="rounded"
+									fill
 								/>
 							</div>
 						</div>

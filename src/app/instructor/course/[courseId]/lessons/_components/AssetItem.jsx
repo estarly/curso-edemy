@@ -7,7 +7,7 @@ import VideoPlayer from "@/components/Shared/VideoPlayer";
 const AssetItem = ({ courseId, asset, assignmentsTypes, onEdit }) => {
   return (
     <div className="col-md-3" key={asset.id}>
-      <div className="card h-100">
+      <div className={`card h-100 ${asset.status === 0 ? "border-warning opacity-75" : ""}`}>
         {/* Video - Tipo 1 */}
         {asset.assetTypeId === 1 && asset.config_asset?.val && (
           <div className="video-container" style={{ height: "160px", overflow: "hidden" }}>
@@ -93,7 +93,14 @@ const AssetItem = ({ courseId, asset, assignmentsTypes, onEdit }) => {
 
         <div className="card-body d-flex flex-column justify-content-between ">
           <div>
-            <h6 className="card-title text-truncate">
+            <div className="d-flex justify-content-end mb-1">
+              {asset.status === 0 ? (
+                <span className="badge bg-warning text-dark">Inactiva</span>
+              ) : (
+                <span className="badge bg-success">Activa</span>
+              )}
+            </div>
+            <h6 className="card-title text-truncate" title={asset.title}>
               {asset.title}
             </h6>
             {asset.description && (
@@ -118,8 +125,13 @@ const AssetItem = ({ courseId, asset, assignmentsTypes, onEdit }) => {
             <AssignmentComponent
               idAsset={asset.id}
               assignmentsTypes={assignmentsTypes}
+              lessonTitle={asset.title}
             />
-            <FileAssetButton courseId={courseId} lessonId={asset.id} />
+            <FileAssetButton
+              courseId={courseId}
+              lessonId={asset.id}
+              lessonTitle={asset.title}
+            />
             <DeleteButton assetId={asset.id} />
           </div>
         </div>

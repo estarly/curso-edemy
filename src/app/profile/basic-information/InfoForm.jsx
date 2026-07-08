@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -11,6 +11,9 @@ import { useRouter } from "next/navigation";
 
 const InfoForm = ({ currentUser, countries, validateUser }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [detectedCountry, setDetectedCountry] = useState("");
+	const autoDetectedRef = useRef(false);
+	const profileToastShownRef = useRef(false);
 
 	const router = useRouter();
 
@@ -45,17 +48,67 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 		setValue("address", currentUser.profile ? currentUser.profile.address : "");
 		setValue("whatsapp", currentUser.profile ? currentUser.profile.whatsapp : "");
 		setValue("phone", currentUser.profile ? currentUser.profile.phone : "");
-		setValue("countryId", currentUser.profile ? parseInt(currentUser.profile.countryId) : "");
+		// Solo fijamos el país si ya existe en el perfil; si no, dejamos que la
+		// autodetección lo complete (no lo reiniciamos a "").
+		if (currentUser.profile?.countryId) {
+			setValue("countryId", parseInt(currentUser.profile.countryId));
+		}
 		setValue("website", currentUser.profile ? currentUser.profile.website : "");
 		setValue("twitter", currentUser.profile ? currentUser.profile.twitter : "");
 		setValue("facebook", currentUser.profile ? currentUser.profile.facebook : "");
 		setValue("linkedin", currentUser.profile ? currentUser.profile.linkedin : "");
 		setValue("youtube", currentUser.profile ? currentUser.profile.youtube : "");
 
-		if (validateUser) {
+		if (validateUser && !profileToastShownRef.current) {
+			profileToastShownRef.current = true;
 			toast.success("Complete su perfil básico para continuar");
 		}
 	}, [validateUser, currentUser, setValue]);
+
+	// Autodetectar el país solo la primera vez (perfil sin país guardado).
+	useEffect(() => {
+		const hasSavedCountry = Boolean(currentUser.profile?.countryId);
+		if (hasSavedCountry || autoDetectedRef.current) return;
+		if (!countries || countries.length === 0) return;
+		autoDetectedRef.current = true;
+
+		const matchCountry = (code) => {
+			if (!code) return null;
+			const lower = String(code).toLowerCase();
+			return countries.find((c) => c.alpha2 === lower) || null;
+		};
+
+		const detect = async () => {
+			let code;
+
+			// 1) Detección por IP (más precisa)
+			try {
+				const res = await fetch("https://ipapi.co/json/");
+				if (res.ok) {
+					const data = await res.json();
+					code = data.country_code;
+				}
+			} catch (_) {
+				// Silenciar: caemos al respaldo por idioma del navegador
+			}
+
+			// 2) Respaldo: región del idioma del navegador (ej. "es-VE" -> "VE")
+			if (!code && typeof navigator !== "undefined") {
+				const locale =
+					navigator.language ||
+					(navigator.languages && navigator.languages[0]);
+				code = locale?.split("-")[1];
+			}
+
+			const match = matchCountry(code);
+			if (match) {
+				setValue("countryId", match.id, { shouldValidate: true });
+				setDetectedCountry(match.name);
+			}
+		};
+
+		detect();
+	}, [currentUser, countries, setValue]);
 
 	const onSubmit = async (data) => {
 		setIsLoading(true);
@@ -140,6 +193,12 @@ const InfoForm = ({ currentUser, countries, validateUser }) => {
 					</select>
 					{errors.countryId && (
 						<div className="invalid-feedback d-block">{errors.countryId.message}</div>
+					)}
+					{detectedCountry && !errors.countryId && (
+						<small className="text-muted d-block mt-1">
+							País detectado automáticamente: <strong>{detectedCountry}</strong>. Puedes
+							cambiarlo si no es correcto.
+						</small>
 					)}
 
 					<br />

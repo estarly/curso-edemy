@@ -11,7 +11,7 @@ import styles from "./LoginForm.module.css";
 import Swal from "sweetalert2";
 import { getPostLoginRedirectPath } from "@/actions/auth/getPostLoginRedirect";
 
-const LoginForm = () => {
+const LoginForm = ({ onSuccess }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const router = useRouter();
@@ -47,6 +47,7 @@ const LoginForm = () => {
 			}
 
 			toast.success("Sesión iniciada");
+			onSuccess?.();
 			const redirectPath = await getPostLoginRedirectPath();
 			router.push(redirectPath);
 			router.refresh();

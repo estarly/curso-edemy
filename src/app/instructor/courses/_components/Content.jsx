@@ -1,6 +1,7 @@
 'use client';
 import CategorySelect from "@/components/FormHelpers/CategorySelect";
 import ProgressBarCourse from "@/components/Instructor/ProgressBarCourse";
+import UserAvatar from "@/components/Layout/UserAvatar";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -234,13 +235,13 @@ export const Content = ({ categories }) => {
 										<div className="courses-content" style={{ padding: 20 }}>
 
 											<div className="course-author d-flex align-items-center">
-												<Image
-													src={course.user?.image || "/images/landing/profile/profile01.png"}
-													className="rounded-circle"
-													alt={course.user?.name || "Instructor"}
-													width={45}
-													height={45}
-												/>
+												{course.user && (
+													<UserAvatar
+														user={course.user}
+														size={45}
+														className="me-2"
+													/>
+												)}
 												<span><strong>{course.user?.name || "Instructor"} </strong><br /> {course.user?.designation || "Sin designación"}</span>
 											</div>
 											<h3>

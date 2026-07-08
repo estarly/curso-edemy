@@ -50,7 +50,7 @@ export async function POST(request, { params }) {
     }
 
     const { body, file: uploadedFile } = await processFormDataWithFile(request, 'file');
-    const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description } = body;
+    const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description, status } = body;
 
     console.log('=== DEBUG INFO ===');
     console.log('Course ID:', courseId);
@@ -385,7 +385,8 @@ export async function POST(request, { params }) {
         file_url: finalFileUrl,
         courseId: parseInt(courseId),
         assetTypeId: parseInt(assetTypeId),
-        config_asset: config_asset
+        config_asset: config_asset,
+        status: status === undefined || status === "" ? 1 : parseInt(status, 10) === 0 ? 0 : 1,
       },
     });
 

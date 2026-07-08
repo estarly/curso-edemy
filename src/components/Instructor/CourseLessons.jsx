@@ -60,6 +60,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
       participants: "",
       description: "",
       asset: null,
+      active: true,
     },
   });
 
@@ -78,6 +79,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
 
       setValue("title", currentAsset.title || "");
       setValue("description", currentAsset.description || "");
+      setValue("active", currentAsset.status !== 0);
       setValue("asset", selectedAssetType);
 
       if (currentAsset.config_asset) {
@@ -213,6 +215,8 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
 
     setIsLoading(true);
 
+    const lessonStatus = data.active ? 1 : 0;
+
     try {
       let response;
 
@@ -225,6 +229,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
           formData.append('title', data.title);
           formData.append('description', data.description || '');
           formData.append('assetTypeId', asset.value);
+          formData.append('status', lessonStatus);
 
           response = await updateFile(url, formData);
         } else {
@@ -232,6 +237,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
             title: data.title,
             description: data.description,
             assetTypeId: asset.value,
+            status: lessonStatus,
           };
 
           switch (asset.value) {
@@ -266,6 +272,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
           formData.append('title', data.title);
           formData.append('description', data.description || '');
           formData.append('assetTypeId', asset.value);
+          formData.append('status', lessonStatus);
 
           response = await uploadFile(url, formData);
         } else {
@@ -273,6 +280,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
             title: data.title,
             description: data.description,
             assetTypeId: asset.value,
+            status: lessonStatus,
           };
 
           switch (asset.value) {
@@ -334,6 +342,7 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
 
   const video_url = watch("video_url");
   const asset = watch("asset");
+  const active = watch("active");
 
   const setCustomValue = (id, value) => {
     setValue(id, value, {
@@ -528,6 +537,24 @@ const CourseLessons = ({ params, currentAsset, onCancelEdit, onAssetUpdated, onA
                 </div>
               </div>
             )}
+
+            <div className="row mt-3">
+              <div className="col-12">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="active"
+                    checked={!!active}
+                    disabled={isLoading || isUploading}
+                    onChange={(e) => setValue("active", e.target.checked)}
+                  />
+                  <label className="form-check-label" htmlFor="active">
+                    Lección activa (visible para los estudiantes)
+                  </label>
+                </div>
+              </div>
+            </div>
 
             <div className="col-12 d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
               {isEditMode ? (

@@ -50,6 +50,7 @@ export async function getSingleCourse(params) {
 					},
 				},
 				assets: {
+					where: { status: 1 },
 					include: {
 						assignments: true,
 						assetType: true,

@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from "react"
 import ImageCropper from "./ImageCropper"
 
 const IMAGE_DIMENSIONS = {
-  banner: { width: 832, height: 456, label: "Banner", allowVideo: true },
+  // freeSize: sin validación de tamaño ni recorte forzado (sube el archivo tal cual)
+  banner: { width: 832, height: 456, label: "Banner", allowVideo: true, freeSize: true },
   category: { width: 650, height: 433, label: "Categoría" },
   profile: { width: 200, height: 200, label: "Perfil" },
   course: { width: 750, height: 500, label: "Curso" },
@@ -69,7 +70,7 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
     setSelectedMediaType(null)
 
     if (!file.type.startsWith("image/") && !(dimensions.allowVideo && file.type.startsWith("video/"))) {
-      setError("El archivo debe ser imagen (JPG, PNG, WEBP) o video MP4.")
+      setError("El archivo debe ser imagen (JPG, PNG, WEBP) o video (MP4, WEBM, OGG).")
       return
     }
 
@@ -90,6 +91,14 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
 
     if (file.size > 5 * 1024 * 1024) {
       setError("La imagen no debe superar los 5MB.")
+      return
+    }
+
+    // Sin validación de tamaño: se sube la imagen tal cual, sin recorte forzado.
+    if (dimensions.freeSize) {
+      const previewUrl = URL.createObjectURL(file)
+      setSelectedImage(previewUrl)
+      onChange && onChange(file)
       return
     }
 
@@ -142,7 +151,8 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
     <div className="container py-4">
       {title && (
         <h2 className="fw-bold mb-4">
-          {dimensions.label} ({dimensions.width}x{dimensions.height}px)
+          {dimensions.label}
+          {!dimensions.freeSize && ` (${dimensions.width}x${dimensions.height}px)`}
         </h2>
       )}
 
@@ -195,13 +205,17 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
               ) : (
                 <>
                   <i className="bi bi-upload fs-1 text-secondary mb-2"></i>
-                  <p className="text-secondary mb-1">Haz clic para seleccionar o arrastra una imagen</p>
-                  <p className="text-secondary small">
-                    {dimensions.label}: {dimensions.width} x {dimensions.height} px
-                    {dimensions.allowVideo ? " o video MP4" : ""} (Formato: JPG, PNG
-                    {dimensions.allowVideo ? ", WEBP, MP4" : ""})
+                  <p className="text-secondary mb-1">
+                    Haz clic para seleccionar o arrastra {dimensions.allowVideo ? "una imagen o video" : "una imagen"}
                   </p>
-                  <p className="text-secondary small mt-1">Podrás recortar la imagen después de seleccionarla</p>
+                  <p className="text-secondary small">
+                    {dimensions.freeSize
+                      ? `${dimensions.label} (Formato: JPG, PNG, WEBP, MP4, WEBM, OGG)`
+                      : `${dimensions.label}: ${dimensions.width} x ${dimensions.height} px (Formato: JPG, PNG)`}
+                  </p>
+                  {!dimensions.freeSize && (
+                    <p className="text-secondary small mt-1">Podrás recortar la imagen después de seleccionarla</p>
+                  )}
                 </>
               )}
               <input
@@ -210,7 +224,7 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
                 className="d-none"
                 accept={
                   dimensions.allowVideo
-                    ? "image/png, image/jpeg, image/webp, video/mp4"
+                    ? "image/png, image/jpeg, image/webp, video/mp4, video/webm, video/ogg"
                     : "image/png, image/jpeg"
                 }
                 onChange={handleImageChange}
@@ -219,6 +233,12 @@ export default function ImageUploader({ type = "banner", onChange,title=false })
           </div>
         </div>
       </div>
+
+      {dimensions.freeSize && (
+        <p className="fw-bold text-danger">
+          La medida recomendada es 416X228 px ó la misma relaccion 16:9
+        </p>
+      )}
 
       {error && (
         <div className="alert alert-danger mb-4" role="alert">

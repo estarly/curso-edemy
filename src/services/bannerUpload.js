@@ -1,7 +1,7 @@
 import { getStorageService } from "./storage";
 
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm"];
+const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm", "video/ogg"];
 
 export class BannerUploadService {
 	constructor(provider) {
@@ -24,7 +24,7 @@ export class BannerUploadService {
 		if (!file) throw new Error("No se proporcionó ningún archivo");
 
 		if (!this.isAllowedFile(file)) {
-			throw new Error("Formato no permitido. Use JPG, PNG, WEBP o MP4.");
+			throw new Error("Formato no permitido. Use JPG, PNG, WEBP, MP4, WEBM u OGG.");
 		}
 
 		if (!this.storageService) {

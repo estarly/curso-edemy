@@ -13,10 +13,27 @@ const isAnswerComplete = (assignmentTypeId, value) => {
 	return value !== null && value !== undefined && value.toString().trim() !== "";
 };
 
+const getSavedAnswer = (asst) => {
+	if (!asst.statecourse?.length) return null;
+	const assignmentResult = asst.statecourse[0].assignmentresults?.[0];
+	if (!assignmentResult?.response) return null;
+	return assignmentResult.response.correct_answer ?? null;
+};
+
+const isAssignmentSubmitted = (asst) => {
+	const saved = getSavedAnswer(asst);
+	if (saved === null || saved === undefined) return false;
+	if (Array.isArray(saved)) return saved.length > 0;
+	return saved.toString().trim() !== "";
+};
+
 const CourseAsset = ({ assets, onContinue }) => {
 	const [inputValues, setInputValues] = useState({});
 
 	const handleOptionChange = async (selectedOption, questionId) => {
+		const assignment = assets.assignments?.find((a) => a.id === questionId);
+		if (assignment && isAssignmentSubmitted(assignment)) return;
+
 		try {
 			const res = await fetch("/api/stateCourse/registerResponseAssignment", {
 				method: "POST",
@@ -40,6 +57,9 @@ const CourseAsset = ({ assets, onContinue }) => {
 	};
 
 	const handleMultipleToggle = (option, questionId) => {
+		const assignment = assets.assignments?.find((a) => a.id === questionId);
+		if (assignment && isAssignmentSubmitted(assignment)) return;
+
 		setInputValues((prev) => {
 			const current = Array.isArray(prev[questionId]) ? prev[questionId] : [];
 			const next = current.includes(option)
@@ -53,13 +73,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 		if (assets && assets.assignments) {
 			const initialValues = {};
 			assets.assignments.forEach(asst => {
-				let userAnswer = null;
-				if (asst.statecourse && asst.statecourse.length > 0) {
-					const assignmentResult = asst.statecourse[0].assignmentresults?.[0];
-					if (assignmentResult && assignmentResult.response) {
-						userAnswer = assignmentResult.response.correct_answer;
-					}
-				}
+				const userAnswer = getSavedAnswer(asst);
 				if (userAnswer !== null && userAnswer !== undefined) {
 					initialValues[asst.id] = userAnswer;
 				}
@@ -69,7 +83,10 @@ const CourseAsset = ({ assets, onContinue }) => {
 	}, [assets]);
 
 	const allAnswered = assets?.assignments?.length > 0 &&
-		assets.assignments.every(asst => isAnswerComplete(asst.assignmentTypeId, inputValues[asst.id]));
+		assets.assignments.every((asst) =>
+			isAssignmentSubmitted(asst) ||
+			isAnswerComplete(asst.assignmentTypeId, inputValues[asst.id])
+		);
 
 	const handleContinue = async () => {
 		if (assets?.assignments?.length > 0 && !allAnswered) {
@@ -143,26 +160,18 @@ const CourseAsset = ({ assets, onContinue }) => {
 							{assets.assignments.length && (
 								assets.assignments.map((asst) => {
 									const options = asst.config_assignment.options || asst.config_assignment.create?.options || [];
-
-									let userAnswer = null;
-									if (asst.statecourse && asst.statecourse.length > 0) {
-										const assignmentResult = asst.statecourse[0].assignmentresults?.[0];
-										if (assignmentResult && assignmentResult.response) {
-											userAnswer = assignmentResult.response.correct_answer;
-										}
-									}
-
-									const configWithUserAnswer = {
-										...asst.config_assignment,
-										correct_answer: userAnswer,
-									};
+									const savedAnswer = getSavedAnswer(asst);
+									const alreadySubmitted = isAssignmentSubmitted(asst);
 
 									return (
 										<div className="col-md-4" key={asst.id}>
 											<div className="card">
 												<div className="card-body align-items-center">
-													<h5 className="card-title d-flex justify-content-left">
-														<strong>{assets.id} - {asst.id} - {asst.title}</strong>
+													<h5 className="card-title d-flex justify-content-between align-items-start gap-2">
+														<strong>{asst.title}</strong>
+														{alreadySubmitted && (
+															<span className="badge bg-success flex-shrink-0">Enviada</span>
+														)}
 													</h5>
 													<span className="text-muted">{asst.description}</span>
 													<div>
@@ -171,25 +180,30 @@ const CourseAsset = ({ assets, onContinue }) => {
 																<textarea
 																	className="form-control form-control-sm mb-2"
 																	placeholder="Escribe tu respuesta aquí"
-																	value={inputValues?.[asst.id] !== undefined ? inputValues[asst.id] : (configWithUserAnswer.correct_answer || "")}
+																	value={inputValues?.[asst.id] !== undefined ? inputValues[asst.id] : (savedAnswer || "")}
 																	onChange={(e) => {
+																		if (alreadySubmitted) return;
 																		setInputValues(prev => ({
 																			...prev,
 																			[asst.id]: e.target.value
 																		}));
 																	}}
+																	disabled={alreadySubmitted}
+																	readOnly={alreadySubmitted}
 																	rows={3}
 																/>
-																<button
-																	className="btn btn-primary btn-sm w-100"
-																	disabled={
-																		!inputValues?.[asst.id] ||
-																		inputValues[asst.id].trim() === ""
-																	}
-																	onClick={() => handleOptionChange(inputValues[asst.id], asst.id)}
-																>
-																	Enviar respuesta
-																</button>
+																{!alreadySubmitted && (
+																	<button
+																		className="btn btn-primary btn-sm w-100"
+																		disabled={
+																			!inputValues?.[asst.id] ||
+																			inputValues[asst.id].trim() === ""
+																		}
+																		onClick={() => handleOptionChange(inputValues[asst.id], asst.id)}
+																	>
+																		Enviar respuesta
+																	</button>
+																)}
 															</div>
 														) : asst.assignmentTypeId === 3 ? (
 															<div className="mt-2">
@@ -197,9 +211,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 																	const inputId = `question-${asst.id}-option-${index}`;
 																	const selected = Array.isArray(inputValues?.[asst.id])
 																		? inputValues[asst.id]
-																		: (Array.isArray(configWithUserAnswer.correct_answer)
-																			? configWithUserAnswer.correct_answer
-																			: []);
+																		: (Array.isArray(savedAnswer) ? savedAnswer : []);
 																	const isSelected = selected.includes(option);
 
 																	return (
@@ -210,6 +222,7 @@ const CourseAsset = ({ assets, onContinue }) => {
 																				value={option}
 																				onChange={() => handleMultipleToggle(option, asst.id)}
 																				checked={isSelected}
+																				disabled={alreadySubmitted}
 																			/>
 																			<label htmlFor={inputId} className="ms-2">
 																				{option}
@@ -217,13 +230,15 @@ const CourseAsset = ({ assets, onContinue }) => {
 																		</div>
 																	);
 																})}
-																<button
-																	className="btn btn-primary btn-sm w-100 mt-2"
-																	disabled={!Array.isArray(inputValues?.[asst.id]) || inputValues[asst.id].length === 0}
-																	onClick={() => handleOptionChange(inputValues[asst.id], asst.id)}
-																>
-																	Enviar respuesta
-																</button>
+																{!alreadySubmitted && (
+																	<button
+																		className="btn btn-primary btn-sm w-100 mt-2"
+																		disabled={!Array.isArray(inputValues?.[asst.id]) || inputValues[asst.id].length === 0}
+																		onClick={() => handleOptionChange(inputValues[asst.id], asst.id)}
+																	>
+																		Enviar respuesta
+																	</button>
+																)}
 															</div>
 														) : (
 															options.map((option, index) => {
@@ -237,8 +252,13 @@ const CourseAsset = ({ assets, onContinue }) => {
 																			id={inputId}
 																			name={`question-${asst.id}`}
 																			value={option}
-																			onChange={() => handleOptionChange(option, asst.id)}
+																			onChange={() => {
+																				if (!alreadySubmitted) {
+																					handleOptionChange(option, asst.id);
+																				}
+																			}}
 																			checked={isSelected}
+																			disabled={alreadySubmitted}
 																		/>
 																		<label htmlFor={inputId} className="ms-2">
 																			{option}

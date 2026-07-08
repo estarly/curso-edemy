@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { hasHtmlContent as hasContent } from "@/utils/htmlContent";
 
 const Description = ({
 	description,
@@ -12,21 +13,21 @@ const Description = ({
 	return (
 		<>
 			<div className="courses-overview">
-				{(description && description !== "" && description !== 'NULL') && (
+				{hasContent(description) && (
 					<>
 						<h3>Descripción</h3>
 						<div dangerouslySetInnerHTML={{ __html: description }} />
 					</>
 				)}
 
-				{(requirements && requirements !== "" && requirements !== 'NULL') && (
+				{hasContent(requirements) && (
 					<>
 						<h3>Requisitos</h3>
 						<div dangerouslySetInnerHTML={{ __html: requirements }} />
 					</>
 				)}
 
-				{(what_you_will_learn && what_you_will_learn !== "" && what_you_will_learn !== 'NULL') && (
+				{hasContent(what_you_will_learn) && (
 					<>
 						<h3>Qué aprenderás?</h3>
 						<div
@@ -35,7 +36,7 @@ const Description = ({
 					</>
 				)}
 
-				{(who_is_this_course_for && who_is_this_course_for !== "" && who_is_this_course_for !== 'NULL') && (
+				{hasContent(who_is_this_course_for) && (
 					<>
 						<h3>Para quién es este curso?</h3>
 						<div

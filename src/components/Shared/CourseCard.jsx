@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { stripHtmlAndTruncate } from "@/utils/stripHtmlAndTruncate";
 import HeartButton from "@/components/HeartButton";
+import UserAvatar from "@/components/Layout/UserAvatar";
 
 const CourseCard = ({
 	id,
@@ -61,14 +62,10 @@ const CourseCard = ({
 				<div className="courses-content">
 					<div className="course-author d-flex align-items-center">
 						<div className="d-flex align-items-center">
-							<Image
-								src={user.image || "/images/user1.jpg"}
-								width={350}
-								height={350}
-								className="rounded-circle"
-								alt="image"
-							/>
-							<span><strong>{user.name} </strong><br /> {user.designation}</span>
+							{user && (
+								<UserAvatar user={user} size={35} className="me-2" />
+							)}
+							<span><strong>{user?.name} </strong><br /> {user?.designation}</span>
 						</div>
 						<div className="ms-auto">
 							{(currentUser && statusProgress) && (

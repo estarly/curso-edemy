@@ -3,11 +3,7 @@ import prisma from "@libs/prismadb";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import { bannerUploadService } from "@/services/bannerUpload";
 import { processFormDataWithFile } from "@/utils/fileProcessing";
-import {
-	parseBannerDates,
-	validateBannerImageDimensions,
-	isVideoUrl,
-} from "@/utils/bannerUtils";
+import { parseBannerDates, isVideoUrl } from "@/utils/bannerUtils";
 
 export async function POST(request) {
 	try {
@@ -30,13 +26,6 @@ export async function POST(request) {
 		let imageValue = imageUrl || body.image || null;
 
 		if (mediaFile) {
-			if (mediaFile.mimetype.startsWith("image/")) {
-				const validation = validateBannerImageDimensions(mediaFile.buffer);
-				if (!validation.valid) {
-					return NextResponse.json({ message: validation.message }, { status: 400 });
-				}
-			}
-
 			try {
 				const timestamp = new Date().getTime();
 				const extension = mediaFile.originalname.split(".").pop() || "png";

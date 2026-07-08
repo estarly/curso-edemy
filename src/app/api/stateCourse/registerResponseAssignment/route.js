@@ -37,28 +37,12 @@ export async function POST(req) {
 			orderBy: { created_at: "desc" },
 		});
 		
-		// Si ya existe y la respuesta es igual, no hacer nada y retornar mensaje
+		// Si ya existe una respuesta, no permitir modificarla
 		if (previousResult) {
-			let prevResponse = previousResult.response;
-			if (typeof prevResponse === "string") {
-				try {
-					prevResponse = JSON.parse(prevResponse);
-				} catch (e) {
-					prevResponse = {};
-				}
-			}
-			const prevAnswer = prevResponse.correct_answer;
-			const isSameAnswer = Array.isArray(selectedOption) && Array.isArray(prevAnswer)
-				? selectedOption.length === prevAnswer.length &&
-					selectedOption.every((item) => prevAnswer.includes(item))
-				: prevAnswer === selectedOption;
-
-			if (isSameAnswer) {
-				return new Response(JSON.stringify({
-					ok: false,
-					error: "Ya has respondido esta pregunta con la misma opción.",
-				}), { status: 200 });
-			}
+			return new Response(JSON.stringify({
+				ok: false,
+				error: "Ya has respondido esta pregunta. No puedes modificar tu respuesta.",
+			}), { status: 200 });
 		}
 		
 		// 4. Guardar la nueva respuesta en assignmentResults (merge config + respuesta)

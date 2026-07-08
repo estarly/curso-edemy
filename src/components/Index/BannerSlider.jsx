@@ -37,6 +37,7 @@ const BannerSlider = ({ banners = [] }) => {
 	const touchStartX = useRef(null);
 	const touchDeltaX = useRef(0);
 	const isCorrectingMove = useRef(false);
+	const videoRefs = useRef({});
 
 	useEffect(() => {
 		const checkMobile = () => {
@@ -64,6 +65,27 @@ const BannerSlider = ({ banners = [] }) => {
 
 		return () => clearInterval(timer);
 	}, [isMobile, banners.length]);
+
+	// En móvil, cambiar el atributo autoPlay no reinicia la reproducción al
+	// deslizar. Forzamos play() en el slide activo y pausamos los demás.
+	useEffect(() => {
+		if (!isMobile) return;
+
+		Object.entries(videoRefs.current).forEach(([idx, video]) => {
+			if (!video) return;
+
+			if (Number(idx) === activeIndex) {
+				video.muted = true;
+				video.playsInline = true;
+				const playPromise = video.play();
+				if (playPromise && typeof playPromise.catch === "function") {
+					playPromise.catch(() => {});
+				}
+			} else {
+				video.pause();
+			}
+		});
+	}, [activeIndex, isMobile, banners]);
 
 	const handleBannerClick = useCallback((url) => {
 		if (url) {
@@ -144,12 +166,24 @@ const BannerSlider = ({ banners = [] }) => {
 		return null;
 	}
 
-	const renderMedia = (banner, { mobile = false, isActive = true } = {}) => {
+	const renderMedia = (banner, { mobile = false, isActive = true, index = 0 } = {}) => {
 		const mediaUrl = banner.image;
 
 		if (isVideoUrl(mediaUrl)) {
 			return (
 				<video
+					key={mediaUrl}
+					ref={
+						mobile
+							? (el) => {
+									if (el) {
+										videoRefs.current[index] = el;
+									} else {
+										delete videoRefs.current[index];
+									}
+							  }
+							: undefined
+					}
 					src={mediaUrl}
 					autoPlay={isActive}
 					muted
@@ -212,6 +246,7 @@ const BannerSlider = ({ banners = [] }) => {
 								{renderMedia(banner, {
 									mobile: true,
 									isActive: index === activeIndex,
+									index,
 								})}
 							</div>
 						))}

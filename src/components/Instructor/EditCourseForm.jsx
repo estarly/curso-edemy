@@ -343,7 +343,7 @@ const EditCourseForm = ({ course, params, categories }) => {
 										className="btn btn-sm btn-outline-secondary"
 										onClick={() => setShowImageUploader(false)}
 									>
-										Cancelar y volver a la imagen actual
+										Cancelar y volver
 									</button>
 								</div>
 							)}

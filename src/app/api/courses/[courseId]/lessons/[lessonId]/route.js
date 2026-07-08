@@ -74,7 +74,7 @@ export async function PUT(request, { params }) {
     }
 
     const { body, file: uploadedFile } = await processFormDataWithFile(request, 'file');
-    const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description } = body;
+    const { title, file_url, video_url, url, platform, meeting_id, password, host, duration, participants, assetTypeId, description, status } = body;
 
 
     if (!title) {
@@ -382,6 +382,9 @@ export async function PUT(request, { params }) {
       file_url: finalFileUrl,
       assetTypeId: parseInt(assetTypeId),
     };
+    if (status !== undefined && status !== "") {
+      dataToUpdate.status = parseInt(status, 10) === 0 ? 0 : 1;
+    }
     if (shouldUpdateConfigAsset) {
       dataToUpdate.config_asset = config_asset;
     }

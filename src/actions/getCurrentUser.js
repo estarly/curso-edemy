@@ -83,21 +83,18 @@ export async function validateDataUser() {
 		// Verificar campos del usuario principal
 		for (const field of requiredUserFields) {
 			if (!userData[field] || userData[field].toString().trim() === '') {
-				console.log(`User incompleto: Falta campo ${field}`);
 				return true; // Falta este campo
 			}
 		}
 		
 		// Verificar que profile existe
 		if (!userData.profile) {
-			console.log('Perfil incompleto: No existe el objeto profile');
 			return true; // No hay perfil extendido
 		}
 		
 		// Verificar campos del perfil extendido
 		for (const field of requiredProfileFields) {
 			if (!userData.profile[field] || userData.profile[field].toString().trim() === '') {
-				console.log(`Perfil incompleto: Falta campo ${field} en el perfil`);
 				return true; // Falta este campo
 			}
 		}

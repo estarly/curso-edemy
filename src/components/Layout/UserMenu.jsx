@@ -1,16 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Swal from "sweetalert2";
 import UserAvatar from "./UserAvatar";
+import LoginModal from "@/components/Auth/LoginModal";
 import userMenuConfig from "@libs/userMenuByRole.json";
 import { isMenuItemActive } from "@libs/userMenuUtils";
 
 const UserMenu = ({ currentUser }) => {
 	const pathname = usePathname();
+	const [showLoginModal, setShowLoginModal] = useState(false);
 	const role = currentUser?.role;
 	const roleItems = role ? userMenuConfig.menus[role] || [] : [];
 	const commonItems = userMenuConfig.common || [];
@@ -46,14 +48,32 @@ const UserMenu = ({ currentUser }) => {
 
 	return (
 		<>
-			{!currentUser && (
+			{!currentUser && pathname !== "/auth/login" && (
 				<div className="option-item">
-					<Link href="/auth/login" className="default-btn">
+					<a
+						role="button"
+						tabIndex={0}
+						className="default-btn"
+						style={{ cursor: "pointer" }}
+						onClick={() => setShowLoginModal(true)}
+						onKeyDown={(event) => {
+							if (event.key === "Enter" || event.key === " ") {
+								event.preventDefault();
+								setShowLoginModal(true);
+							}
+						}}
+					>
 						<i className="flaticon-user"></i> Iniciar Sesion{" "}
 						<span></span>
-					</Link>
+					</a>
 				</div>
 			)}
+
+			<LoginModal
+				show={showLoginModal}
+				onClose={() => setShowLoginModal(false)}
+			/>
+
 			{currentUser && (
 				<div className="option-item">
 					<div className="dropdown profile-dropdown">

@@ -7,7 +7,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
-export default function FileAssetButton({ courseId, lessonId }) {
+export default function FileAssetButton({ courseId, lessonId, lessonTitle }) {
   const [show, setShow] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -107,7 +107,14 @@ export default function FileAssetButton({ courseId, lessonId }) {
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>Archivos</Modal.Title>
+          <Modal.Title>
+            Archivos
+            {lessonTitle && (
+              <span className="d-block fs-14 fw-normal text-muted">
+                Lección: {lessonTitle}
+              </span>
+            )}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>

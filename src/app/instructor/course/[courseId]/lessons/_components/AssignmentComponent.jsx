@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Tab, Nav } from "react-bootstrap";
 import Swal from "sweetalert2";
 
-const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
+const AssignmentComponent = ({ idAsset, assignmentsTypes, lessonTitle }) => {
   const [show, setShow] = useState(false);
   const [selectedTypeId, setSelectedTypeId] = useState(null);
   const [assignments, setAssignments] = useState([]);
@@ -365,7 +365,14 @@ const AssignmentComponent = ({ idAsset, assignmentsTypes }) => {
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>Asignar tarea</Modal.Title>
+          <Modal.Title>
+            Asignar tarea
+            {lessonTitle && (
+              <span className="d-block fs-14 fw-normal text-muted">
+                Lección: {lessonTitle}
+              </span>
+            )}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>

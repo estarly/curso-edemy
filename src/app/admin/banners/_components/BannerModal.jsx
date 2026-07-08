@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ImageUploader from "@/app/admin/banners/_components/ImageUploader";
-import { formatDateForInput } from "@/utils/bannerUtils";
+import { formatDateForInput, isVideoUrl } from "@/utils/bannerUtils";
 
 export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }) => {
 	const [formData, setFormData] = useState({
@@ -14,8 +14,17 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
 	});
 
 	const [imageFile, setImageFile] = useState(null);
+	const [activeTab, setActiveTab] = useState("banner");
 
 	useEffect(() => {
+		setActiveTab("banner");
+	}, [show]);
+
+	useEffect(() => {
+		// Siempre limpiamos el archivo seleccionado al abrir/cambiar de banner,
+		// para no arrastrar una selección previa entre aperturas del modal.
+		setImageFile(null);
+
 		if (banner && isEditing) {
 			setFormData({
 				url: banner.url || "",
@@ -26,7 +35,7 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
 				date_start: formatDateForInput(banner.date_start),
 				date_end: formatDateForInput(banner.date_end),
 			});
-		} else if (!isEditing) {
+		} else {
 			setFormData({
 				url: "",
 				imageUrl: "",
@@ -36,7 +45,6 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
 				date_start: "",
 				date_end: "",
 			});
-			setImageFile(null);
 		}
 	}, [banner, isEditing, show]);
 
@@ -153,24 +161,28 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
 								aria-label="Cerrar"
 							></button>
 						</div>
+						<ul className="nav nav-tabs px-3 pt-2">
+							<li className="nav-item">
+								<button
+									type="button"
+									className={`nav-link ${activeTab === "banner" ? "active" : ""}`}
+									onClick={() => setActiveTab("banner")}
+								>
+									Banner
+								</button>
+							</li>
+							<li className="nav-item">
+								<button
+									type="button"
+									className={`nav-link ${activeTab === "preview" ? "active" : ""}`}
+									onClick={() => setActiveTab("preview")}
+								>
+									Preview
+								</button>
+							</li>
+						</ul>
 						<div className="modal-body">
-							<div className="mb-3">
-								<label htmlFor="imageUrl" className="form-label">
-									URL de imagen o video
-								</label>
-								<input
-									type="url"
-									className="form-control bg-light"
-									id="imageUrl"
-									value={formData.imageUrl}
-									onChange={handleChange}
-									placeholder="https://ejemplo.com/banner.webp"
-								/>
-								<small className="text-muted">
-									Opcional si subes un archivo. Imágenes: relación 832x456 px.
-								</small>
-							</div>
-
+							<div className={activeTab === "banner" ? "" : "d-none"}>
 							<div className="mb-3">
 								<label htmlFor="url" className="form-label">
 									Enlace al hacer clic
@@ -251,6 +263,50 @@ export const BannerModal = ({ show, onClose, banner, onSave, isEditing = false }
 										<small>Archivo seleccionado: {imageFile.name}</small>
 									</div>
 								)}
+							</div>
+							</div>
+
+							<div className={activeTab === "preview" ? "" : "d-none"}>
+								{(() => {
+									const previewUrl = formData.image || formData.imageUrl;
+
+									if (!previewUrl) {
+										return (
+											<p className="text-muted text-center py-5 mb-0">
+												No hay archivo para previsualizar.
+											</p>
+										);
+									}
+
+									const isVideo = imageFile
+										? imageFile.type.startsWith("video/")
+										: isVideoUrl(previewUrl);
+
+									return (
+										<div className="text-center">
+											{isVideo ? (
+												<video
+													key={previewUrl}
+													src={previewUrl}
+													controls
+													autoPlay
+													muted
+													loop
+													playsInline
+													className="img-fluid rounded"
+													style={{ maxHeight: "60vh" }}
+												/>
+											) : (
+												<img
+													src={previewUrl}
+													alt="Preview del banner"
+													className="img-fluid rounded"
+													style={{ maxHeight: "60vh" }}
+												/>
+											)}
+										</div>
+									);
+								})()}
 							</div>
 						</div>
 						<div className="modal-footer">

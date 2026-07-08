@@ -18,7 +18,13 @@ const CoursesDetailsSidebar = ({
 	user,
 	currentUser
 }) => {
-	const [yaInscrito, setYaInscrito] = useState(false);
+	const isAlreadyEnrolled =
+		currentUser?.id ? enrolledUserIds?.some((e) => e.userId === currentUser.id) : false;
+	const [yaInscrito, setYaInscrito] = useState(isAlreadyEnrolled);
+
+	const goToCourse = () => {
+		window.location.href = `/learning/course/${slug}/${id}`;
+	};
 
 	const handleShareClick = () => {
 		const courseUrl = `${window.location.origin}/courses/${slug}`; // Genera la URL del curso
@@ -44,21 +50,9 @@ const CoursesDetailsSidebar = ({
 	};
 
 	const handleEnrolmentClick = async () => {
-		// Verifica si el usuario actual ya está inscrito
-		setYaInscrito(currentUser && currentUser?.id ? enrolledUserIds?.some(e => e.userId === currentUser?.id) : false);
-
-		if(yaInscrito) {
-			Swal.fire({
-				title: "¡Ya estás inscrito!",
-				text: "Vamos a ver el curso.",
-				icon: "info",
-				timer: 4000,
-				timerProgressBar: true,
-				confirmButtonText: "Ver curso",
-
-			}).then(() => {
-				window.location.href = `/learning/course/${slug}/${id}`;
-			});
+		// Si ya está inscrito, el botón lleva directamente al curso.
+		if (yaInscrito) {
+			goToCourse();
 			return;
 		}
 
@@ -103,6 +97,7 @@ const CoursesDetailsSidebar = ({
 
 				if (response.ok) {
 					const data = await response.json();
+					setYaInscrito(true);
 					// Mostrar mensaje de éxito con el ID del enrolamiento
 					Swal.fire({
 						title: "¡Asignado al curso!",
@@ -113,6 +108,7 @@ const CoursesDetailsSidebar = ({
 					});
 				} else {
 					const errorData = await response.json();
+					setYaInscrito(true);
 					Swal.fire({
 						title: "¡Ya estás inscrito!",
 						text: errorData.error || "Ya estás inscrito en este curso.",
@@ -223,11 +219,11 @@ const CoursesDetailsSidebar = ({
 			
 			
 				<button
-					className={` w-100 ${yaInscrito ? "btn btn-secondary" : "default-btn"}`}
+					className={` w-100 ${yaInscrito ? "btn btn-success" : "default-btn"}`}
 					onClick={handleEnrolmentClick}
 				>
 					<i className={`${yaInscrito ? "flaticon-play" : "flaticon-shopping-cart"}`}></i>
-					{" "}{yaInscrito ? " Continuar" : " Inscribirme"}
+					{" "}{yaInscrito ? " Ver el curso" : " Inscribirme"}
 					<span></span>
 				</button>
 			

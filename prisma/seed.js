@@ -15,7 +15,7 @@ async function main() {
 				image:
 					"https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408",
 				hashedPassword:
-					"$2b$10$LyqBjAOLKSJY.wRImyQ22uytJ785JjdR6WyyQott4i1cxXxfjIWua",
+					"$2b$10$naRsefOqsAgPqjOMD8coZe62KuY/tCoEw9TB5NivRzTWU/DC2nPR6",
 				role: "ADMIN",
 				is_instructor: false,
 				status: 1,
@@ -24,16 +24,31 @@ async function main() {
 			},
 			{
 				id: 2,
-				name: "Instructor Apellido",
+				name: "Teacher Apellido",
 				designation: "CEO At ImportDesk ",
-				email: "instructor@gmail.com",
+				email: "teacher@gmail.com",
 				image:
 					"https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408",
 				hashedPassword:
-					"$2a$12$hNf/wPKh6TCQmaWzeQH0/O8RAw8UZFauXGUG.rzNOgwGiH5JBMHja",
+					"$2b$10$naRsefOqsAgPqjOMD8coZe62KuY/tCoEw9TB5NivRzTWU/DC2nPR6",
 				role: "INSTRUCTOR",
-				is_instructor: false,
+				is_instructor: true,
 				requires_course_review: false,
+				status: 1,
+				created_at: new Date("2025-03-20T07:17:13.567Z"),
+				updated_at: new Date("2025-05-15T20:40:34.312Z"),
+			},
+			{
+				id: 3,
+				name: "Student Apellido",
+				designation: "Estudiante",
+				email: "student@gmail.com",
+				image:
+					"https://space-share.nyc3.digitaloceanspaces.com/upload_share/profile/profile-1-1747315779408",
+				hashedPassword:
+					"$2b$10$naRsefOqsAgPqjOMD8coZe62KuY/tCoEw9TB5NivRzTWU/DC2nPR6",
+				role: "USER",
+				is_instructor: false,
 				status: 1,
 				created_at: new Date("2025-03-20T07:17:13.567Z"),
 				updated_at: new Date("2025-05-15T20:40:34.312Z"),

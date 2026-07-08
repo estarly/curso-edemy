@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { formatDateForInput } from "@/utils/bannerUtils";
+import { formatDateForInput, isVideoUrl } from "@/utils/bannerUtils";
 import "./BannersTable.css";
 
 export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) => {
@@ -199,16 +199,18 @@ export const BannersTable = ({ items, onEditClick, onDeleteClick, onReorder }) =
 									<td>
 										{item.image ? (
 											<div className="d-flex flex-column align-items-start gap-1">
-												{item.image.toLowerCase().includes(".mp4") ? (
-													<video
-														src={item.image}
-														width="120"
-														height="66"
-														className="rounded"
-														muted
-														playsInline
-													/>
-												) : (
+											{isVideoUrl(item.image) ? (
+												<video
+													key={item.image}
+													src={item.image}
+													width="120"
+													height="66"
+													className="rounded"
+													muted
+													playsInline
+													preload="metadata"
+												/>
+											) : (
 													<img
 														src={item.image}
 														alt={`Banner ${item.id}`}
